@@ -27,10 +27,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. The app starts locally with a single command
   2. The data model supports campaigns, player slots, invite links, and availability entries
   3. The app is deployable to production (or a staging environment) with a working URL
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- (TBD during planning)
+- [ ] 01-01-PLAN.md — Scaffold Next.js + TypeScript + Tailwind, install Prisma, define full domain schema (Campaign, PlayerSlot, AvailabilityEntry), push SQLite DB
+- [ ] 01-02-PLAN.md — Seed demo campaign data (4 players, planning window), write designer-friendly README
+- [ ] 01-03-PLAN.md — Configure Vercel deployment, deploy to production, verify live URL
 
 ### Phase 2: Campaign
 **Goal**: The DM can create a campaign and hand out invite links to each player
@@ -81,7 +83,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/TBD | Not started | - |
+| 1. Foundation | 0/3 | Not started | - |
 | 2. Campaign | 0/TBD | Not started | - |
 | 3. Availability | 0/TBD | Not started | - |
 | 4. Dashboard | 0/TBD | Not started | - |
