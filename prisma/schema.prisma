@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Campaign {
+  id                  String       @id @default(cuid())
+  name                String
+  planningWindowStart DateTime?
+  planningWindowEnd   DateTime?
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+  playerSlots         PlayerSlot[]
+}
+
+model PlayerSlot {
+  id                    String              @id @default(cuid())
+  campaignId            String
+  name                  String
+  inviteToken           String              @unique @default(cuid())
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+  campaign              Campaign            @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  availabilityEntries   AvailabilityEntry[]
+}
+
+// type: "weekly" = recurring day-of-week pattern
+// type: "override" = specific date exception
+model AvailabilityEntry {
+  id           String     @id @default(cuid())
+  playerSlotId String
+  type         String     // "weekly" | "override"
+  dayOfWeek    Int?       // 0=Sun, 1=Mon, ..., 6=Sat (used when type="weekly")
+  date         DateTime?  // specific date (used when type="override")
+  timeOfDay    String?    // "morning" | "afternoon" | "evening"
+  status       String     // "free" | "busy"
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  playerSlot   PlayerSlot @relation(fields: [playerSlotId], references: [id], onDelete: Cascade)
+}
