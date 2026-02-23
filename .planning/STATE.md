@@ -11,8 +11,8 @@ See: .planning/PROJECT.md (updated 2026-02-23)
 
 Phase: 1 of 4 (Foundation)
 Plan: 3 of 3 in current phase
-Status: In progress
-Last activity: 2026-02-23 — Completed 01-02 (Seed data + README)
+Status: Awaiting human action (Vercel login)
+Last activity: 2026-02-23 — 01-03 Task 1 complete (deployment config ready); awaiting Vercel login to deploy
 
 Progress: [██░░░░░░░░] 20%
 
@@ -51,6 +51,8 @@ Recent decisions affecting current work:
 - [Phase 01-foundation 01-02]: Prisma 7 seed configured in prisma.config.ts migrations.seed field (not package.json "prisma" key)
 - [Phase 01-foundation 01-02]: Use npx tsx for seed scripts — Prisma 7 generated client is ESM-only (import.meta.url); ts-node CommonJS mode fails
 - [Phase 01-foundation 01-02]: Seed script uses relative import path ../src/generated/prisma/client (not @/ alias — not resolved outside Next.js bundler)
+- [Phase 01-foundation 01-03]: Prisma 7 does not support env() in datasource provider field (P1012 error) — schema.prisma keeps provider="sqlite"; production DB handled via Vercel env vars + adapter switch in prisma.ts
+- [Phase 01-foundation 01-03]: serverExternalPackages added to next.config.ts for better-sqlite3 — prevents webpack/turbopack from bundling native module
 
 ### Pending Todos
 
@@ -63,5 +65,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-23
-Stopped at: Completed 01-02-PLAN.md — Seed data and designer README
+Stopped at: 01-03-PLAN.md Task 1 complete — awaiting `vercel login` then `vercel --prod` for deployment
 Resume file: None
