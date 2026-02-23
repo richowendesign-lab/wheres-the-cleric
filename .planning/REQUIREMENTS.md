@@ -1,0 +1,85 @@
+# Requirements: D&D Session Planner
+
+**Defined:** 2026-02-23
+**Core Value:** The DM can instantly see when everyone is free — without chasing people for responses or guessing which dates to offer.
+
+## v1 Requirements
+
+### Campaign
+
+- [ ] **CAMP-01**: DM can create a campaign by setting a name and adding named player slots
+- [ ] **CAMP-02**: Each player slot generates a unique persistent invite link
+- [ ] **CAMP-03**: DM can set a planning window (start and end date) for the current scheduling period
+
+### Availability
+
+- [ ] **AVAIL-01**: Player can set recurring weekly availability (which days of the week they're generally free)
+- [ ] **AVAIL-02**: Player can specify time-of-day preference per day (morning / afternoon / evening)
+- [ ] **AVAIL-03**: Player can mark specific dates as free or busy, overriding their weekly pattern
+- [ ] **AVAIL-04**: Player can return to their invite link at any time and update their availability
+
+### Dashboard
+
+- [ ] **DASH-01**: DM can view a calendar grid showing each player's availability status per day
+- [ ] **DASH-02**: DM can see days where all players are available visually highlighted
+- [ ] **DASH-03**: DM can see which players have not yet submitted their availability
+- [ ] **DASH-04**: DM can see a ranked list of best session days based on group availability score
+
+### Access
+
+- [ ] **ACCESS-01**: Player can access and submit availability via invite link with no account required
+
+## v2 Requirements
+
+### Campaign Management
+
+- **CAMP-V2-01**: DM can archive or close a completed campaign
+- **CAMP-V2-02**: DM can regenerate a player's invite link if it is compromised
+
+### Sharing
+
+- **SHARE-V2-01**: DM can share a read-only view of the group schedule with all players
+- **SHARE-V2-02**: DM can export best-day recommendations to share outside the app
+
+### History
+
+- **HIST-V2-01**: DM can log confirmed session dates
+- **HIST-V2-02**: DM can view history of past sessions and attendance
+
+## Out of Scope
+
+| Feature | Reason |
+|---------|--------|
+| Automated reminder emails to players | DM prefers to handle nudging manually; adds email infrastructure complexity |
+| Player account creation / login | Private invite links are the access model — no accounts needed for players |
+| Per-session polls with pre-selected dates | Replaced by open availability model, which solves the "too rigid" problem |
+| In-app chat or session notes | Scheduling only; communication happens outside the app |
+| Mobile native app | Web-first; mobile browser is sufficient for v1 |
+
+## Traceability
+
+Which phases cover which requirements. Updated during roadmap creation.
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| CAMP-01 | — | Pending |
+| CAMP-02 | — | Pending |
+| CAMP-03 | — | Pending |
+| AVAIL-01 | — | Pending |
+| AVAIL-02 | — | Pending |
+| AVAIL-03 | — | Pending |
+| AVAIL-04 | — | Pending |
+| DASH-01 | — | Pending |
+| DASH-02 | — | Pending |
+| DASH-03 | — | Pending |
+| DASH-04 | — | Pending |
+| ACCESS-01 | — | Pending |
+
+**Coverage:**
+- v1 requirements: 12 total
+- Mapped to phases: 0
+- Unmapped: 12 ⚠️
+
+---
+*Requirements defined: 2026-02-23*
+*Last updated: 2026-02-23 after initial definition*
