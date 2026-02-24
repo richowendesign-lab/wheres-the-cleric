@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-02-23)
 ## Current Position
 
 Phase: 2 of 4 (Campaign Creation)
-Plan: 1 of 3 in current phase
-Status: In progress — 02-01 complete
-Last activity: 2026-02-24 — 02-01 complete (campaign creation form and schema migration)
+Plan: 2 of 3 in current phase
+Status: In progress — 02-02 complete
+Last activity: 2026-02-24 — 02-02 complete (campaign detail page, invite links, planning window form)
 
-Progress: [████░░░░░░] 40%
+Progress: [█████░░░░░] 50%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: 13.3min
-- Total execution time: 40min
+- Total plans completed: 4
+- Average duration: 12.5min
+- Total execution time: 50min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-foundation | 3/3 | 40min | 13.3min |
-| 02-campaign | 1/3 | 15min | 15min |
+| 02-campaign | 2/3 | 25min | 12.5min |
 
 **Recent Trend:**
-- Last 5 plans: 7min, 8min, 25min, 15min
+- Last 5 plans: 8min, 25min, 15min, 10min
 - Trend: stable
 
 *Updated after each plan completion*
@@ -57,6 +57,8 @@ Recent decisions affecting current work:
 - [Phase 01-foundation 01-03]: Production database configured via DATABASE_URL in Vercel dashboard (not dual-provider prisma.config.ts) — simpler and avoids Prisma 7 P1012 env() limitation
 - [Phase 02-campaign]: Server Action in src/lib/actions/; CampaignForm client component holds useActionState for error display (React 19 pattern)
 - [Phase 02-campaign]: font-fantasy Tailwind utility via @theme --font-cinzel CSS variable (Tailwind CSS 4 pattern)
+- [Phase 02-campaign 02-02]: updatePlanningWindow.bind(null, campaign.id) pre-binds campaignId before passing to useActionState — standard React 19 pattern for extra Server Action args
+- [Phase 02-campaign 02-02]: NEXT_PUBLIC_APP_URL with localhost:3000 fallback for invite URL construction — no hardcoded URLs in production
 
 ### Pending Todos
 
@@ -69,5 +71,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: Completed 02-01-PLAN.md — Campaign creation form, Server Action, schema migration
+Stopped at: Completed 02-02-PLAN.md — Campaign detail page, invite links table, planning window form
 Resume file: None
