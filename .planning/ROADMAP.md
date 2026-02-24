@@ -59,10 +59,13 @@ Plans:
   2. Player can specify a time-of-day preference (morning, afternoon, or evening) for each free day
   3. Player can mark a specific date as busy or free, overriding their weekly pattern for that day
   4. Player can return to their invite link later, see their existing availability, and update it
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- (TBD during planning)
+- [ ] 03-01-PLAN.md — Schema @@unique migration, use-debounce install, and availability Server Actions
+- [ ] 03-02-PLAN.md — WeeklySchedule (day toggles + time-of-day) and AvailabilityCalendar components
+- [ ] 03-03-PLAN.md — AvailabilityForm root with auto-save and invite page wiring
+- [ ] 03-04-PLAN.md — Human verification of full Phase 3 availability flow
 
 ### Phase 4: Dashboard
 **Goal**: The DM has a clear view of group availability and knows when to schedule the next session
