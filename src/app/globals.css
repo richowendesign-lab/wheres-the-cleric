@@ -3,3 +3,9 @@
 @theme {
   --font-fantasy: var(--font-cinzel);
 }
+
+/* Make native date picker calendar icon visible on dark backgrounds */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
