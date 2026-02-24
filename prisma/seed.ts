@@ -16,6 +16,7 @@ async function main() {
   const campaign = await prisma.campaign.create({
     data: {
       name: 'Curse of Strahd',
+      dmName: 'Richard',
       planningWindowStart: new Date('2026-03-01'),
       planningWindowEnd: new Date('2026-03-31'),
       playerSlots: {
