@@ -13,6 +13,7 @@ datasource db {
 model Campaign {
   id                  String       @id @default(cuid())
   name                String
+  dmName              String
   planningWindowStart DateTime?
   planningWindowEnd   DateTime?
   createdAt           DateTime     @default(now())
