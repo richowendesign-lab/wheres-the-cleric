@@ -35,3 +35,26 @@ export async function createCampaign(_prevState: unknown, formData: FormData) {
 
   redirect(`/campaigns/${campaign.id}`)
 }
+
+export async function updatePlanningWindow(campaignId: string, _prevState: unknown, formData: FormData) {
+  const startVal = formData.get('planningWindowStart') as string
+  const endVal = formData.get('planningWindowEnd') as string
+
+  if (!startVal || !endVal) {
+    return { error: 'Both dates are required.' }
+  }
+
+  const planningWindowStart = new Date(startVal)
+  const planningWindowEnd = new Date(endVal)
+
+  if (planningWindowEnd <= planningWindowStart) {
+    return { error: 'End date must be after start date.' }
+  }
+
+  await prisma.campaign.update({
+    where: { id: campaignId },
+    data: { planningWindowStart, planningWindowEnd },
+  })
+
+  return { success: true }
+}
