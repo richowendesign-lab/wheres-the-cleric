@@ -12,7 +12,7 @@ Four phases from foundation to a working scheduling app. Phase 1 sets up the pro
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - App skeleton, data models, routing, and deployment pipeline
+- [x] **Phase 1: Foundation** - App skeleton, data models, routing, and deployment pipeline
 - [ ] **Phase 2: Campaign** - DM creates a campaign and generates unique persistent invite links per player
 - [ ] **Phase 3: Availability** - Players access their invite link and submit their availability
 - [ ] **Phase 4: Dashboard** - DM sees group availability, highlights, missing players, and best-day recommendations
@@ -31,8 +31,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 - [x] 01-01-PLAN.md — Scaffold Next.js + TypeScript + Tailwind, install Prisma, define full domain schema (Campaign, PlayerSlot, AvailabilityEntry), push SQLite DB
-- [ ] 01-02-PLAN.md — Seed demo campaign data (4 players, planning window), write designer-friendly README
-- [ ] 01-03-PLAN.md — Configure Vercel deployment, deploy to production, verify live URL
+- [x] 01-02-PLAN.md — Seed demo campaign data (4 players, planning window), write designer-friendly README
+- [x] 01-03-PLAN.md — Configure Vercel deployment, deploy to production, verify live URL
 
 ### Phase 2: Campaign
 **Goal**: The DM can create a campaign and hand out invite links to each player
@@ -83,7 +83,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 2/3 | In Progress|  |
+| 1. Foundation | 3/3 | Complete | 2026-02-24 |
 | 2. Campaign | 0/TBD | Not started | - |
 | 3. Availability | 0/TBD | Not started | - |
 | 4. Dashboard | 0/TBD | Not started | - |
