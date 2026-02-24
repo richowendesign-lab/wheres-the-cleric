@@ -45,4 +45,6 @@ model AvailabilityEntry {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   playerSlot   PlayerSlot @relation(fields: [playerSlotId], references: [id], onDelete: Cascade)
+
+  @@unique([playerSlotId, date])
 }
