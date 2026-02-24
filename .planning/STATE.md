@@ -10,25 +10,25 @@ See: .planning/PROJECT.md (updated 2026-02-23)
 ## Current Position
 
 Phase: 2 of 4 (Campaign Creation)
-Plan: 2 of 3 in current phase
-Status: In progress — 02-02 complete
-Last activity: 2026-02-24 — 02-02 complete (campaign detail page, invite links, planning window form)
+Plan: 3 of 3 in current phase
+Status: Phase 2 complete — all plans done
+Last activity: 2026-02-24 — 02-03 complete (player invite landing page, invalid token error, dark theme)
 
-Progress: [█████░░░░░] 50%
+Progress: [██████░░░░] 60%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: 12.5min
-- Total execution time: 50min
+- Total plans completed: 5
+- Average duration: 13min
+- Total execution time: 85min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-foundation | 3/3 | 40min | 13.3min |
-| 02-campaign | 2/3 | 25min | 12.5min |
+| 02-campaign | 3/3 | 45min | 15min |
 
 **Recent Trend:**
 - Last 5 plans: 8min, 25min, 15min, 10min
@@ -59,6 +59,9 @@ Recent decisions affecting current work:
 - [Phase 02-campaign]: font-fantasy Tailwind utility via @theme --font-cinzel CSS variable (Tailwind CSS 4 pattern)
 - [Phase 02-campaign 02-02]: updatePlanningWindow.bind(null, campaign.id) pre-binds campaignId before passing to useActionState — standard React 19 pattern for extra Server Action args
 - [Phase 02-campaign 02-02]: NEXT_PUBLIC_APP_URL with localhost:3000 fallback for invite URL construction — no hardcoded URLs in production
+- [Phase 02-campaign 02-03]: Next.js 15 async params — type as Promise<{ token: string }>, await before destructuring (direct access causes runtime error)
+- [Phase 02-campaign 02-03]: Route-scoped not-found.tsx at invite/[token]/ so friendly error only applies to invite 404s, not the whole app
+- [Phase 02-campaign 02-03]: Dark theme date inputs — filter: invert(1) on ::-webkit-calendar-picker-indicator in globals.css for calendar icon visibility
 
 ### Pending Todos
 
@@ -71,5 +74,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: Completed 02-02-PLAN.md — Campaign detail page, invite links table, planning window form
+Stopped at: Completed 02-03-PLAN.md — Player invite landing page, invalid token error page, Phase 2 complete
 Resume file: None

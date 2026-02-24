@@ -13,7 +13,7 @@ Four phases from foundation to a working scheduling app. Phase 1 sets up the pro
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - App skeleton, data models, routing, and deployment pipeline
-- [ ] **Phase 2: Campaign** - DM creates a campaign and generates unique persistent invite links per player
+- [x] **Phase 2: Campaign** - DM creates a campaign and generates unique persistent invite links per player
 - [ ] **Phase 3: Availability** - Players access their invite link and submit their availability
 - [ ] **Phase 4: Dashboard** - DM sees group availability, highlights, missing players, and best-day recommendations
 
@@ -48,7 +48,7 @@ Plans:
 Plans:
 - [x] 02-01-PLAN.md — Schema migration (dmName), Server Action, and DM campaign creation form at /campaigns/new
 - [x] 02-02-PLAN.md — Campaign detail page at /campaigns/[id] with invite links, copy buttons, and planning window edit
-- [ ] 02-03-PLAN.md — Player landing page at /invite/[token] with dark D&D theme, CTA placeholder, and invalid-token error page
+- [x] 02-03-PLAN.md — Player landing page at /invite/[token] with dark D&D theme, CTA placeholder, and invalid-token error page
 
 ### Phase 3: Availability
 **Goal**: Players can express when they're generally free and flag specific date exceptions
@@ -86,6 +86,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete    | 2026-02-24 |
-| 2. Campaign | 2/3 | In Progress|  |
+| 2. Campaign | 3/3 | Complete   | 2026-02-24 |
 | 3. Availability | 0/TBD | Not started | - |
 | 4. Dashboard | 0/TBD | Not started | - |
