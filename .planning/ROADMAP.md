@@ -43,10 +43,12 @@ Plans:
   2. Each player slot has a unique persistent invite link the DM can copy and share
   3. DM can set a planning window (start and end date) that scopes the scheduling period
   4. A player can open their invite link in a browser with no login or account required and see their slot
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- (TBD during planning)
+- [ ] 02-01-PLAN.md — Schema migration (dmName), Server Action, and DM campaign creation form at /campaigns/new
+- [ ] 02-02-PLAN.md — Campaign detail page at /campaigns/[id] with invite links, copy buttons, and planning window edit
+- [ ] 02-03-PLAN.md — Player landing page at /invite/[token] with dark D&D theme, CTA placeholder, and invalid-token error page
 
 ### Phase 3: Availability
 **Goal**: Players can express when they're generally free and flag specific date exceptions
