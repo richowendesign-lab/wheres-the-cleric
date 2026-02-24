@@ -7,9 +7,9 @@
 
 ### Campaign
 
-- [ ] **CAMP-01**: DM can create a campaign by setting a name and adding named player slots
-- [ ] **CAMP-02**: Each player slot generates a unique persistent invite link
-- [ ] **CAMP-03**: DM can set a planning window (start and end date) for the current scheduling period
+- [x] **CAMP-01**: DM can create a campaign by setting a name and adding named player slots
+- [x] **CAMP-02**: Each player slot generates a unique persistent invite link
+- [x] **CAMP-03**: DM can set a planning window (start and end date) for the current scheduling period
 
 ### Availability
 
@@ -62,9 +62,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CAMP-01 | Phase 2 | Pending |
-| CAMP-02 | Phase 2 | Pending |
-| CAMP-03 | Phase 2 | Pending |
+| CAMP-01 | Phase 2 | Complete |
+| CAMP-02 | Phase 2 | Complete |
+| CAMP-03 | Phase 2 | Complete |
 | AVAIL-01 | Phase 3 | Pending |
 | AVAIL-02 | Phase 3 | Pending |
 | AVAIL-03 | Phase 3 | Pending |
