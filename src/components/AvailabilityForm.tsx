@@ -118,10 +118,11 @@ export function AvailabilityForm({
 
   function handleDateClick(dateKey: string) {
     const current = overrides.get(dateKey)
-    let newStatus: 'free' | 'busy' | null
-    if (current === undefined) newStatus = 'busy'
-    else if (current === 'busy') newStatus = 'free'
-    else newStatus = null  // remove override
+    // Simplified: only toggle free override on/off. No busy state.
+    // Pattern-free dates (no override) are not clickable in the calendar — handled there.
+    let newStatus: 'free' | null
+    if (current === 'free') newStatus = null  // remove override
+    else newStatus = 'free'                    // add free override
 
     // Optimistic update
     const prevOverrides = overrides

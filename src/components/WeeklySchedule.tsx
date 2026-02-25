@@ -39,11 +39,16 @@ export function WeeklySchedule({ selection, onChange }: WeeklyScheduleProps) {
     const newSelection = new Set(selection)
     const key = `${dow}-${time}`
     if (newSelection.has(key)) {
-      newSelection.delete(key)
+      // Prevent removing the last time — use × to remove the whole day
+      const activeTimesForDay = TIMES.filter(t => newSelection.has(`${dow}-${t}`))
+      if (activeTimesForDay.length > 1) {
+        newSelection.delete(key)
+        onChange(newSelection)
+      }
     } else {
       newSelection.add(key)
+      onChange(newSelection)
     }
-    onChange(newSelection)
   }
 
   const activeDays = DAYS.filter(({ dow }) => isDayActive(dow, selection))
@@ -71,7 +76,7 @@ export function WeeklySchedule({ selection, onChange }: WeeklyScheduleProps) {
         })}
       </div>
 
-      {/* Time preferences — appears below the day row, one row per active day */}
+      {/* Time preferences — one row per active day with × to remove */}
       {activeDays.length > 0 && (
         <div className="space-y-2 pt-3 border-t border-gray-800">
           {activeDays.map(({ label, dow }) => (
@@ -96,6 +101,14 @@ export function WeeklySchedule({ selection, onChange }: WeeklyScheduleProps) {
                   )
                 })}
               </div>
+              <button
+                type="button"
+                onClick={() => handleDayClick(dow)}
+                aria-label={`Remove ${label}`}
+                className="ml-auto text-gray-600 hover:text-gray-300 transition-colors text-base leading-none"
+              >
+                ×
+              </button>
             </div>
           ))}
         </div>
