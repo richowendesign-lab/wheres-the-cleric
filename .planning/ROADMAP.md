@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - App skeleton, data models, routing, and deployment pipeline
 - [x] **Phase 2: Campaign** - DM creates a campaign and generates unique persistent invite links per player
-- [ ] **Phase 3: Availability** - Players access their invite link and submit their availability
+- [x] **Phase 3: Availability** - Players access their invite link and submit their availability
 - [ ] **Phase 4: Dashboard** - DM sees group availability, highlights, missing players, and best-day recommendations
 
 ## Phase Details
@@ -62,9 +62,9 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Schema @@unique migration, use-debounce install, and availability Server Actions
-- [ ] 03-02-PLAN.md — WeeklySchedule (day toggles + time-of-day) and AvailabilityCalendar components
-- [ ] 03-03-PLAN.md — AvailabilityForm root with auto-save and invite page wiring
+- [x] 03-01-PLAN.md — Schema @@unique migration, use-debounce install, and availability Server Actions
+- [x] 03-02-PLAN.md — WeeklySchedule (day toggles + time-of-day) and AvailabilityCalendar components
+- [x] 03-03-PLAN.md — AvailabilityForm root with auto-save and invite page wiring
 - [ ] 03-04-PLAN.md — Human verification of full Phase 3 availability flow
 
 ### Phase 4: Dashboard
@@ -90,5 +90,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete    | 2026-02-24 |
 | 2. Campaign | 3/3 | Complete    | 2026-02-24 |
-| 3. Availability | 0/TBD | Not started | - |
+| 3. Availability | 3/4 | In progress | - |
 | 4. Dashboard | 0/TBD | Not started | - |

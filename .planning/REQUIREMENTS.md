@@ -16,7 +16,7 @@
 - [ ] **AVAIL-01**: Player can set recurring weekly availability (which days of the week they're generally free)
 - [ ] **AVAIL-02**: Player can specify time-of-day preference per day (morning / afternoon / evening)
 - [ ] **AVAIL-03**: Player can mark specific dates as free or busy, overriding their weekly pattern
-- [ ] **AVAIL-04**: Player can return to their invite link at any time and update their availability
+- [x] **AVAIL-04**: Player can return to their invite link at any time and update their availability
 
 ### Dashboard
 
@@ -68,7 +68,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AVAIL-01 | Phase 3 | Pending |
 | AVAIL-02 | Phase 3 | Pending |
 | AVAIL-03 | Phase 3 | Pending |
-| AVAIL-04 | Phase 3 | Pending |
+| AVAIL-04 | Phase 3 | Complete |
 | DASH-01 | Phase 4 | Pending |
 | DASH-02 | Phase 4 | Pending |
 | DASH-03 | Phase 4 | Pending |
