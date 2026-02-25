@@ -8,8 +8,6 @@ import { AvailabilityCalendar } from './AvailabilityCalendar'
 
 interface AvailabilityFormProps {
   playerSlotId: string
-  campaignName: string
-  playerName: string
   planningWindowStart: string   // ISO string serialized from server
   planningWindowEnd: string     // ISO string serialized from server
   // Existing AvailabilityEntry rows from database (pre-populate state)
@@ -56,8 +54,6 @@ function SaveIndicator({
 
 export function AvailabilityForm({
   playerSlotId,
-  campaignName,
-  playerName,
   planningWindowStart,
   planningWindowEnd,
   initialEntries,
@@ -85,12 +81,12 @@ export function AvailabilityForm({
   const [weeklySelection, setWeeklySelection] = useState<Set<string>>(initialWeeklySelection)
   const [overrides, setOverrides] = useState<Map<string, 'free' | 'busy'>>(initialOverrides)
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle')
-  const [, startTransition] = useTransition()
+  const [, startWeeklyTransition] = useTransition()
 
   // Debounced weekly save — fires 600ms after last toggle
   const debouncedSaveWeekly = useDebouncedCallback(
     (selection: Set<string>) => {
-      startTransition(async () => {
+      startWeeklyTransition(async () => {
         setSaveStatus('saving')
         const entries = Array.from(selection).map(key => {
           const [day, time] = key.split('-')
@@ -127,37 +123,35 @@ export function AvailabilityForm({
     else if (current === 'busy') newStatus = 'free'
     else newStatus = null  // remove override
 
-    // Update local state immediately
+    // Optimistic update
+    const prevOverrides = overrides
     const newOverrides = new Map(overrides)
     if (newStatus === null) newOverrides.delete(dateKey)
     else newOverrides.set(dateKey, newStatus)
     setOverrides(newOverrides)
+    setSaveStatus('saving')
 
-    // Persist via Server Action (non-debounced — each date click is discrete)
-    startTransition(async () => {
-      setSaveStatus('saving')
-      const result = await toggleDateOverride(playerSlotId, dateKey, newStatus)
-      if ('error' in result) {
+    // Persist via Server Action — independent async call, no shared transition
+    toggleDateOverride(playerSlotId, dateKey, newStatus)
+      .then(result => {
+        if ('error' in result) {
+          setSaveStatus('error')
+          setOverrides(prevOverrides)
+        } else {
+          setSaveStatus('saved')
+          setTimeout(() => setSaveStatus('idle'), 2000)
+        }
+      })
+      .catch(() => {
         setSaveStatus('error')
-        // Rollback local state on failure
-        setOverrides(overrides)
-      } else {
-        setSaveStatus('saved')
-        setTimeout(() => setSaveStatus('idle'), 2000)
-      }
-    })
+        setOverrides(prevOverrides)
+      })
   }
 
   const hasCalendar = Boolean(planningWindowStart && planningWindowEnd)
 
   return (
     <div className="space-y-8">
-      {/* Context header */}
-      <div>
-        <p className="text-xs text-amber-500 uppercase tracking-widest mb-0.5">{campaignName}</p>
-        <p className="text-lg font-semibold text-gray-100">{playerName}</p>
-      </div>
-
       {/* Save indicator */}
       <SaveIndicator
         status={saveStatus}
@@ -166,14 +160,16 @@ export function AvailabilityForm({
 
       {/* Weekly schedule section */}
       <div>
-        <h2 className="text-amber-400 font-semibold text-lg mb-4">Your weekly availability</h2>
+        <h2 className="text-amber-400 font-semibold text-lg mb-1">Your weekly availability</h2>
+        <p className="text-sm text-gray-400 mb-4">Select the days you&apos;re generally free each week, then choose which times work for you.</p>
         <WeeklySchedule selection={weeklySelection} onChange={handleWeeklyChange} />
       </div>
 
       {/* Calendar section — only rendered if planning window is set */}
       {hasCalendar && (
         <div>
-          <h2 className="text-amber-400 font-semibold text-lg mb-4">Date exceptions</h2>
+          <h2 className="text-amber-400 font-semibold text-lg mb-1">Specific date exceptions</h2>
+          <p className="text-sm text-gray-400 mb-4">Override your weekly pattern for individual dates — mark a normally-free day as busy, or a busy day as free.</p>
           <AvailabilityCalendar
             planningWindowStart={planningWindowStart}
             planningWindowEnd={planningWindowEnd}

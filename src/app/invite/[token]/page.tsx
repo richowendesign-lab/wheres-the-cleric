@@ -84,8 +84,6 @@ export default async function InvitePage({
         <div className="pt-4 border-t border-gray-800">
           <AvailabilityForm
             playerSlotId={slot.id}
-            campaignName={campaign.name}
-            playerName={slot.name}
             planningWindowStart={campaign.planningWindowStart?.toISOString() ?? ''}
             planningWindowEnd={campaign.planningWindowEnd?.toISOString() ?? ''}
             initialEntries={slot.availabilityEntries.map(e => ({
