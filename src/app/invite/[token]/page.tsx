@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
+import { AvailabilityForm } from '@/components/AvailabilityForm'
 
 export const metadata = {
   title: 'D&D Session Planner',
@@ -30,6 +31,7 @@ export default async function InvitePage({
           },
         },
       },
+      availabilityEntries: true,
     },
   })
 
@@ -78,18 +80,23 @@ export default async function InvitePage({
           </div>
         )}
 
-        {/* Phase 3 CTA — placeholder, disabled in Phase 2 */}
+        {/* Availability Form */}
         <div className="pt-4 border-t border-gray-800">
-          <p className="text-sm text-gray-500 mb-3">
-            Your DM will send a prompt when it&apos;s time to set your availability.
-          </p>
-          <button
-            disabled
-            className="w-full py-4 rounded-lg bg-amber-500 text-gray-950 font-bold text-lg opacity-40 cursor-not-allowed"
-            aria-label="Availability form coming in a future update"
-          >
-            Set your availability
-          </button>
+          <AvailabilityForm
+            playerSlotId={slot.id}
+            campaignName={campaign.name}
+            playerName={slot.name}
+            planningWindowStart={campaign.planningWindowStart?.toISOString() ?? ''}
+            planningWindowEnd={campaign.planningWindowEnd?.toISOString() ?? ''}
+            initialEntries={slot.availabilityEntries.map(e => ({
+              id: e.id,
+              type: e.type,
+              dayOfWeek: e.dayOfWeek,
+              date: e.date?.toISOString() ?? null,
+              timeOfDay: e.timeOfDay,
+              status: e.status,
+            }))}
+          />
         </div>
       </div>
     </main>
