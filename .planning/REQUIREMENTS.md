@@ -21,9 +21,9 @@
 ### Dashboard
 
 - [ ] **DASH-01**: DM can view a calendar grid showing each player's availability status per day
-- [ ] **DASH-02**: DM can see days where all players are available visually highlighted
+- [x] **DASH-02**: DM can see days where all players are available visually highlighted
 - [ ] **DASH-03**: DM can see which players have not yet submitted their availability
-- [ ] **DASH-04**: DM can see a ranked list of best session days based on group availability score
+- [x] **DASH-04**: DM can see a ranked list of best session days based on group availability score
 
 ### Access
 
@@ -70,9 +70,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AVAIL-03 | Phase 3 | Pending |
 | AVAIL-04 | Phase 3 | Complete |
 | DASH-01 | Phase 4 | Pending |
-| DASH-02 | Phase 4 | Pending |
+| DASH-02 | Phase 4 | Complete |
 | DASH-03 | Phase 4 | Pending |
-| DASH-04 | Phase 4 | Pending |
+| DASH-04 | Phase 4 | Complete |
 | ACCESS-01 | Phase 2 | Pending |
 
 **Coverage:**
@@ -82,4 +82,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-02-23*
-*Last updated: 2026-02-23 after roadmap creation*
+*Last updated: 2026-02-25 after 04-01 completion (DASH-02, DASH-04 marked complete)*

@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-23)
 
 **Core value:** The DM can instantly see when everyone is free — without chasing people for responses or guessing which dates to offer.
-**Current focus:** Phase 3 - Availability (complete)
+**Current focus:** Phase 4 - Dashboard (in progress)
 
 ## Current Position
 
-Phase: 3 of 4 (Availability)
-Plan: 3 of 3 in current phase
-Status: Phase 3 complete — all plans done
-Last activity: 2026-02-25 — 03-03 complete (AvailabilityForm integration, auto-save, invite page wired)
+Phase: 4 of 4 (Dashboard)
+Plan: 1 of 3 in current phase
+Status: Phase 4 in progress — plan 1 complete
+Last activity: 2026-02-25 — 04-01 complete (availability aggregation utility and BestDaysList component)
 
-Progress: [████████░░] 75%
+Progress: [█████████░] 83%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
-- Average duration: 11min
-- Total execution time: 93min
+- Total plans completed: 9
+- Average duration: 10min
+- Total execution time: 95min
 
 **By Phase:**
 
@@ -30,9 +30,10 @@ Progress: [████████░░] 75%
 | 01-foundation | 3/3 | 40min | 13.3min |
 | 02-campaign | 3/3 | 45min | 15min |
 | 03-availability | 3/3 | ~13min | ~4.3min |
+| 04-dashboard | 1/3 | ~2min | ~2min |
 
 **Recent Trend:**
-- Last 5 plans: 8min, 25min, 15min, 10min, ~3min, ~2min, ~8min
+- Last 5 plans: 8min, 25min, 15min, 10min, ~3min, ~2min, ~8min, ~2min
 - Trend: stable
 
 *Updated after each plan completion*
@@ -71,6 +72,10 @@ Recent decisions affecting current work:
 - [Phase 03-availability 03-03]: SaveIndicator retry triggers debouncedSaveWeekly.flush() — re-sends last weekly state immediately without re-toggle
 - [Phase 03-availability 03-03]: Calendar section conditionally rendered only when both planningWindowStart and planningWindowEnd are non-empty strings
 - [Phase 03-availability 03-03]: Date override optimistic rollback uses captured overrides closure (pre-click state) to revert on server error
+- [Phase 04-dashboard 04-01]: Override-beats-weekly resolution centralised in resolvePlayerStatusOnDate — same logic as AvailabilityCalendar but now shared; uses .find() not .filter() per schema @@unique guarantee
+- [Phase 04-dashboard 04-01]: Players with zero total entries always return no-response — checked at computeDayStatuses loop level before calling resolvePlayerStatusOnDate
+- [Phase 04-dashboard 04-01]: computeDayStatuses returns [] on missing window bounds — safe default for pages rendered before window is set
+- [Phase 04-dashboard 04-01]: BestDaysList is a server component — receives plain DayAggregation data, no client-side state needed
 
 ### Pending Todos
 
@@ -83,5 +88,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-25
-Stopped at: Completed 03-03-PLAN.md — AvailabilityForm integration, auto-save wired to Server Actions, invite page updated, Phase 3 complete
+Stopped at: Completed 04-01-PLAN.md — availability aggregation utility and BestDaysList server component
 Resume file: None

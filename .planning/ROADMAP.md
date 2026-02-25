@@ -79,7 +79,7 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Availability aggregation utility (computeDayStatuses, computeBestDays) and BestDaysList component
+- [x] 04-01-PLAN.md — Availability aggregation utility (computeDayStatuses, computeBestDays) and BestDaysList component
 - [ ] 04-02-PLAN.md — DashboardCalendar client component with multi-dot grid, hover tooltip, and click-to-panel
 - [ ] 04-03-PLAN.md — Extend campaign detail page with dashboard sections (calendar, missing players, best days)
 - [ ] 04-04-PLAN.md — Human verification of complete Phase 4 dashboard
@@ -94,4 +94,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Foundation | 3/3 | Complete    | 2026-02-24 |
 | 2. Campaign | 3/3 | Complete    | 2026-02-24 |
 | 3. Availability | 3/4 | In progress | - |
-| 4. Dashboard | 0/4 | Not started | - |
+| 4. Dashboard | 1/4 | In progress | - |
