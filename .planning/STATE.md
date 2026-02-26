@@ -5,21 +5,21 @@
 See: .planning/PROJECT.md (updated 2026-02-23)
 
 **Core value:** The DM can instantly see when everyone is free — without chasing people for responses or guessing which dates to offer.
-**Current focus:** Phase 4 - Dashboard (in progress)
+**Current focus:** Phase 4 - Dashboard (complete)
 
 ## Current Position
 
 Phase: 4 of 4 (Dashboard)
-Plan: 2 of 3 in current phase
-Status: Phase 4 in progress — plan 2 complete
-Last activity: 2026-02-26 — 04-02 complete (DashboardCalendar interactive calendar grid component)
+Plan: 3 of 3 in current phase
+Status: Phase 4 complete — all plans done
+Last activity: 2026-02-26 — 04-03 complete (campaign detail page with full DM dashboard)
 
-Progress: [█████████░] 90%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
+- Total plans completed: 10
 - Average duration: 10min
 - Total execution time: 95min
 
@@ -30,7 +30,7 @@ Progress: [█████████░] 90%
 | 01-foundation | 3/3 | 40min | 13.3min |
 | 02-campaign | 3/3 | 45min | 15min |
 | 03-availability | 3/3 | ~13min | ~4.3min |
-| 04-dashboard | 2/3 | ~3min | ~1.5min |
+| 04-dashboard | 3/3 | ~4min | ~1.3min |
 
 **Recent Trend:**
 - Last 5 plans: 8min, 25min, 15min, 10min, ~3min, ~2min, ~8min, ~2min
@@ -80,6 +80,10 @@ Recent decisions affecting current work:
 - [Phase 04-dashboard 04-02]: Tooltip uses CSS group-hover:opacity-100 only — zero JS state for show/hide, avoids re-renders on hover
 - [Phase 04-dashboard 04-02]: buildMonthGrid and formatDateKey copied inline from AvailabilityCalendar.tsx — keeps component self-contained without cross-component imports
 - [Phase 04-dashboard 04-02]: Side panel backdrop is fixed inset-0 z-10; panel itself is z-20 — backdrop click closes panel without conflicting with panel interactions
+- [Phase 04-dashboard 04-03]: Dashboard sections appended below existing invite links and planning window sections — no existing JSX modified
+- [Phase 04-dashboard 04-03]: Dates serialized via toISOString().split('T')[0] on server before reaching client components — avoids RSC Date serialization error
+- [Phase 04-dashboard 04-03]: computeDayStatuses called server-side, result passed as plain DayAggregation[] to DashboardCalendar and BestDaysList
+- [Phase 04-dashboard 04-03]: DashboardCalendar always renders (handles its own empty state); Awaiting Response section is conditional on missingPlayers.length > 0
 
 ### Pending Todos
 
@@ -92,5 +96,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-26
-Stopped at: Completed 04-02-PLAN.md — DashboardCalendar interactive calendar grid component
+Stopped at: Completed 04-03-PLAN.md — campaign detail page with full DM dashboard
 Resume file: None
