@@ -114,36 +114,38 @@ export default async function CampaignDetailPage({
           </section>
         )}
 
-        {/* Availability Calendar */}
-        <section>
-          <h2 className="text-lg font-semibold text-gray-200 mb-4">Group Availability</h2>
-          <div className="flex flex-wrap gap-4 text-xs text-gray-500 mb-4">
-            <span className="flex items-center gap-1.5">
-              <span className="inline-block w-2.5 h-2.5 rounded-full bg-green-400" />Free
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="inline-block w-2.5 h-2.5 rounded-full bg-red-400" />Busy
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="inline-block w-2.5 h-2.5 rounded-full bg-gray-600" />No response
-            </span>
-          </div>
-          <DashboardCalendar
-            dayAggregations={dayAggregations}
-            playerSlots={serializedSlots.map(s => ({ id: s.id, name: s.name }))}
-            windowStart={windowStartStr ?? ''}
-            windowEnd={windowEndStr ?? ''}
-          />
-        </section>
+        {/* Availability + Best Days side by side */}
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
+          {/* Availability Calendar */}
+          <section className="flex-1 min-w-0">
+            <h2 className="text-lg font-semibold text-gray-200 mb-4">Group Availability</h2>
+            <div className="flex flex-wrap gap-4 text-xs text-gray-500 mb-4">
+              <span className="flex items-center gap-1.5">
+                <span className="inline-block w-2.5 h-2.5 rounded-full bg-green-400" />Free
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="inline-block w-2.5 h-2.5 rounded-full bg-red-400" />Busy
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="inline-block w-2.5 h-2.5 rounded-full bg-gray-600" />No response
+              </span>
+            </div>
+            <DashboardCalendar
+              dayAggregations={dayAggregations}
+              playerSlots={serializedSlots.map(s => ({ id: s.id, name: s.name }))}
+              windowStart={windowStartStr ?? ''}
+              windowEnd={windowEndStr ?? ''}
+            />
+          </section>
 
-        {/* Best Days */}
-        <section>
-          <h2 className="text-lg font-semibold text-gray-200 mb-4">Best Days</h2>
-          <BestDaysList
-            days={dayAggregations}
-            playerSlots={serializedSlots.map(s => ({ id: s.id, name: s.name }))}
-          />
-        </section>
+          {/* Best Days */}
+          <section className="w-full lg:w-72 shrink-0">
+            <BestDaysList
+              days={dayAggregations}
+              playerSlots={serializedSlots.map(s => ({ id: s.id, name: s.name }))}
+            />
+          </section>
+        </div>
       </div>
     </main>
   )
