@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundation** - App skeleton, data models, routing, and deployment pipeline
 - [x] **Phase 2: Campaign** - DM creates a campaign and generates unique persistent invite links per player
 - [x] **Phase 3: Availability** - Players access their invite link and submit their availability
-- [ ] **Phase 4: Dashboard** - DM sees group availability, highlights, missing players, and best-day recommendations
+- [x] **Phase 4: Dashboard** - DM sees group availability, highlights, missing players, and best-day recommendations (completed 2026-02-26)
 
 ## Phase Details
 
@@ -94,4 +94,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Foundation | 3/3 | Complete    | 2026-02-24 |
 | 2. Campaign | 3/3 | Complete    | 2026-02-24 |
 | 3. Availability | 3/4 | In progress | - |
-| 4. Dashboard | 3/4 | In Progress|  |
+| 4. Dashboard | 4/4 | Complete   | 2026-02-26 |
