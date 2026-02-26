@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-23)
 ## Current Position
 
 Phase: 4 of 4 (Dashboard)
-Plan: 1 of 3 in current phase
-Status: Phase 4 in progress — plan 1 complete
-Last activity: 2026-02-25 — 04-01 complete (availability aggregation utility and BestDaysList component)
+Plan: 2 of 3 in current phase
+Status: Phase 4 in progress — plan 2 complete
+Last activity: 2026-02-26 — 04-02 complete (DashboardCalendar interactive calendar grid component)
 
-Progress: [█████████░] 83%
+Progress: [█████████░] 90%
 
 ## Performance Metrics
 
@@ -30,7 +30,7 @@ Progress: [█████████░] 83%
 | 01-foundation | 3/3 | 40min | 13.3min |
 | 02-campaign | 3/3 | 45min | 15min |
 | 03-availability | 3/3 | ~13min | ~4.3min |
-| 04-dashboard | 1/3 | ~2min | ~2min |
+| 04-dashboard | 2/3 | ~3min | ~1.5min |
 
 **Recent Trend:**
 - Last 5 plans: 8min, 25min, 15min, 10min, ~3min, ~2min, ~8min, ~2min
@@ -76,6 +76,10 @@ Recent decisions affecting current work:
 - [Phase 04-dashboard 04-01]: Players with zero total entries always return no-response — checked at computeDayStatuses loop level before calling resolvePlayerStatusOnDate
 - [Phase 04-dashboard 04-01]: computeDayStatuses returns [] on missing window bounds — safe default for pages rendered before window is set
 - [Phase 04-dashboard 04-01]: BestDaysList is a server component — receives plain DayAggregation data, no client-side state needed
+- [Phase 04-dashboard 04-02]: DashboardCalendar is 'use client' — requires useState for selectedDate panel, useEffect for Escape key listener
+- [Phase 04-dashboard 04-02]: Tooltip uses CSS group-hover:opacity-100 only — zero JS state for show/hide, avoids re-renders on hover
+- [Phase 04-dashboard 04-02]: buildMonthGrid and formatDateKey copied inline from AvailabilityCalendar.tsx — keeps component self-contained without cross-component imports
+- [Phase 04-dashboard 04-02]: Side panel backdrop is fixed inset-0 z-10; panel itself is z-20 — backdrop click closes panel without conflicting with panel interactions
 
 ### Pending Todos
 
@@ -87,6 +91,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-25
-Stopped at: Completed 04-01-PLAN.md — availability aggregation utility and BestDaysList server component
+Last session: 2026-02-26
+Stopped at: Completed 04-02-PLAN.md — DashboardCalendar interactive calendar grid component
 Resume file: None
