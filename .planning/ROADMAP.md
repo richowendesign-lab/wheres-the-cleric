@@ -65,7 +65,7 @@ Plans:
 - [x] 03-01-PLAN.md — Schema @@unique migration, use-debounce install, and availability Server Actions
 - [x] 03-02-PLAN.md — WeeklySchedule (day toggles + time-of-day) and AvailabilityCalendar components
 - [x] 03-03-PLAN.md — AvailabilityForm root with auto-save and invite page wiring
-- [ ] 03-04-PLAN.md — Human verification of full Phase 3 availability flow
+- [x] 03-04-PLAN.md — Human verification of full Phase 3 availability flow
 
 ### Phase 4: Dashboard
 **Goal**: The DM has a clear view of group availability and knows when to schedule the next session
@@ -82,7 +82,7 @@ Plans:
 - [x] 04-01-PLAN.md — Availability aggregation utility (computeDayStatuses, computeBestDays) and BestDaysList component
 - [x] 04-02-PLAN.md — DashboardCalendar client component with multi-dot grid, hover tooltip, and click-to-panel
 - [x] 04-03-PLAN.md — Extend campaign detail page with dashboard sections (calendar, missing players, best days)
-- [ ] 04-04-PLAN.md — Human verification of complete Phase 4 dashboard
+- [x] 04-04-PLAN.md — Human verification of complete Phase 4 dashboard
 
 ## Progress
 
@@ -93,5 +93,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete    | 2026-02-24 |
 | 2. Campaign | 3/3 | Complete    | 2026-02-24 |
-| 3. Availability | 3/4 | In progress | - |
+| 3. Availability | 4/4 | Complete    | 2026-02-26 |
 | 4. Dashboard | 4/4 | Complete   | 2026-02-26 |

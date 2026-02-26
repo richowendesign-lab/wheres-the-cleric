@@ -11,8 +11,8 @@ See: .planning/PROJECT.md (updated 2026-02-23)
 
 Phase: 4 of 4 (Dashboard)
 Plan: 4 of 4 in current phase
-Status: Phase 4 complete — awaiting DM checkpoint sign-off
-Last activity: 2026-02-26 — 04-04 checkpoint (DM visual verification of full dashboard)
+Status: All phases complete — DM dashboard verified and approved
+Last activity: 2026-02-26 — 04-04 complete (DM approved Phase 4 dashboard visual verification)
 
 Progress: [██████████] 100%
 
@@ -85,6 +85,8 @@ Recent decisions affecting current work:
 - [Phase 04-dashboard 04-03]: computeDayStatuses called server-side, result passed as plain DayAggregation[] to DashboardCalendar and BestDaysList
 - [Phase 04-dashboard 04-03]: DashboardCalendar always renders (handles its own empty state); Awaiting Response section is conditional on missingPlayers.length > 0
 - [Phase 04-dashboard]: Phase 4 quality gate: TypeScript + build checks passed before DM visual verification
+- [Phase 04-dashboard 04-04]: Side-by-side flex layout applied for calendar and best-days sections (md:flex-row) — improves readability over stacked vertical layout
+- [Phase 04-dashboard 04-04]: Duplicate Best Days heading removed from page.tsx — BestDaysList renders its own heading internally
 
 ### Pending Todos
 
@@ -97,5 +99,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-26
-Stopped at: Checkpoint 04-04 — awaiting DM visual verification of Phase 4 dashboard
+Stopped at: Completed 04-04-PLAN.md — all phases complete
 Resume file: None
