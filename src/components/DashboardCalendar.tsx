@@ -130,7 +130,7 @@ export function DashboardCalendar({
                           <button
                             type="button"
                             onClick={() => setSelectedDate(dateKey)}
-                            className={`w-full rounded-md py-1.5 text-sm text-center transition-colors leading-none
+                            className={`w-full rounded-md py-1.5 text-sm text-center transition-colors leading-none cursor-pointer
                               ${agg?.allFree
                                 ? 'bg-green-800/60 hover:bg-green-700/60 text-gray-100'
                                 : 'text-gray-400 hover:bg-gray-800'}`}
