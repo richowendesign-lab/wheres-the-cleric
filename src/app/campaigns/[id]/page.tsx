@@ -2,6 +2,9 @@ import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import { CopyLinkButton } from '@/components/CopyLinkButton'
 import { UpdatePlanningWindowForm } from '@/components/UpdatePlanningWindowForm'
+import { computeDayStatuses } from '@/lib/availability'
+import { DashboardCalendar } from '@/components/DashboardCalendar'
+import { BestDaysList } from '@/components/BestDaysList'
 
 export default async function CampaignDetailPage({
   params,
@@ -12,12 +15,45 @@ export default async function CampaignDetailPage({
 
   const campaign = await prisma.campaign.findUnique({
     where: { id },
-    include: { playerSlots: { orderBy: { createdAt: 'asc' } } },
+    include: {
+      playerSlots: {
+        include: { availabilityEntries: true },
+        orderBy: { createdAt: 'asc' },
+      },
+    },
   })
 
   if (!campaign) notFound()
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+
+  // Serialize playerSlots for client components (Date -> string)
+  const serializedSlots = campaign.playerSlots.map(slot => ({
+    id: slot.id,
+    name: slot.name,
+    availabilityEntries: slot.availabilityEntries.map(e => ({
+      id: e.id,
+      type: e.type,
+      dayOfWeek: e.dayOfWeek,
+      date: e.date?.toISOString() ?? null,
+      timeOfDay: e.timeOfDay,
+      status: e.status,
+    })),
+  }))
+
+  // Convert planning window Date objects to ISO strings (null if not set)
+  const windowStartStr = campaign.planningWindowStart?.toISOString().split('T')[0] ?? null
+  const windowEndStr = campaign.planningWindowEnd?.toISOString().split('T')[0] ?? null
+
+  // Compute aggregates server-side
+  const dayAggregations = (windowStartStr && windowEndStr)
+    ? computeDayStatuses(serializedSlots, windowStartStr, windowEndStr)
+    : []
+
+  // Detect missing players (zero total availability entries)
+  const missingPlayers = campaign.playerSlots.filter(
+    slot => slot.availabilityEntries.length === 0
+  )
 
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100 px-4 py-12">
@@ -51,6 +87,62 @@ export default async function CampaignDetailPage({
         <section>
           <h2 className="text-lg font-semibold text-gray-200 mb-4">Planning Window</h2>
           <UpdatePlanningWindowForm campaign={campaign} />
+        </section>
+
+        {/* Divider */}
+        <hr className="border-gray-800" />
+
+        {/* Missing Players */}
+        {missingPlayers.length > 0 && (
+          <section>
+            <h2 className="text-lg font-semibold text-gray-200 mb-4">Awaiting Response</h2>
+            <div className="flex flex-wrap gap-2">
+              {missingPlayers.map(slot => (
+                <span
+                  key={slot.id}
+                  className="bg-gray-800 text-gray-400 text-sm rounded-md px-3 py-1.5"
+                >
+                  {slot.name}
+                </span>
+              ))}
+            </div>
+            <p className="text-gray-500 text-xs mt-2">
+              {missingPlayers.length === 1
+                ? '1 player has not yet submitted availability.'
+                : `${missingPlayers.length} players have not yet submitted availability.`}
+            </p>
+          </section>
+        )}
+
+        {/* Availability Calendar */}
+        <section>
+          <h2 className="text-lg font-semibold text-gray-200 mb-4">Group Availability</h2>
+          <div className="flex flex-wrap gap-4 text-xs text-gray-500 mb-4">
+            <span className="flex items-center gap-1.5">
+              <span className="inline-block w-2.5 h-2.5 rounded-full bg-green-400" />Free
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="inline-block w-2.5 h-2.5 rounded-full bg-red-400" />Busy
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="inline-block w-2.5 h-2.5 rounded-full bg-gray-600" />No response
+            </span>
+          </div>
+          <DashboardCalendar
+            dayAggregations={dayAggregations}
+            playerSlots={serializedSlots.map(s => ({ id: s.id, name: s.name }))}
+            windowStart={windowStartStr ?? ''}
+            windowEnd={windowEndStr ?? ''}
+          />
+        </section>
+
+        {/* Best Days */}
+        <section>
+          <h2 className="text-lg font-semibold text-gray-200 mb-4">Best Days</h2>
+          <BestDaysList
+            days={dayAggregations}
+            playerSlots={serializedSlots.map(s => ({ id: s.id, name: s.name }))}
+          />
         </section>
       </div>
     </main>
