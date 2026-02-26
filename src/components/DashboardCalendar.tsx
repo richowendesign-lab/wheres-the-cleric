@@ -205,7 +205,7 @@ export function DashboardCalendar({
                 <h3 className="font-semibold text-gray-100">{formatPanelDate(selectedDate)}</h3>
                 <button
                   onClick={() => setSelectedDate(null)}
-                  className="text-gray-400 hover:text-gray-100 transition-colors"
+                  className="text-gray-400 hover:text-gray-100 transition-colors cursor-pointer"
                   aria-label="Close panel"
                 >
                   ✕
