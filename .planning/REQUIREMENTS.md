@@ -99,20 +99,20 @@ Redesign of campaign creation and player onboarding. Single shared link replaces
 | DASH-03 | Phase 4 | Complete |
 | DASH-04 | Phase 4 | Complete |
 | ACCESS-01 | Phase 2 | Complete |
-| CAMP-11 | — | Pending |
-| CAMP-12 | — | Pending |
-| CAMP-13 | — | Pending |
-| JOIN-01 | — | Pending |
-| JOIN-02 | — | Pending |
-| JOIN-03 | — | Pending |
-| JOIN-04 | — | Pending |
-| MIGR-01 | — | Pending |
+| MIGR-01 | Phase 5 | Pending |
+| CAMP-11 | Phase 6 | Pending |
+| CAMP-12 | Phase 6 | Pending |
+| CAMP-13 | Phase 6 | Pending |
+| JOIN-01 | Phase 7 | Pending |
+| JOIN-02 | Phase 7 | Pending |
+| JOIN-03 | Phase 7 | Pending |
+| JOIN-04 | Phase 7 | Pending |
 
 **Coverage:**
 - v1.1 requirements: 8 total
-- Mapped to phases: 0
-- Unmapped: 8 ⚠️
+- Mapped to phases: 8
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-02-23*
-*Last updated: 2026-02-27 after v1.1 milestone definition*
+*Last updated: 2026-02-27 after v1.1 roadmap created*
