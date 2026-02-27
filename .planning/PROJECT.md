@@ -21,7 +21,11 @@ The DM can instantly see when everyone is free — without chasing people for re
 
 ### Active
 
-(None — all v1.0 requirements shipped. Define v1.1 requirements with `/gsd:new-milestone`.)
+- [ ] DM can create a campaign by entering only a planning window (no name, no player names)
+- [ ] Campaign generates a single shareable join link
+- [ ] New player visits link, enters their name, and is taken to their availability page
+- [ ] Returning player is recognised by browser (cookie) and taken straight to their availability
+- [ ] DM is recognised by browser (cookie) and taken straight to the dashboard when visiting the link
 
 ### Out of Scope
 
@@ -56,5 +60,16 @@ The DM can instantly see when everyone is free — without chasing people for re
 | CSS-only hover tooltip (group-hover) | No JS state for tooltips keeps component lighter | ✓ Good — smooth, no flicker |
 | Side-by-side calendar + best days layout | DM's primary goal after sharing links is to see availability | ✓ Good — user feedback confirmed this |
 
+## Current Milestone: v1.1 Simplified Onboarding
+
+**Goal:** Replace per-player invite links with a single shared join link and self-registration flow
+
+**Target features:**
+- Minimal campaign creation (date range only)
+- Single shareable join link per campaign
+- Player self-registration (enter name on first visit)
+- Cookie-based identity (DM and players recognised on return)
+- Data migration: wipe v1.0 model, apply new schema
+
 ---
-*Last updated: 2026-02-26 after v1.0 milestone*
+*Last updated: 2026-02-27 after v1.1 milestone started*
