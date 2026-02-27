@@ -11,7 +11,7 @@ import { prisma } from '@/lib/prisma'
  */
 export async function saveWeeklyPattern(
   playerSlotId: string,
-  entries: { dayOfWeek: number; timeOfDay: string }[]
+  entries: { dayOfWeek: number }[]
 ): Promise<{ success: true } | { error: string }> {
   try {
     await prisma.$transaction([
@@ -23,7 +23,6 @@ export async function saveWeeklyPattern(
           playerSlotId,
           type: 'weekly',
           dayOfWeek: e.dayOfWeek,
-          timeOfDay: e.timeOfDay,
           status: 'free',
         })),
       }),

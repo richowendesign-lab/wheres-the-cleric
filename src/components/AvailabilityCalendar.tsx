@@ -28,7 +28,7 @@ function formatDateKey(date: Date): string {
   return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}`
 }
 
-type CellState = 'outside-window' | 'free-pattern' | 'free-override' | 'not-selected'
+type CellState = 'outside-window' | 'free-pattern' | 'free-override' | 'busy-override' | 'not-selected'
 
 function getCellState(
   date: Date,
@@ -46,9 +46,10 @@ function getCellState(
   const dateKey = formatDateKey(date)
   const override = overrides.get(dateKey)
   if (override === 'free') return 'free-override'
+  if (override === 'busy') return 'busy-override'
 
   const dow = date.getUTCDay()
-  const isPatternFree = Array.from(weeklySelection).some(k => k.startsWith(`${dow}-`))
+  const isPatternFree = weeklySelection.has(String(dow))
   return isPatternFree ? 'free-pattern' : 'not-selected'
 }
 
@@ -98,15 +99,15 @@ export function AvailabilityCalendar({
                     const state = getCellState(date, windowStart, windowEnd, weeklySelection, overrides)
                     const dateKey = formatDateKey(date)
 
-                    // Pattern-free dates are already free — not clickable via calendar
-                    // Override-free and not-selected dates are clickable
-                    const isClickable = state === 'not-selected' || state === 'free-override'
+                    // All dates inside the planning window are clickable
+                    const isClickable = state !== 'outside-window'
+
+                    const isAvailable = state === 'free-pattern' || state === 'free-override'
 
                     const cellClass =
                       state === 'outside-window' ? 'text-gray-700 cursor-default' :
-                      state === 'free-pattern'   ? 'bg-amber-900/40 text-amber-200 cursor-default' :
-                      state === 'free-override'  ? 'bg-amber-500/60 text-amber-100 ring-1 ring-amber-400 cursor-pointer hover:bg-amber-500/80' :
-                      /* not-selected */            'text-gray-500 cursor-pointer hover:bg-gray-800'
+                      isAvailable                ? 'bg-amber-900/40 text-amber-200 cursor-pointer hover:opacity-70' :
+                      /* not available */           'text-gray-500 cursor-pointer hover:bg-amber-900/20 hover:text-amber-300'
 
                     return (
                       <button
@@ -130,11 +131,11 @@ export function AvailabilityCalendar({
       <div className="flex flex-wrap gap-3 text-xs text-gray-500">
         <span className="flex items-center gap-1.5">
           <span className="inline-block w-3 h-3 rounded bg-amber-900/40" />
-          Free (weekly pattern)
+          Available
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="inline-block w-3 h-3 rounded bg-amber-500/60 ring-1 ring-amber-400" />
-          Free (exception added)
+          <span className="inline-block w-3 h-3 rounded bg-gray-800" />
+          Not available
         </span>
       </div>
     </div>
