@@ -3,7 +3,7 @@
 **Defined:** 2026-02-23
 **Core Value:** The DM can instantly see when everyone is free — without chasing people for responses or guessing which dates to offer.
 
-## v1 Requirements
+## v1.0 Requirements (Shipped)
 
 ### Campaign
 
@@ -13,9 +13,9 @@
 
 ### Availability
 
-- [ ] **AVAIL-01**: Player can set recurring weekly availability (which days of the week they're generally free)
-- [ ] **AVAIL-02**: Player can specify time-of-day preference per day (morning / afternoon / evening)
-- [ ] **AVAIL-03**: Player can mark specific dates as free or busy, overriding their weekly pattern
+- [x] **AVAIL-01**: Player can set recurring weekly availability (which days of the week they're generally free)
+- [x] **AVAIL-02**: Player can specify time-of-day preference per day (morning / afternoon / evening)
+- [x] **AVAIL-03**: Player can mark specific dates as free or busy, overriding their weekly pattern
 - [x] **AVAIL-04**: Player can return to their invite link at any time and update their availability
 
 ### Dashboard
@@ -27,59 +27,92 @@
 
 ### Access
 
-- [ ] **ACCESS-01**: Player can access and submit availability via invite link with no account required
+- [x] **ACCESS-01**: Player can access and submit availability via invite link with no account required
+
+## v1.1 Requirements
+
+Redesign of campaign creation and player onboarding. Single shared link replaces per-player invite links. Players self-register on first visit. Cookie-based identity removes the need for individual links.
+
+### Campaign Creation
+
+- [ ] **CAMP-11**: DM can create a campaign by entering only a planning window (start and end date)
+- [ ] **CAMP-12**: DM sees their single shareable join link immediately after campaign creation
+- [ ] **CAMP-13**: DM's browser is remembered as campaign owner so they can return to the dashboard
+
+### Join Flow
+
+- [ ] **JOIN-01**: New visitor to the join link is prompted to enter their name to join
+- [ ] **JOIN-02**: After entering their name, player is redirected to their availability page
+- [ ] **JOIN-03**: Returning player is auto-recognised (cookie) and redirected to their availability page
+- [ ] **JOIN-04**: DM visiting the join link is auto-recognised (cookie) and redirected to the dashboard
+
+### Migration
+
+- [ ] **MIGR-01**: Database schema updated to remove player names from campaign creation and support self-registration; existing data wiped
 
 ## v2 Requirements
 
 ### Campaign Management
 
-- **CAMP-V2-01**: DM can archive or close a completed campaign
-- **CAMP-V2-02**: DM can regenerate a player's invite link if it is compromised
+- **MGMT-01**: DM can remove a player from a campaign
+- **MGMT-02**: DM can delete a campaign
+- **MGMT-03**: DM can archive or close a completed campaign
+
+### Player
+
+- **PLAY-01**: Player can update their name after registering
 
 ### Sharing
 
-- **SHARE-V2-01**: DM can share a read-only view of the group schedule with all players
-- **SHARE-V2-02**: DM can export best-day recommendations to share outside the app
+- **SHARE-01**: DM can share a read-only view of the group schedule with all players
+- **SHARE-02**: DM can export best-day recommendations to share outside the app
 
 ### History
 
-- **HIST-V2-01**: DM can log confirmed session dates
-- **HIST-V2-02**: DM can view history of past sessions and attendance
+- **HIST-01**: DM can log confirmed session dates
+- **HIST-02**: DM can view history of past sessions and attendance
 
 ## Out of Scope
 
 | Feature | Reason |
 |---------|--------|
-| Automated reminder emails to players | DM prefers to handle nudging manually; adds email infrastructure complexity |
-| Player account creation / login | Private invite links are the access model — no accounts needed for players |
-| Per-session polls with pre-selected dates | Replaced by open availability model, which solves the "too rigid" problem |
-| In-app chat or session notes | Scheduling only; communication happens outside the app |
-| Mobile native app | Web-first; mobile browser is sufficient for v1 |
+| Player cap / invite approval | Complexity not warranted for small friend groups |
+| Multiple campaigns per DM | Single campaign is the use case |
+| Automated reminder emails | DM prefers to handle nudging manually |
+| Account-based login | Invite links + cookies are sufficient |
+| Per-session polls | Replaced by open availability model |
+| In-app chat or session notes | Scheduling only |
 
 ## Traceability
-
-Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | CAMP-01 | Phase 2 | Complete |
 | CAMP-02 | Phase 2 | Complete |
 | CAMP-03 | Phase 2 | Complete |
-| AVAIL-01 | Phase 3 | Pending |
-| AVAIL-02 | Phase 3 | Pending |
-| AVAIL-03 | Phase 3 | Pending |
+| AVAIL-01 | Phase 3 | Complete |
+| AVAIL-02 | Phase 3 | Complete |
+| AVAIL-03 | Phase 3 | Complete |
 | AVAIL-04 | Phase 3 | Complete |
 | DASH-01 | Phase 4 | Complete |
 | DASH-02 | Phase 4 | Complete |
 | DASH-03 | Phase 4 | Complete |
 | DASH-04 | Phase 4 | Complete |
-| ACCESS-01 | Phase 2 | Pending |
+| ACCESS-01 | Phase 2 | Complete |
+| CAMP-11 | — | Pending |
+| CAMP-12 | — | Pending |
+| CAMP-13 | — | Pending |
+| JOIN-01 | — | Pending |
+| JOIN-02 | — | Pending |
+| JOIN-03 | — | Pending |
+| JOIN-04 | — | Pending |
+| MIGR-01 | — | Pending |
 
 **Coverage:**
-- v1 requirements: 12 total
-- Mapped to phases: 12
-- Unmapped: 0
+- v1.1 requirements: 8 total
+- Mapped to phases: 0
+- Unmapped: 8 ⚠️
 
 ---
 *Requirements defined: 2026-02-23*
-*Last updated: 2026-02-25 after 04-01 completion (DASH-02, DASH-04 marked complete)*
+*Last updated: 2026-02-27 after v1.1 milestone definition*
