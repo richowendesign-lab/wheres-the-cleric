@@ -38,7 +38,13 @@ Full phase details: `.planning/milestones/v1.0-ROADMAP.md`
   2. PlayerSlot table has no inviteToken field; player name is stored after self-registration
   3. All v1.0 campaign and player data is gone from the database
   4. App runs against the new schema without errors (local and production)
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Rewrite schema.prisma to v1.1 model and wipe database
+- [ ] 05-02-PLAN.md — Fix server-side code (seed.ts + campaign action)
+- [ ] 05-03-PLAN.md — Fix UI/pages (campaign detail, invite stub, CampaignForm)
+- [ ] 05-04-PLAN.md — Full build verification and human smoke test
 
 ### Phase 6: Campaign Creation
 **Goal**: DM can create a campaign by entering only a date range, immediately sees a single shareable join link, and is recognised as the campaign owner on return visits
@@ -70,6 +76,6 @@ Full phase details: `.planning/milestones/v1.0-ROADMAP.md`
 | 2. Campaign | v1.0 | 3/3 | Complete | 2026-02-24 |
 | 3. Availability | v1.0 | 4/4 | Complete | 2026-02-26 |
 | 4. Dashboard | v1.0 | 4/4 | Complete | 2026-02-26 |
-| 5. Schema Migration | v1.1 | 0/? | Not started | - |
+| 5. Schema Migration | v1.1 | 0/4 | Not started | - |
 | 6. Campaign Creation | v1.1 | 0/? | Not started | - |
 | 7. Join Flow | v1.1 | 0/? | Not started | - |
