@@ -3,7 +3,7 @@
 ## Milestones
 
 - ✅ **v1.0 MVP** — Phases 1-4 (shipped 2026-02-26)
-- 🚧 **v1.1 Simplified Onboarding** — Phases 5-7 (in progress)
+- ✅ **v1.1 Simplified Onboarding** — Phases 5-7 (shipped 2026-03-02)
 
 ## Phases
 
@@ -19,13 +19,13 @@ Full phase details: `.planning/milestones/v1.0-ROADMAP.md`
 
 </details>
 
-### 🚧 v1.1 Simplified Onboarding (In Progress)
+### ✅ v1.1 Simplified Onboarding (Complete — shipped 2026-03-02)
 
 **Milestone Goal:** Replace per-player invite links with a single shared join link and self-registration flow. DM enters only a date range to create a campaign. Players arrive at the join link, enter their name once, and are remembered on return. Cookie-based routing means the same URL sends each visitor to the right place.
 
 - [x] **Phase 5: Schema Migration** — Wipe v1.0 schema and apply new data model that supports single join link and self-registration (4/4 plans) — completed 2026-03-02
 - [x] **Phase 6: Campaign Creation** — DM creates a campaign with only a date range, receives a single shareable join link, and is remembered as campaign owner (completed 2026-03-02)
-- [ ] **Phase 7: Join Flow** — Smart join link routes new visitors to name entry, returning players to their availability page, and returning DMs to the dashboard
+- [x] **Phase 7: Join Flow** — Smart join link routes new visitors to name entry, returning players to their availability page, and returning DMs to the dashboard (completed 2026-03-02)
 
 ## Phase Details
 
@@ -74,7 +74,7 @@ Plans:
 
 Plans:
 - [x] 07-01-PLAN.md — Smart join page routing (dm/player cookie checks) + registerPlayer server action
-- [ ] 07-02-PLAN.md — Player availability page and end-to-end human verification
+- [x] 07-02-PLAN.md — Player availability page and end-to-end human verification
 
 ## Progress
 
@@ -86,4 +86,4 @@ Plans:
 | 4. Dashboard | v1.0 | 4/4 | Complete | 2026-02-26 |
 | 5. Schema Migration | v1.1 | 4/4 | Complete | 2026-03-02 |
 | 6. Campaign Creation | 2/2 | Complete   | 2026-03-02 | - |
-| 7. Join Flow | v1.1 | 1/2 | In Progress | - |
+| 7. Join Flow | v1.1 | 2/2 | Complete | 2026-03-02 |
