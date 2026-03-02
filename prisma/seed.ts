@@ -12,11 +12,9 @@ async function main() {
   await prisma.playerSlot.deleteMany()
   await prisma.campaign.deleteMany()
 
-  // Create demo campaign
+  // Create demo campaign (v1.1: no name or dmName)
   const campaign = await prisma.campaign.create({
     data: {
-      name: 'Curse of Strahd',
-      dmName: 'Richard',
       planningWindowStart: new Date('2026-03-01'),
       planningWindowEnd: new Date('2026-03-31'),
       playerSlots: {
@@ -31,11 +29,10 @@ async function main() {
     include: { playerSlots: true },
   })
 
-  console.log('Seeded campaign:', campaign.name)
-  console.log('Player slots:')
-  campaign.playerSlots.forEach((slot) => {
-    console.log(`  - ${slot.name}: /invite/${slot.inviteToken}`)
-  })
+  console.log('Seeded campaign ID:', campaign.id)
+  console.log('Join token:', campaign.joinToken)
+  console.log('DM secret:', campaign.dmSecret)
+  console.log('Player slots:', campaign.playerSlots.map(s => s.name).join(', '))
 }
 
 main()
