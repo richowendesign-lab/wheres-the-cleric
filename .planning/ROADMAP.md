@@ -70,7 +70,11 @@ Plans:
   2. After entering their name and submitting, player lands on their personal availability page
   3. Returning player who revisits the join link is automatically sent to their availability page without seeing the name form
   4. DM who revisits the join link is automatically sent to the dashboard without seeing the name form
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 07-01-PLAN.md — Smart join page routing (dm/player cookie checks) + registerPlayer server action
+- [ ] 07-02-PLAN.md — Player availability page and end-to-end human verification
 
 ## Progress
 
@@ -82,4 +86,4 @@ Plans:
 | 4. Dashboard | v1.0 | 4/4 | Complete | 2026-02-26 |
 | 5. Schema Migration | v1.1 | 4/4 | Complete | 2026-03-02 |
 | 6. Campaign Creation | 2/2 | Complete   | 2026-03-02 | - |
-| 7. Join Flow | v1.1 | 0/? | Not started | - |
+| 7. Join Flow | v1.1 | 0/2 | Not started | - |
