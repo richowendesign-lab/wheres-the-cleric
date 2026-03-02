@@ -23,11 +23,11 @@ See: .planning/PROJECT.md (updated 2026-02-27)
 ## Current Position
 
 Phase: 6 of 7 in v1.1 (Campaign Creation) — IN PROGRESS
-Plan: 1 of 3 in Phase 6 (complete)
-Status: Plan 06-01 complete — dm_secret cookie and join link display done
-Last activity: 2026-03-02 — Phase 6 Plan 1 (06-01-PLAN.md)
+Plan: 2 of 3 in Phase 6 (complete)
+Status: Plan 06-02 complete — returning DM home page redirect done
+Last activity: 2026-03-02 — Phase 6 Plan 2 (06-02-PLAN.md)
 
-Progress: [███████████░░░░░░░░░] 55% (v1.0 complete, Phase 5 complete, Phase 6 Plan 1 complete)
+Progress: [████████████░░░░░░░░] 60% (v1.0 complete, Phase 5 complete, Phase 6 Plans 1+2 complete)
 
 ## Performance Metrics
 
@@ -71,6 +71,7 @@ Carried forward from v1.0:
 - [Phase 05-schema-migration]: No source file changes needed in plan 05-04 — build was clean after plans 05-02 and 05-03 fully eliminated all v1.0 field references
 - [Phase 06-campaign-creation]: No secure: true on dm_secret cookie — Next.js dev is HTTP; Vercel enforces HTTPS at the platform level
 - [Phase 06-campaign-creation]: cookies() from next/headers must be awaited in Next.js 16+ server actions before calling .set()
+- [Phase 06-campaign-creation]: Silent fallthrough when dm_secret cookie is stale (no matching campaign) — handles DB reset gracefully, DM can create new campaign
 
 ### Pending Todos
 
@@ -83,5 +84,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-02
-Stopped at: Completed 06-01-PLAN.md (dm_secret cookie + join link display — Phase 6 Plan 1 complete)
+Stopped at: Completed 06-02-PLAN.md (returning DM home page redirect — Phase 6 Plan 2 complete)
 Resume file: None

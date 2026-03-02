@@ -24,7 +24,7 @@ Full phase details: `.planning/milestones/v1.0-ROADMAP.md`
 **Milestone Goal:** Replace per-player invite links with a single shared join link and self-registration flow. DM enters only a date range to create a campaign. Players arrive at the join link, enter their name once, and are remembered on return. Cookie-based routing means the same URL sends each visitor to the right place.
 
 - [x] **Phase 5: Schema Migration** — Wipe v1.0 schema and apply new data model that supports single join link and self-registration (4/4 plans) — completed 2026-03-02
-- [ ] **Phase 6: Campaign Creation** — DM creates a campaign with only a date range, receives a single shareable join link, and is remembered as campaign owner
+- [x] **Phase 6: Campaign Creation** — DM creates a campaign with only a date range, receives a single shareable join link, and is remembered as campaign owner (completed 2026-03-02)
 - [ ] **Phase 7: Join Flow** — Smart join link routes new visitors to name entry, returning players to their availability page, and returning DMs to the dashboard
 
 ## Phase Details
@@ -81,5 +81,5 @@ Plans:
 | 3. Availability | v1.0 | 4/4 | Complete | 2026-02-26 |
 | 4. Dashboard | v1.0 | 4/4 | Complete | 2026-02-26 |
 | 5. Schema Migration | v1.1 | 4/4 | Complete | 2026-03-02 |
-| 6. Campaign Creation | 1/2 | In Progress|  | - |
+| 6. Campaign Creation | 2/2 | Complete   | 2026-03-02 | - |
 | 7. Join Flow | v1.1 | 0/? | Not started | - |
