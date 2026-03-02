@@ -1,6 +1,22 @@
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
+import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 
-export default function HomePage() {
+export default async function HomePage() {
+  const cookieStore = await cookies()
+  const dmSecret = cookieStore.get('dm_secret')?.value
+
+  if (dmSecret) {
+    const campaign = await prisma.campaign.findUnique({
+      where: { dmSecret },
+      select: { id: true },
+    })
+    if (campaign) {
+      redirect(`/campaigns/${campaign.id}`)
+    }
+  }
+
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100 flex flex-col items-center justify-center px-4">
       <h1 className="font-fantasy text-4xl text-amber-400 mb-4">D&D Session Planner</h1>
