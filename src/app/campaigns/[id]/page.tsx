@@ -4,6 +4,7 @@ import { UpdatePlanningWindowForm } from '@/components/UpdatePlanningWindowForm'
 import { computeDayStatuses } from '@/lib/availability'
 import { DashboardCalendar } from '@/components/DashboardCalendar'
 import { BestDaysList } from '@/components/BestDaysList'
+import { CopyLinkButton } from '@/components/CopyLinkButton'
 
 export default async function CampaignDetailPage({
   params,
@@ -47,6 +48,10 @@ export default async function CampaignDetailPage({
     ? computeDayStatuses(serializedSlots, windowStartStr, windowEndStr)
     : []
 
+  // Construct join URL
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+  const joinUrl = `${appUrl}/join/${campaign.joinToken}`
+
   // Detect missing players (zero total availability entries)
   const missingPlayers = campaign.playerSlots.filter(
     slot => slot.availabilityEntries.length === 0
@@ -58,6 +63,18 @@ export default async function CampaignDetailPage({
         <div>
           <h1 className="font-fantasy text-3xl text-amber-400 mb-1">Campaign Dashboard</h1>
         </div>
+
+        {/* Join Link */}
+        <section>
+          <h2 className="text-lg font-semibold text-gray-200 mb-4">Join Link</h2>
+          <p className="text-sm text-gray-400 mb-3">
+            Share this link with your players. Anyone who visits it can join the campaign.
+          </p>
+          <div className="flex items-center gap-3 bg-gray-800 rounded px-4 py-3">
+            <span className="flex-1 text-sm font-mono text-amber-300 truncate">{joinUrl}</span>
+            <CopyLinkButton url={joinUrl} />
+          </div>
+        </section>
 
         {/* Planning Window */}
         <section>
