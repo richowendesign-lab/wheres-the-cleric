@@ -106,8 +106,8 @@ export function AvailabilityCalendar({
 
                     const cellClass =
                       state === 'outside-window' ? 'text-gray-700 cursor-default' :
-                      isAvailable                ? 'bg-amber-900/40 text-amber-200 cursor-pointer hover:opacity-70' :
-                      /* not available */           'text-gray-500 cursor-pointer hover:bg-amber-900/20 hover:text-amber-300'
+                      isAvailable                ? 'bg-amber-900/40 text-amber-200 cursor-pointer hover:opacity-70 transition-opacity' :
+                      /* not available */           'text-gray-500 cursor-pointer hover:bg-amber-900/20 hover:text-amber-300 transition-colors'
 
                     return (
                       <button

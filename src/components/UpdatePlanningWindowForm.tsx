@@ -49,7 +49,7 @@ export function UpdatePlanningWindowForm({ campaign }: { campaign: Campaign }) {
       <button
         type="submit"
         disabled={isPending}
-        className="px-5 py-2 rounded bg-amber-500 text-gray-950 font-semibold hover:bg-amber-400 disabled:opacity-50"
+        className="px-5 py-2 rounded bg-amber-500 text-gray-950 font-semibold hover:bg-amber-400 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isPending ? 'Saving...' : 'Update window'}
       </button>

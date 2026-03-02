@@ -167,7 +167,7 @@ export function DashboardCalendar({
                                   />
                                   <span>{slot.name}</span>
                                   <span className="text-gray-500">
-                                    {status === 'free' ? 'Free' : status === 'busy' ? 'Busy' : 'No response'}
+                                    {status === 'free' ? 'Free' : status === 'busy' ? 'Unavailable' : 'No response'}
                                   </span>
                                 </div>
                               )
@@ -224,7 +224,7 @@ export function DashboardCalendar({
                       <span className={`text-sm ml-auto
                         ${status === 'free' ? 'text-green-400' :
                           status === 'busy' ? 'text-red-400' : 'text-gray-500'}`}>
-                        {status === 'free' ? 'Free' : status === 'busy' ? 'Busy' : 'No response'}
+                        {status === 'free' ? 'Free' : status === 'busy' ? 'Unavailable' : 'No response'}
                       </span>
                     </div>
                   )

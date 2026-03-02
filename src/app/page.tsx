@@ -25,7 +25,7 @@ export default async function HomePage() {
       </p>
       <Link
         href="/campaigns/new"
-        className="px-6 py-3 rounded bg-amber-500 text-gray-950 font-semibold hover:bg-amber-400"
+        className="px-6 py-3 rounded bg-amber-500 text-gray-950 font-semibold hover:bg-amber-400 transition-colors"
       >
         Create a Campaign
       </Link>

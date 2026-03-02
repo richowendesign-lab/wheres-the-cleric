@@ -36,7 +36,7 @@ export function CampaignForm() {
       <button
         type="submit"
         disabled={isPending}
-        className="w-full py-3 rounded bg-amber-500 text-gray-950 font-semibold hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full py-3 rounded bg-amber-500 text-gray-950 font-semibold hover:bg-amber-400 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isPending ? 'Creating...' : 'Create Campaign'}
       </button>
