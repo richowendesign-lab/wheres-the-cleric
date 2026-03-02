@@ -22,12 +22,12 @@ See: .planning/PROJECT.md (updated 2026-02-27)
 
 ## Current Position
 
-Phase: 5 of 7 in v1.1 (Schema Migration) — COMPLETE
-Plan: 4 of 4 in Phase 5 (complete)
-Status: Phase 5 complete, ready for Phase 6
-Last activity: 2026-03-02 — Phase 5 build verification and human smoke test (05-04-PLAN.md)
+Phase: 6 of 7 in v1.1 (Campaign Creation) — IN PROGRESS
+Plan: 1 of 3 in Phase 6 (complete)
+Status: Plan 06-01 complete — dm_secret cookie and join link display done
+Last activity: 2026-03-02 — Phase 6 Plan 1 (06-01-PLAN.md)
 
-Progress: [██████████░░░░░░░░░░] 50% (v1.0 complete, Phase 5 complete)
+Progress: [███████████░░░░░░░░░] 55% (v1.0 complete, Phase 5 complete, Phase 6 Plan 1 complete)
 
 ## Performance Metrics
 
@@ -69,6 +69,8 @@ Carried forward from v1.0:
 - [v1.1 migration]: Existing v1.0 data will be wiped; schema drops name/dmName from Campaign, drops inviteToken from PlayerSlot, adds joinToken + dmSecret to Campaign
 - [Phase 05-schema-migration]: Used prisma db push --force-reset (not prisma migrate reset) — project uses db push workflow with no migrations directory
 - [Phase 05-schema-migration]: No source file changes needed in plan 05-04 — build was clean after plans 05-02 and 05-03 fully eliminated all v1.0 field references
+- [Phase 06-campaign-creation]: No secure: true on dm_secret cookie — Next.js dev is HTTP; Vercel enforces HTTPS at the platform level
+- [Phase 06-campaign-creation]: cookies() from next/headers must be awaited in Next.js 16+ server actions before calling .set()
 
 ### Pending Todos
 
@@ -81,5 +83,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-02
-Stopped at: Completed 05-04-PLAN.md (Phase 5 fully complete — build verified + smoke test approved)
+Stopped at: Completed 06-01-PLAN.md (dm_secret cookie + join link display — Phase 6 Plan 1 complete)
 Resume file: None

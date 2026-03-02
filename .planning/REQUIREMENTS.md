@@ -35,9 +35,9 @@ Redesign of campaign creation and player onboarding. Single shared link replaces
 
 ### Campaign Creation
 
-- [ ] **CAMP-11**: DM can create a campaign by entering only a planning window (start and end date)
-- [ ] **CAMP-12**: DM sees their single shareable join link immediately after campaign creation
-- [ ] **CAMP-13**: DM's browser is remembered as campaign owner so they can return to the dashboard
+- [x] **CAMP-11**: DM can create a campaign by entering only a planning window (start and end date)
+- [x] **CAMP-12**: DM sees their single shareable join link immediately after campaign creation
+- [x] **CAMP-13**: DM's browser is remembered as campaign owner so they can return to the dashboard
 
 ### Join Flow
 
@@ -100,9 +100,9 @@ Redesign of campaign creation and player onboarding. Single shared link replaces
 | DASH-04 | Phase 4 | Complete |
 | ACCESS-01 | Phase 2 | Complete |
 | MIGR-01 | Phase 5 | Complete |
-| CAMP-11 | Phase 6 | Pending |
-| CAMP-12 | Phase 6 | Pending |
-| CAMP-13 | Phase 6 | Pending |
+| CAMP-11 | Phase 6 | Complete |
+| CAMP-12 | Phase 6 | Complete |
+| CAMP-13 | Phase 6 | Complete |
 | JOIN-01 | Phase 7 | Pending |
 | JOIN-02 | Phase 7 | Pending |
 | JOIN-03 | Phase 7 | Pending |
