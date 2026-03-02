@@ -144,8 +144,7 @@ export function DashboardCalendar({
                                   <span
                                     key={slot.id}
                                     className={`w-1.5 h-1.5 rounded-full inline-block
-                                      ${status === 'free' ? 'bg-green-400' :
-                                        status === 'busy' ? 'bg-red-400' : 'bg-gray-600'}`}
+                                      ${status === 'free' ? 'bg-green-400' : 'bg-gray-600'}`}
                                   />
                                 )
                               })}
@@ -162,12 +161,11 @@ export function DashboardCalendar({
                               return (
                                 <div key={slot.id} className="flex items-center gap-2">
                                   <span className={`w-2 h-2 rounded-full shrink-0
-                                    ${status === 'free' ? 'bg-green-400' :
-                                      status === 'busy' ? 'bg-red-400' : 'bg-gray-500'}`}
+                                    ${status === 'free' ? 'bg-green-400' : 'bg-gray-500'}`}
                                   />
                                   <span>{slot.name}</span>
                                   <span className="text-gray-500">
-                                    {status === 'free' ? 'Free' : status === 'busy' ? 'Unavailable' : 'No response'}
+                                    {status === 'free' ? 'Free' : 'No response'}
                                   </span>
                                 </div>
                               )
@@ -217,14 +215,12 @@ export function DashboardCalendar({
                   return (
                     <div key={slot.id} className="flex items-center gap-3">
                       <span className={`w-3 h-3 rounded-full shrink-0
-                        ${status === 'free' ? 'bg-green-400' :
-                          status === 'busy' ? 'bg-red-400' : 'bg-gray-500'}`}
+                        ${status === 'free' ? 'bg-green-400' : 'bg-gray-500'}`}
                       />
                       <span className="text-gray-100 font-medium">{slot.name}</span>
                       <span className={`text-sm ml-auto
-                        ${status === 'free' ? 'text-green-400' :
-                          status === 'busy' ? 'text-red-400' : 'text-gray-500'}`}>
-                        {status === 'free' ? 'Free' : status === 'busy' ? 'Unavailable' : 'No response'}
+                        ${status === 'free' ? 'text-green-400' : 'text-gray-500'}`}>
+                        {status === 'free' ? 'Free' : 'No response'}
                       </span>
                     </div>
                   )

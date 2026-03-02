@@ -1,4 +1,4 @@
-export type PlayerDayStatus = 'free' | 'busy' | 'no-response'
+export type PlayerDayStatus = 'free' | 'no-response'
 
 export interface PlayerSlotWithEntries {
   id: string
@@ -46,7 +46,7 @@ export function resolvePlayerStatusOnDate(
   })
 
   if (override) {
-    return override.status as PlayerDayStatus
+    return override.status === 'free' ? 'free' : 'no-response'
   }
 
   // Fall back to weekly pattern

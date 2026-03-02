@@ -117,9 +117,6 @@ export default async function CampaignDetailPage({
                 <span className="inline-block w-2.5 h-2.5 rounded-full bg-green-400" />Free
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="inline-block w-2.5 h-2.5 rounded-full bg-red-400" />Unavailable
-              </span>
-              <span className="flex items-center gap-1.5">
                 <span className="inline-block w-2.5 h-2.5 rounded-full bg-gray-600" />No response
               </span>
             </div>
