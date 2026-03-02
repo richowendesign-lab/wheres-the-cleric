@@ -55,7 +55,11 @@ Plans:
   2. After creation, DM sees a single join link they can copy and share
   3. DM's browser receives a cookie marking them as campaign owner
   4. DM can close and reopen the browser, visit the app, and land on their dashboard without re-entering anything
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — Set DM cookie on campaign creation and display join link on dashboard
+- [ ] 06-02-PLAN.md — Home page returning DM redirect and end-to-end human verification
 
 ### Phase 7: Join Flow
 **Goal**: The join link is smart — new visitors see a name entry form, returning players go straight to their availability page, and the DM goes straight to the dashboard
@@ -77,5 +81,5 @@ Plans:
 | 3. Availability | v1.0 | 4/4 | Complete | 2026-02-26 |
 | 4. Dashboard | v1.0 | 4/4 | Complete | 2026-02-26 |
 | 5. Schema Migration | v1.1 | 4/4 | Complete | 2026-03-02 |
-| 6. Campaign Creation | v1.1 | 0/? | Not started | - |
+| 6. Campaign Creation | v1.1 | 0/2 | In progress | - |
 | 7. Join Flow | v1.1 | 0/? | Not started | - |
