@@ -23,7 +23,7 @@ Full phase details: `.planning/milestones/v1.0-ROADMAP.md`
 
 **Milestone Goal:** Replace per-player invite links with a single shared join link and self-registration flow. DM enters only a date range to create a campaign. Players arrive at the join link, enter their name once, and are remembered on return. Cookie-based routing means the same URL sends each visitor to the right place.
 
-- [ ] **Phase 5: Schema Migration** — Wipe v1.0 schema and apply new data model that supports single join link and self-registration
+- [x] **Phase 5: Schema Migration** — Wipe v1.0 schema and apply new data model that supports single join link and self-registration (4/4 plans) — completed 2026-03-02
 - [ ] **Phase 6: Campaign Creation** — DM creates a campaign with only a date range, receives a single shareable join link, and is remembered as campaign owner
 - [ ] **Phase 7: Join Flow** — Smart join link routes new visitors to name entry, returning players to their availability page, and returning DMs to the dashboard
 
@@ -41,10 +41,10 @@ Full phase details: `.planning/milestones/v1.0-ROADMAP.md`
 **Plans**: 4 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — Rewrite schema.prisma to v1.1 model and wipe database
-- [ ] 05-02-PLAN.md — Fix server-side code (seed.ts + campaign action)
-- [ ] 05-03-PLAN.md — Fix UI/pages (campaign detail, invite stub, CampaignForm)
-- [ ] 05-04-PLAN.md — Full build verification and human smoke test
+- [x] 05-01-PLAN.md — Rewrite schema.prisma to v1.1 model and wipe database
+- [x] 05-02-PLAN.md — Fix server-side code (seed.ts + campaign action)
+- [x] 05-03-PLAN.md — Fix UI/pages (campaign detail, invite stub, CampaignForm)
+- [x] 05-04-PLAN.md — Full build verification and human smoke test
 
 ### Phase 6: Campaign Creation
 **Goal**: DM can create a campaign by entering only a date range, immediately sees a single shareable join link, and is recognised as the campaign owner on return visits
@@ -76,6 +76,6 @@ Plans:
 | 2. Campaign | v1.0 | 3/3 | Complete | 2026-02-24 |
 | 3. Availability | v1.0 | 4/4 | Complete | 2026-02-26 |
 | 4. Dashboard | v1.0 | 4/4 | Complete | 2026-02-26 |
-| 5. Schema Migration | 1/4 | In Progress|  | - |
+| 5. Schema Migration | v1.1 | 4/4 | Complete | 2026-03-02 |
 | 6. Campaign Creation | v1.1 | 0/? | Not started | - |
 | 7. Join Flow | v1.1 | 0/? | Not started | - |

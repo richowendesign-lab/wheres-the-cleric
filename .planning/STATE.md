@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Simplified Onboarding
-status: unknown
-last_updated: "2026-03-02T10:34:27.959Z"
+status: in_progress
+last_updated: "2026-03-02T12:00:00.000Z"
 progress:
-  total_phases: 5
-  completed_phases: 4
+  total_phases: 7
+  completed_phases: 5
   total_plans: 18
-  completed_plans: 16
+  completed_plans: 18
 ---
 
 # Project State
@@ -18,16 +18,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-27)
 
 **Core value:** The DM can instantly see when everyone is free — without chasing people for responses or guessing which dates to offer.
-**Current focus:** Phase 5 — Schema Migration (v1.1 Simplified Onboarding)
+**Current focus:** Phase 6 — Campaign Creation (v1.1 Simplified Onboarding)
 
 ## Current Position
 
-Phase: 5 of 7 in v1.1 (Schema Migration)
-Plan: 1 of 1 in current phase (complete)
-Status: Phase 5 complete
-Last activity: 2026-03-02 — Phase 5 schema migration executed (05-01-PLAN.md)
+Phase: 5 of 7 in v1.1 (Schema Migration) — COMPLETE
+Plan: 4 of 4 in Phase 5 (complete)
+Status: Phase 5 complete, ready for Phase 6
+Last activity: 2026-03-02 — Phase 5 build verification and human smoke test (05-04-PLAN.md)
 
-Progress: [████████░░░░░░░░░░░░] 43% (v1.0 complete, Phase 5 complete)
+Progress: [██████████░░░░░░░░░░] 50% (v1.0 complete, Phase 5 complete)
 
 ## Performance Metrics
 
@@ -68,6 +68,7 @@ Carried forward from v1.0:
 - [Phase 04-dashboard]: computeDayStatuses called server-side, passed as plain DayAggregation[] to client components
 - [v1.1 migration]: Existing v1.0 data will be wiped; schema drops name/dmName from Campaign, drops inviteToken from PlayerSlot, adds joinToken + dmSecret to Campaign
 - [Phase 05-schema-migration]: Used prisma db push --force-reset (not prisma migrate reset) — project uses db push workflow with no migrations directory
+- [Phase 05-schema-migration]: No source file changes needed in plan 05-04 — build was clean after plans 05-02 and 05-03 fully eliminated all v1.0 field references
 
 ### Pending Todos
 
@@ -80,5 +81,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-02
-Stopped at: Completed 05-01-PLAN.md (Phase 5 schema migration complete)
+Stopped at: Completed 05-04-PLAN.md (Phase 5 fully complete — build verified + smoke test approved)
 Resume file: None
