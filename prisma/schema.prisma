@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -12,8 +9,8 @@ datasource db {
 
 model Campaign {
   id                  String       @id @default(cuid())
-  name                String
-  dmName              String
+  joinToken           String       @unique @default(cuid())
+  dmSecret            String       @unique @default(cuid())
   planningWindowStart DateTime?
   planningWindowEnd   DateTime?
   createdAt           DateTime     @default(now())
@@ -22,14 +19,13 @@ model Campaign {
 }
 
 model PlayerSlot {
-  id                    String              @id @default(cuid())
-  campaignId            String
-  name                  String
-  inviteToken           String              @unique @default(cuid())
-  createdAt             DateTime            @default(now())
-  updatedAt             DateTime            @updatedAt
-  campaign              Campaign            @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-  availabilityEntries   AvailabilityEntry[]
+  id                  String              @id @default(cuid())
+  campaignId          String
+  name                String
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+  campaign            Campaign            @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  availabilityEntries AvailabilityEntry[]
 }
 
 // type: "weekly" = recurring day-of-week pattern
