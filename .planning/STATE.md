@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Simplified Onboarding
 status: unknown
-last_updated: "2026-03-02T17:02:53.768Z"
+last_updated: "2026-03-02T17:13:18Z"
 progress:
-  total_phases: 6
+  total_phases: 7
   completed_phases: 6
-  total_plans: 20
-  completed_plans: 20
+  total_plans: 22
+  completed_plans: 21
 ---
 
 # Project State
@@ -18,16 +18,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-27)
 
 **Core value:** The DM can instantly see when everyone is free — without chasing people for responses or guessing which dates to offer.
-**Current focus:** Phase 6 — Campaign Creation (v1.1 Simplified Onboarding)
+**Current focus:** Phase 7 — Join Flow (v1.1 Simplified Onboarding)
 
 ## Current Position
 
-Phase: 6 of 7 in v1.1 (Campaign Creation) — IN PROGRESS
-Plan: 2 of 3 in Phase 6 (complete)
-Status: Plan 06-02 complete — returning DM home page redirect done
-Last activity: 2026-03-02 — Phase 6 Plan 2 (06-02-PLAN.md)
+Phase: 7 of 7 in v1.1 (Join Flow) — IN PROGRESS
+Plan: 1 of 2 in Phase 7 (complete)
+Status: Plan 07-01 complete — smart join page routing + registerPlayer action done
+Last activity: 2026-03-02 — Phase 7 Plan 1 (07-01-PLAN.md)
 
-Progress: [████████████░░░░░░░░] 60% (v1.0 complete, Phase 5 complete, Phase 6 Plans 1+2 complete)
+Progress: [████████████████░░░░] 80% (v1.0 complete, Phases 5+6 complete, Phase 7 Plan 1 complete)
 
 ## Performance Metrics
 
@@ -72,6 +72,9 @@ Carried forward from v1.0:
 - [Phase 06-campaign-creation]: No secure: true on dm_secret cookie — Next.js dev is HTTP; Vercel enforces HTTPS at the platform level
 - [Phase 06-campaign-creation]: cookies() from next/headers must be awaited in Next.js 16+ server actions before calling .set()
 - [Phase 06-campaign-creation]: Silent fallthrough when dm_secret cookie is stale (no matching campaign) — handles DB reset gracefully, DM can create new campaign
+- [Phase 07-join-flow]: JoinForm extracted to separate JoinForm.tsx file rather than inlined — cleaner 'use client' boundary
+- [Phase 07-join-flow]: player_id cookie set without secure: true — consistent with dm_secret decision; Vercel enforces HTTPS at platform level
+- [Phase 07-join-flow]: redirect() as final statement in registerPlayer (not inside try/catch) — Next.js redirect() throws internally
 
 ### Pending Todos
 
@@ -84,5 +87,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-02
-Stopped at: Completed 06-02-PLAN.md (returning DM home page redirect — Phase 6 Plan 2 complete)
+Stopped at: Completed 07-01-PLAN.md (smart join page routing + registerPlayer action — Phase 7 Plan 1 complete)
 Resume file: None

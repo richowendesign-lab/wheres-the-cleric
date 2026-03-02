@@ -41,10 +41,10 @@ Redesign of campaign creation and player onboarding. Single shared link replaces
 
 ### Join Flow
 
-- [ ] **JOIN-01**: New visitor to the join link is prompted to enter their name to join
-- [ ] **JOIN-02**: After entering their name, player is redirected to their availability page
-- [ ] **JOIN-03**: Returning player is auto-recognised (cookie) and redirected to their availability page
-- [ ] **JOIN-04**: DM visiting the join link is auto-recognised (cookie) and redirected to the dashboard
+- [x] **JOIN-01**: New visitor to the join link is prompted to enter their name to join
+- [x] **JOIN-02**: After entering their name, player is redirected to their availability page
+- [x] **JOIN-03**: Returning player is auto-recognised (cookie) and redirected to their availability page
+- [x] **JOIN-04**: DM visiting the join link is auto-recognised (cookie) and redirected to the dashboard
 
 ### Migration
 
@@ -103,10 +103,10 @@ Redesign of campaign creation and player onboarding. Single shared link replaces
 | CAMP-11 | Phase 6 | Complete |
 | CAMP-12 | Phase 6 | Complete |
 | CAMP-13 | Phase 6 | Complete |
-| JOIN-01 | Phase 7 | Pending |
-| JOIN-02 | Phase 7 | Pending |
-| JOIN-03 | Phase 7 | Pending |
-| JOIN-04 | Phase 7 | Pending |
+| JOIN-01 | Phase 7 | Complete |
+| JOIN-02 | Phase 7 | Complete |
+| JOIN-03 | Phase 7 | Complete |
+| JOIN-04 | Phase 7 | Complete |
 
 **Coverage:**
 - v1.1 requirements: 8 total
