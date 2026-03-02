@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Simplified Onboarding
-status: in_progress
-last_updated: "2026-03-02T12:00:00.000Z"
+status: unknown
+last_updated: "2026-03-02T16:34:41.164Z"
 progress:
-  total_phases: 7
+  total_phases: 5
   completed_phases: 5
   total_plans: 18
   completed_plans: 18
