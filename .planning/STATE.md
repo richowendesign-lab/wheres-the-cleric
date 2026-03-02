@@ -1,3 +1,16 @@
+---
+gsd_state_version: 1.0
+milestone: v1.1
+milestone_name: Simplified Onboarding
+status: unknown
+last_updated: "2026-03-02T10:34:27.959Z"
+progress:
+  total_phases: 5
+  completed_phases: 4
+  total_plans: 18
+  completed_plans: 16
+---
+
 # Project State
 
 ## Project Reference
@@ -10,11 +23,11 @@ See: .planning/PROJECT.md (updated 2026-02-27)
 ## Current Position
 
 Phase: 5 of 7 in v1.1 (Schema Migration)
-Plan: — of — in current phase
-Status: Ready to plan
-Last activity: 2026-02-27 — v1.1 roadmap created (phases 5-7 defined)
+Plan: 1 of 1 in current phase (complete)
+Status: Phase 5 complete
+Last activity: 2026-03-02 — Phase 5 schema migration executed (05-01-PLAN.md)
 
-Progress: [████████░░░░░░░░░░░░] 40% (v1.0 complete, v1.1 not started)
+Progress: [████████░░░░░░░░░░░░] 43% (v1.0 complete, Phase 5 complete)
 
 ## Performance Metrics
 
@@ -54,6 +67,7 @@ Carried forward from v1.0:
 - [Phase 04-dashboard]: Override-beats-weekly resolution in resolvePlayerStatusOnDate
 - [Phase 04-dashboard]: computeDayStatuses called server-side, passed as plain DayAggregation[] to client components
 - [v1.1 migration]: Existing v1.0 data will be wiped; schema drops name/dmName from Campaign, drops inviteToken from PlayerSlot, adds joinToken + dmSecret to Campaign
+- [Phase 05-schema-migration]: Used prisma db push --force-reset (not prisma migrate reset) — project uses db push workflow with no migrations directory
 
 ### Pending Todos
 
@@ -65,6 +79,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-27
-Stopped at: v1.1 roadmap created — ready to plan Phase 5
+Last session: 2026-03-02
+Stopped at: Completed 05-01-PLAN.md (Phase 5 schema migration complete)
 Resume file: None

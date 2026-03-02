@@ -48,7 +48,7 @@ Redesign of campaign creation and player onboarding. Single shared link replaces
 
 ### Migration
 
-- [ ] **MIGR-01**: Database schema updated to remove player names from campaign creation and support self-registration; existing data wiped
+- [x] **MIGR-01**: Database schema updated to remove player names from campaign creation and support self-registration; existing data wiped
 
 ## v2 Requirements
 
@@ -99,7 +99,7 @@ Redesign of campaign creation and player onboarding. Single shared link replaces
 | DASH-03 | Phase 4 | Complete |
 | DASH-04 | Phase 4 | Complete |
 | ACCESS-01 | Phase 2 | Complete |
-| MIGR-01 | Phase 5 | Pending |
+| MIGR-01 | Phase 5 | Complete |
 | CAMP-11 | Phase 6 | Pending |
 | CAMP-12 | Phase 6 | Pending |
 | CAMP-13 | Phase 6 | Pending |

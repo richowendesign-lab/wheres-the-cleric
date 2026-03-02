@@ -76,6 +76,6 @@ Plans:
 | 2. Campaign | v1.0 | 3/3 | Complete | 2026-02-24 |
 | 3. Availability | v1.0 | 4/4 | Complete | 2026-02-26 |
 | 4. Dashboard | v1.0 | 4/4 | Complete | 2026-02-26 |
-| 5. Schema Migration | v1.1 | 0/4 | Not started | - |
+| 5. Schema Migration | 1/4 | In Progress|  | - |
 | 6. Campaign Creation | v1.1 | 0/? | Not started | - |
 | 7. Join Flow | v1.1 | 0/? | Not started | - |
