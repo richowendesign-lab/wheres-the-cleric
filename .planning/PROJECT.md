@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A web app for scheduling D&D sessions with a group of friends. The DM (organizer) creates a campaign and gets unique private invite links per player. Players use their link to set their recurring weekly availability and mark specific date exceptions. The DM sees a calendar showing aggregate availability across the group plus ranked recommendations for the best session days. Shipped as v1.0 MVP — deployed to Vercel with Neon PostgreSQL in production.
+A web app for scheduling D&D sessions with a group of friends. The DM creates a campaign by entering a date range and gets a single shareable join link. Players visit the link, enter their name once, and are remembered on return by a browser cookie. The DM sees a calendar showing aggregate availability across the group plus ranked recommendations for the best session days. Deployed to Vercel with Neon PostgreSQL in production.
 
 ## Core Value
 
@@ -18,34 +18,38 @@ The DM can instantly see when everyone is free — without chasing people for re
 - ✓ DM can see an aggregate availability calendar showing each player's status per day — v1.0
 - ✓ App ranks and recommends the best days for a session based on group availability — v1.0
 - ✓ DM can see which players haven't submitted their availability yet — v1.0
+- ✓ DM can create a campaign by entering only a planning window (no name, no player names) — v1.1
+- ✓ Campaign generates a single shareable join link — v1.1
+- ✓ New player visits link, enters their name, and is taken to their availability page — v1.1
+- ✓ Returning player is recognised by browser (cookie) and taken straight to their availability — v1.1
+- ✓ DM is recognised by browser (cookie) and taken straight to the dashboard when visiting the link — v1.1
 
 ### Active
 
-- [ ] DM can create a campaign by entering only a planning window (no name, no player names)
-- [ ] Campaign generates a single shareable join link
-- [ ] New player visits link, enters their name, and is taken to their availability page
-- [ ] Returning player is recognised by browser (cookie) and taken straight to their availability
-- [ ] DM is recognised by browser (cookie) and taken straight to the dashboard when visiting the link
+_(empty — planning next milestone)_
 
 ### Out of Scope
 
 - Automated reminders sent to players — DM handles nudging manually
-- Account-based login — private invite links used instead
+- Account-based login — cookie-based identity is sufficient for this use case
 - Per-session polls with pre-selected dates — replaced by open availability model
 - In-app chat or session notes — scheduling only
+- Player cap / invite approval — complexity not warranted for small friend groups
+- Multiple campaigns per DM — single campaign is the use case
 
 ## Context
 
 - Group size: 5 people (1 DM + 4 players)
 - Shipped v1.0 in 3 days (2026-02-23 → 2026-02-26): 4 phases, 14 plans, ~7,600 TypeScript LOC
+- Shipped v1.1 in 4 days (2026-02-27 → 2026-03-02): 3 phases, 8 plans, +3,053 / -241 LOC
+- Current codebase: ~7,744 TypeScript LOC
 - Tech stack: Next.js 16, React 19, TypeScript, Tailwind CSS 4, Prisma 7, SQLite (local) / Neon PostgreSQL (production)
 - Deployed to Vercel: https://my-portfolio-henna-ten-97.vercel.app
-- Access model: No accounts — each player gets their own persistent private link they can return to and update
-- Key insight: Players express *when they're generally free* rather than react to dates the DM proposes
+- Access model: No accounts — single join link per campaign; DM and players identified by httpOnly cookies
 
 ## Constraints
 
-- **Access model**: No user accounts — invite links must be persistent and uniquely tied to each player
+- **Access model**: No user accounts — cookie-based identity for DM and players; single join link per campaign
 - **Group focus**: Built for small groups (5–8 people), not general-purpose event scheduling
 
 ## Key Decisions
@@ -59,17 +63,11 @@ The DM can instantly see when everyone is free — without chasing people for re
 | Server-side aggregation for dashboard | Keeps client components simple; no client fetching | ✓ Good — fast renders, no loading states |
 | CSS-only hover tooltip (group-hover) | No JS state for tooltips keeps component lighter | ✓ Good — smooth, no flicker |
 | Side-by-side calendar + best days layout | DM's primary goal after sharing links is to see availability | ✓ Good — user feedback confirmed this |
-
-## Current Milestone: v1.1 Simplified Onboarding
-
-**Goal:** Replace per-player invite links with a single shared join link and self-registration flow
-
-**Target features:**
-- Minimal campaign creation (date range only)
-- Single shareable join link per campaign
-- Player self-registration (enter name on first visit)
-- Cookie-based identity (DM and players recognised on return)
-- Data migration: wipe v1.0 model, apply new schema
+| Cookie-based identity over per-player links (v1.1) | Single join link lowers friction — no individual link management for DM | ✓ Good — simpler DM workflow |
+| No `secure: true` on httpOnly cookies (v1.1) | Next.js dev is HTTP; Vercel enforces HTTPS at platform level | ✓ Good — clean dual-environment |
+| Silent fallthrough on stale dm_secret cookie (v1.1) | Handles DB reset gracefully — DM can create new campaign without error state | ✓ Good — zero error UX |
+| JoinForm extracted to separate file (v1.1) | Clean `use client` boundary from server component routing logic | ✓ Good — clear separation |
+| `redirect()` outside try/catch in server actions (v1.1) | Next.js `redirect()` throws internally — must not be caught | ✓ Good — correct pattern |
 
 ---
-*Last updated: 2026-02-27 after v1.1 milestone started*
+*Last updated: 2026-03-02 after v1.1 milestone*

@@ -19,62 +19,16 @@ Full phase details: `.planning/milestones/v1.0-ROADMAP.md`
 
 </details>
 
-### ✅ v1.1 Simplified Onboarding (Complete — shipped 2026-03-02)
+<details>
+<summary>✅ v1.1 Simplified Onboarding (Phases 5-7) — SHIPPED 2026-03-02</summary>
 
-**Milestone Goal:** Replace per-player invite links with a single shared join link and self-registration flow. DM enters only a date range to create a campaign. Players arrive at the join link, enter their name once, and are remembered on return. Cookie-based routing means the same URL sends each visitor to the right place.
+- [x] **Phase 5: Schema Migration** — Wipe v1.0 schema and apply new data model supporting single join link and self-registration (4/4 plans) — completed 2026-03-02
+- [x] **Phase 6: Campaign Creation** — DM creates campaign with only a date range, receives single shareable join link, remembered as owner (2/2 plans) — completed 2026-03-02
+- [x] **Phase 7: Join Flow** — Smart join link routes new visitors to name entry, returning players to availability, returning DMs to dashboard (2/2 plans) — completed 2026-03-02
 
-- [x] **Phase 5: Schema Migration** — Wipe v1.0 schema and apply new data model that supports single join link and self-registration (4/4 plans) — completed 2026-03-02
-- [x] **Phase 6: Campaign Creation** — DM creates a campaign with only a date range, receives a single shareable join link, and is remembered as campaign owner (completed 2026-03-02)
-- [x] **Phase 7: Join Flow** — Smart join link routes new visitors to name entry, returning players to their availability page, and returning DMs to the dashboard (completed 2026-03-02)
+Full phase details: `.planning/milestones/v1.1-ROADMAP.md`
 
-## Phase Details
-
-### Phase 5: Schema Migration
-**Goal**: The database schema supports the v1.1 access model — join token, DM secret, and player self-registration — with all v1.0 data cleared
-**Depends on**: Phase 4 (v1.0 complete)
-**Requirements**: MIGR-01
-**Success Criteria** (what must be TRUE):
-  1. Campaign table has joinToken and dmSecret fields; name and dmName fields are removed
-  2. PlayerSlot table has no inviteToken field; player name is stored after self-registration
-  3. All v1.0 campaign and player data is gone from the database
-  4. App runs against the new schema without errors (local and production)
-**Plans**: 4 plans
-
-Plans:
-- [x] 05-01-PLAN.md — Rewrite schema.prisma to v1.1 model and wipe database
-- [x] 05-02-PLAN.md — Fix server-side code (seed.ts + campaign action)
-- [x] 05-03-PLAN.md — Fix UI/pages (campaign detail, invite stub, CampaignForm)
-- [x] 05-04-PLAN.md — Full build verification and human smoke test
-
-### Phase 6: Campaign Creation
-**Goal**: DM can create a campaign by entering only a date range, immediately sees a single shareable join link, and is recognised as the campaign owner on return visits
-**Depends on**: Phase 5
-**Requirements**: CAMP-11, CAMP-12, CAMP-13
-**Success Criteria** (what must be TRUE):
-  1. DM can submit the campaign creation form with only start and end dates — no name or player name fields present
-  2. After creation, DM sees a single join link they can copy and share
-  3. DM's browser receives a cookie marking them as campaign owner
-  4. DM can close and reopen the browser, visit the app, and land on their dashboard without re-entering anything
-**Plans**: 2 plans
-
-Plans:
-- [ ] 06-01-PLAN.md — Set DM cookie on campaign creation and display join link on dashboard
-- [ ] 06-02-PLAN.md — Home page returning DM redirect and end-to-end human verification
-
-### Phase 7: Join Flow
-**Goal**: The join link is smart — new visitors see a name entry form, returning players go straight to their availability page, and the DM goes straight to the dashboard
-**Depends on**: Phase 6
-**Requirements**: JOIN-01, JOIN-02, JOIN-03, JOIN-04
-**Success Criteria** (what must be TRUE):
-  1. New visitor who opens the join link sees a name entry form with no other navigation
-  2. After entering their name and submitting, player lands on their personal availability page
-  3. Returning player who revisits the join link is automatically sent to their availability page without seeing the name form
-  4. DM who revisits the join link is automatically sent to the dashboard without seeing the name form
-**Plans**: 2 plans
-
-Plans:
-- [x] 07-01-PLAN.md — Smart join page routing (dm/player cookie checks) + registerPlayer server action
-- [x] 07-02-PLAN.md — Player availability page and end-to-end human verification
+</details>
 
 ## Progress
 
@@ -85,5 +39,5 @@ Plans:
 | 3. Availability | v1.0 | 4/4 | Complete | 2026-02-26 |
 | 4. Dashboard | v1.0 | 4/4 | Complete | 2026-02-26 |
 | 5. Schema Migration | v1.1 | 4/4 | Complete | 2026-03-02 |
-| 6. Campaign Creation | 2/2 | Complete   | 2026-03-02 | - |
+| 6. Campaign Creation | v1.1 | 2/2 | Complete | 2026-03-02 |
 | 7. Join Flow | v1.1 | 2/2 | Complete | 2026-03-02 |
