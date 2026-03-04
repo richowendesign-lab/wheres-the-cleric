@@ -9,9 +9,9 @@ Requirements for the Multi-Campaign DM milestone. Phase numbering continues from
 
 ### Authentication
 
-- [ ] **AUTH-01**: DM can sign up with email and password
-- [ ] **AUTH-02**: DM can log in with email and password
-- [ ] **AUTH-03**: DM session persists across browser refresh (httpOnly session cookie)
+- [x] **AUTH-01**: DM can sign up with email and password
+- [x] **AUTH-02**: DM can log in with email and password
+- [x] **AUTH-03**: DM session persists across browser refresh (httpOnly session cookie)
 - [ ] **AUTH-04**: DM can log out and session is cleared
 
 ### Campaign Management
@@ -52,9 +52,9 @@ Requirements for the Multi-Campaign DM milestone. Phase numbering continues from
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 8 | Pending |
-| AUTH-02 | Phase 8 | Pending |
-| AUTH-03 | Phase 8 | Pending |
+| AUTH-01 | Phase 8 | Complete |
+| AUTH-02 | Phase 8 | Complete |
+| AUTH-03 | Phase 8 | Complete |
 | AUTH-04 | Phase 8 | Pending |
 | CAMP-01 | Phase 9 | Pending |
 | CAMP-02 | Phase 9 | Pending |
