@@ -5,6 +5,8 @@ import { computeDayStatuses } from '@/lib/availability'
 import { DashboardCalendar } from '@/components/DashboardCalendar'
 import { BestDaysList } from '@/components/BestDaysList'
 import { CopyLinkButton } from '@/components/CopyLinkButton'
+import { DeleteCampaignButton } from '@/components/DeleteCampaignButton'
+import { logOut } from '@/lib/actions/auth'
 
 export default async function CampaignDetailPage({
   params,
@@ -49,7 +51,8 @@ export default async function CampaignDetailPage({
     : []
 
   // Construct join URL
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL
+    ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
   const joinUrl = `${appUrl}/join/${campaign.joinToken}`
 
   // Detect missing players (zero total availability entries)
@@ -60,8 +63,17 @@ export default async function CampaignDetailPage({
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100 px-4 py-12">
       <div className="max-w-2xl mx-auto space-y-10">
-        <div>
+        <form action={logOut} className="flex justify-end mb-4">
+          <button
+            type="submit"
+            className="text-sm text-gray-400 hover:text-gray-200 transition-colors underline"
+          >
+            Log out
+          </button>
+        </form>
+        <div className="flex items-center justify-between">
           <h1 className="font-fantasy text-3xl text-amber-400 mb-1">Campaign Dashboard</h1>
+          <DeleteCampaignButton campaignId={campaign.id} />
         </div>
 
         {/* Join Link */}
