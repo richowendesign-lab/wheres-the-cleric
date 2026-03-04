@@ -34,7 +34,7 @@ Full phase details: `.planning/milestones/v1.1-ROADMAP.md`
 ### v1.2 Multi-Campaign DM (Phases 8-10)
 
 - [x] **Phase 8: DM Auth** — DM can create an account and log in with email and password, with session persisting across browser refreshes (completed 2026-03-04)
-- [ ] **Phase 9: Campaign Fields and Join Cap** — Campaign creation captures name, description, and max players; join link enforces the player cap
+- [x] **Phase 9: Campaign Fields and Join Cap** — Campaign creation captures name, description, and max players; join link enforces the player cap (completed 2026-03-04)
 - [ ] **Phase 10: Multi-Campaign Dashboard** — DM home page shows all their campaigns as cards with a button to create a new one
 
 ## Phase Details
@@ -68,8 +68,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 09-01-PLAN.md — Schema fields (name, description, maxPlayers, dmId), updated createCampaign action, join cap enforcement in registerPlayer
-- [ ] 09-02-PLAN.md — CampaignForm UI fields, campaign dashboard display, join page cap gate + human verification
+- [x] 09-01-PLAN.md — Schema fields (name, description, maxPlayers, dmId), updated createCampaign action, join cap enforcement in registerPlayer
+- [x] 09-02-PLAN.md — CampaignForm UI fields, campaign dashboard display, join page cap gate + human verification
 
 ### Phase 10: Multi-Campaign Dashboard
 **Goal**: DM can see and navigate all their campaigns from a single home page
@@ -94,5 +94,5 @@ Plans:
 | 6. Campaign Creation | v1.1 | 2/2 | Complete | 2026-03-02 |
 | 7. Join Flow | v1.1 | 2/2 | Complete | 2026-03-02 |
 | 8. DM Auth | v1.2 | 4/4 | Complete | 2026-03-04 |
-| 9. Campaign Fields and Join Cap | 1/2 | In Progress|  | - |
+| 9. Campaign Fields and Join Cap | v1.2 | 2/2 | Complete | 2026-03-04 |
 | 10. Multi-Campaign Dashboard | v1.2 | 0/? | Not started | - |

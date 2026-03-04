@@ -70,4 +70,4 @@ Requirements for the Multi-Campaign DM milestone. Phase numbering continues from
 
 ---
 *Requirements defined: 2026-03-04*
-*Last updated: 2026-03-04 — AUTH-04 marked complete after 08-02 (logOut server action)*
+*Last updated: 2026-03-04 — CAMP-01/02/03 and JOIN-01 confirmed complete after 09-02 (UI + human verification)*

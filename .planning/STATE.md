@@ -22,10 +22,10 @@ See: .planning/PROJECT.md (updated 2026-03-04 after v1.2 milestone start)
 
 ## Current Position
 
-Phase: Phase 9 (Campaign Fields and Join Cap) — in progress
-Plan: 1 of 2 complete (09-01 done)
-Status: Campaign schema extended with name/description/maxPlayers/dmId; createCampaign validates name and links to authenticated DM; registerPlayer enforces player cap; ready for Phase 9 UI plan (09-02)
-Last activity: 2026-03-04 — completed 09-01 (schema migration + action updates)
+Phase: Phase 9 (Campaign Fields and Join Cap) — complete
+Plan: 2 of 2 complete (09-01 and 09-02 done)
+Status: All four Phase 9 requirements complete and human-verified — CampaignForm has name/description/maxPlayers fields; campaign dashboard shows name, description, and player cap indicator; join page gates at cap with "Campaign Full" screen
+Last activity: 2026-03-04 — completed 09-02 (UI updates: CampaignForm, campaign dashboard, join cap gate)
 
 ```
 v1.2 Progress: [██░░░░░░░░] 1/3 phases (Phase 9 in progress)
@@ -66,5 +66,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed 09-01 — Campaign schema + action updates (name/description/maxPlayers/dmId, player cap enforcement)
+Stopped at: Completed 09-02 — Campaign fields UI + join cap gate (CampaignForm, campaign dashboard, join page)
 Resume file: None
