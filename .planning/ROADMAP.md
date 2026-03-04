@@ -65,7 +65,11 @@ Plans:
   2. DM can optionally enter a description and it appears on the campaign dashboard
   3. DM can optionally set a max players number and it is saved with the campaign
   4. A player attempting to join a full campaign (at max players limit) sees a "campaign full" message and cannot join
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 09-01-PLAN.md — Schema fields (name, description, maxPlayers, dmId), updated createCampaign action, join cap enforcement in registerPlayer
+- [ ] 09-02-PLAN.md — CampaignForm UI fields, campaign dashboard display, join page cap gate + human verification
 
 ### Phase 10: Multi-Campaign Dashboard
 **Goal**: DM can see and navigate all their campaigns from a single home page
@@ -89,6 +93,6 @@ Plans:
 | 5. Schema Migration | v1.1 | 4/4 | Complete | 2026-03-02 |
 | 6. Campaign Creation | v1.1 | 2/2 | Complete | 2026-03-02 |
 | 7. Join Flow | v1.1 | 2/2 | Complete | 2026-03-02 |
-| 8. DM Auth | 4/4 | Complete    | 2026-03-04 | - |
-| 9. Campaign Fields and Join Cap | v1.2 | 0/? | Not started | - |
+| 8. DM Auth | v1.2 | 4/4 | Complete | 2026-03-04 |
+| 9. Campaign Fields and Join Cap | v1.2 | 0/2 | Not started | - |
 | 10. Multi-Campaign Dashboard | v1.2 | 0/? | Not started | - |
