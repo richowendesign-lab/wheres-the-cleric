@@ -11,10 +11,15 @@ model Campaign {
   id                  String       @id @default(cuid())
   joinToken           String       @unique @default(cuid())
   dmSecret            String       @unique @default(cuid())
+  name                String?
+  description         String?
+  maxPlayers          Int?
+  dmId                String?
   planningWindowStart DateTime?
   planningWindowEnd   DateTime?
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
+  dm                  DM?          @relation(fields: [dmId], references: [id])
   playerSlots         PlayerSlot[]
 }
 
@@ -46,11 +51,12 @@ model AvailabilityEntry {
 }
 
 model DM {
-  id           String    @id @default(cuid())
-  email        String    @unique
+  id           String     @id @default(cuid())
+  email        String     @unique
   passwordHash String
-  createdAt    DateTime  @default(now())
+  createdAt    DateTime   @default(now())
   sessions     Session[]
+  campaigns    Campaign[]
 }
 
 model Session {
