@@ -80,7 +80,10 @@ Plans:
   2. DM can click a campaign card to navigate to that campaign's dashboard
   3. DM home page has a "Create new campaign" button that opens the campaign creation flow
   4. A DM with no campaigns sees an empty state with only the "Create new campaign" button
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 10-01-PLAN.md — DM home dashboard: campaign cards, empty state, create button + human verification
 
 ## Progress
 
@@ -95,4 +98,4 @@ Plans:
 | 7. Join Flow | v1.1 | 2/2 | Complete | 2026-03-02 |
 | 8. DM Auth | v1.2 | 4/4 | Complete | 2026-03-04 |
 | 9. Campaign Fields and Join Cap | v1.2 | Complete    | 2026-03-04 | 2026-03-04 |
-| 10. Multi-Campaign Dashboard | v1.2 | 0/? | Not started | - |
+| 10. Multi-Campaign Dashboard | v1.2 | 0/1 | Not started | - |
