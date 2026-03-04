@@ -44,3 +44,20 @@ model AvailabilityEntry {
 
   @@unique([playerSlotId, date])
 }
+
+model DM {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  createdAt    DateTime  @default(now())
+  sessions     Session[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  token     String   @unique @default(cuid())
+  dmId      String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  dm        DM       @relation(fields: [dmId], references: [id], onDelete: Cascade)
+}
