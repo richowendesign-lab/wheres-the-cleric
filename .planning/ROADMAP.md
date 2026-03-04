@@ -94,5 +94,5 @@ Plans:
 | 6. Campaign Creation | v1.1 | 2/2 | Complete | 2026-03-02 |
 | 7. Join Flow | v1.1 | 2/2 | Complete | 2026-03-02 |
 | 8. DM Auth | v1.2 | 4/4 | Complete | 2026-03-04 |
-| 9. Campaign Fields and Join Cap | v1.2 | 2/2 | Complete | 2026-03-04 |
+| 9. Campaign Fields and Join Cap | v1.2 | Complete    | 2026-03-04 | 2026-03-04 |
 | 10. Multi-Campaign Dashboard | v1.2 | 0/? | Not started | - |
