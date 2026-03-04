@@ -19,6 +19,22 @@ export async function registerPlayer(_prevState: unknown, formData: FormData) {
     return { error: 'Name must be 50 characters or fewer.' }
   }
 
+  const campaign = await prisma.campaign.findUnique({
+    where: { id: campaignId },
+    select: {
+      maxPlayers: true,
+      _count: { select: { playerSlots: true } },
+    },
+  })
+
+  if (!campaign) {
+    return { error: 'Campaign not found.' }
+  }
+
+  if (campaign.maxPlayers !== null && campaign._count.playerSlots >= campaign.maxPlayers) {
+    return { error: 'This campaign is full. No more players can join.' }
+  }
+
   const slot = await prisma.playerSlot.create({
     data: { campaignId, name: trimmedName },
   })
