@@ -12,6 +12,20 @@ export function CampaignForm() {
         <p className="text-red-400 text-sm">{state.error}</p>
       )}
 
+      <div>
+        <label className="block text-sm text-gray-300 mb-1">
+          Campaign name <span className="text-red-400">*</span>
+        </label>
+        <input
+          type="text"
+          name="name"
+          required
+          maxLength={100}
+          placeholder="The Lost Mine of Phandelver"
+          className="w-full rounded bg-gray-800 border border-gray-600 px-3 py-2 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-amber-500"
+        />
+      </div>
+
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-sm text-gray-300 mb-1">Planning window start</label>
@@ -31,6 +45,29 @@ export function CampaignForm() {
             className="w-full rounded bg-gray-800 border border-gray-600 px-3 py-2 text-gray-100 focus:outline-none focus:border-amber-500"
           />
         </div>
+      </div>
+
+      <div>
+        <label className="block text-sm text-gray-300 mb-1">Description <span className="text-gray-500 text-xs">(optional)</span></label>
+        <textarea
+          name="description"
+          rows={3}
+          maxLength={500}
+          placeholder="A few words about the campaign for your players..."
+          className="w-full rounded bg-gray-800 border border-gray-600 px-3 py-2 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-amber-500 resize-none"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm text-gray-300 mb-1">Max players <span className="text-gray-500 text-xs">(optional)</span></label>
+        <input
+          type="number"
+          name="maxPlayers"
+          min={1}
+          max={20}
+          placeholder="e.g. 5"
+          className="w-32 rounded bg-gray-800 border border-gray-600 px-3 py-2 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-amber-500"
+        />
       </div>
 
       <button
