@@ -8,7 +8,7 @@ progress:
   total_phases: 10
   completed_phases: 7
   total_plans: 28
-  completed_plans: 23
+  completed_plans: 24
 ---
 
 # Project State
@@ -23,9 +23,9 @@ See: .planning/PROJECT.md (updated 2026-03-04 after v1.2 milestone start)
 ## Current Position
 
 Phase: Phase 8 (DM Auth) — in progress
-Plan: 1 of 6 complete (08-01 done)
-Status: Auth data layer complete, moving to sign-up endpoint
-Last activity: 2026-03-04 — completed 08-01 (DM/Session Prisma models + auth utilities)
+Plan: 2 of 6 complete (08-02 done)
+Status: Auth server actions and route middleware complete, moving to UI pages
+Last activity: 2026-03-04 — completed 08-02 (signUp/logIn/logOut server actions + middleware)
 
 ```
 v1.2 Progress: [█░░░░░░░░░] 0/3 phases (Phase 8 in progress)
@@ -45,6 +45,8 @@ See PROJECT.md Key Decisions table for full history.
 - bcryptjs over bcrypt: pure JS, no native compilation, works on Vercel Edge without extra config
 - Session expiry 30 days; BCRYPT_ROUNDS=12 for security/performance balance
 - db push (not migrate) for schema changes — works for both SQLite dev and Neon prod
+- Inline SESSION_COOKIE_NAME in middleware (cannot import from @/lib/auth — Edge runtime incompatibility with next/headers)
+- Middleware appends ?next=pathname for future redirect-after-login; logIn action ignores it in Phase 8
 
 ### Pending Todos
 
@@ -57,5 +59,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed 08-01 — DM + Session models and auth.ts utilities
+Stopped at: Completed 08-02 — auth server actions + Next.js middleware
 Resume file: None

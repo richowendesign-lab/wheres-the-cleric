@@ -51,8 +51,8 @@ Full phase details: `.planning/milestones/v1.1-ROADMAP.md`
 **Plans**: 4 plans
 
 Plans:
-- [ ] 08-01-PLAN.md — Schema + auth utility lib (DM model, Session model, bcrypt, session utilities)
-- [ ] 08-02-PLAN.md — Auth server actions (signUp, logIn, logOut) + Next.js middleware
+- [x] 08-01-PLAN.md — Schema + auth utility lib (DM model, Session model, bcrypt, session utilities)
+- [x] 08-02-PLAN.md — Auth server actions (signUp, logIn, logOut) + Next.js middleware
 - [ ] 08-03-PLAN.md — Sign-up and login pages + home page update
 - [ ] 08-04-PLAN.md — Logout button on campaign dashboard + end-to-end verification checkpoint
 
@@ -89,6 +89,6 @@ Plans:
 | 5. Schema Migration | v1.1 | 4/4 | Complete | 2026-03-02 |
 | 6. Campaign Creation | v1.1 | 2/2 | Complete | 2026-03-02 |
 | 7. Join Flow | v1.1 | 2/2 | Complete | 2026-03-02 |
-| 8. DM Auth | 1/4 | In Progress|  | - |
+| 8. DM Auth | v1.2 | 2/4 | In Progress | - |
 | 9. Campaign Fields and Join Cap | v1.2 | 0/? | Not started | - |
 | 10. Multi-Campaign Dashboard | v1.2 | 0/? | Not started | - |
