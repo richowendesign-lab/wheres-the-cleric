@@ -48,7 +48,13 @@ Full phase details: `.planning/milestones/v1.1-ROADMAP.md`
   2. DM can log in with their email and password from any device
   3. DM remains logged in after closing and reopening the browser (session persists across refresh)
   4. DM can log out and is redirected away from authenticated pages; returning to those pages redirects to login
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 08-01-PLAN.md — Schema + auth utility lib (DM model, Session model, bcrypt, session utilities)
+- [ ] 08-02-PLAN.md — Auth server actions (signUp, logIn, logOut) + Next.js middleware
+- [ ] 08-03-PLAN.md — Sign-up and login pages + home page update
+- [ ] 08-04-PLAN.md — Logout button on campaign dashboard + end-to-end verification checkpoint
 
 ### Phase 9: Campaign Fields and Join Cap
 **Goal**: DM can create richly described campaigns and the join link enforces a player cap
@@ -83,6 +89,6 @@ Full phase details: `.planning/milestones/v1.1-ROADMAP.md`
 | 5. Schema Migration | v1.1 | 4/4 | Complete | 2026-03-02 |
 | 6. Campaign Creation | v1.1 | 2/2 | Complete | 2026-03-02 |
 | 7. Join Flow | v1.1 | 2/2 | Complete | 2026-03-02 |
-| 8. DM Auth | v1.2 | 0/? | Not started | - |
+| 8. DM Auth | v1.2 | 0/4 | Not started | - |
 | 9. Campaign Fields and Join Cap | v1.2 | 0/? | Not started | - |
 | 10. Multi-Campaign Dashboard | v1.2 | 0/? | Not started | - |
