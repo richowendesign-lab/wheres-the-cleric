@@ -22,13 +22,13 @@ See: .planning/PROJECT.md (updated 2026-03-04 after v1.2 milestone start)
 
 ## Current Position
 
-Phase: Phase 8 (DM Auth) — in progress
-Plan: 4 of 6 complete (08-04 done)
-Status: Full DM auth system live and human-verified (sign-up, login, session persistence, logout all working), ready for Phase 9 campaign management
-Last activity: 2026-03-04 — completed 08-04 (logout button + end-to-end auth verification)
+Phase: Phase 9 (Campaign Fields and Join Cap) — in progress
+Plan: 1 of 2 complete (09-01 done)
+Status: Campaign schema extended with name/description/maxPlayers/dmId; createCampaign validates name and links to authenticated DM; registerPlayer enforces player cap; ready for Phase 9 UI plan (09-02)
+Last activity: 2026-03-04 — completed 09-01 (schema migration + action updates)
 
 ```
-v1.2 Progress: [█░░░░░░░░░] 0/3 phases (Phase 8 in progress)
+v1.2 Progress: [██░░░░░░░░] 1/3 phases (Phase 9 in progress)
 ```
 
 ## Accumulated Context
@@ -51,6 +51,9 @@ See PROJECT.md Key Decisions table for full history.
 - Home page removes dm_secret cookie check entirely, replaced with getSessionDM() — Create a Campaign CTA removed (middleware protects /campaigns/new)
 - Logout form uses plain HTML form with action={logOut} in Server Component — no 'use client' needed
 - dm_secret cookie ownership check retained in campaign page for Phase 8 — Phase 9 migrates ownership to authenticated DM account
+- Campaign name/description/maxPlayers fields nullable in DB (String?/Int?) — required-at-creation enforced in server action, not DB constraint
+- createCampaign no longer sets dm_secret cookie — ownership now via authenticated DM session (dmId FK)
+- maxPlayers cap check uses prisma _count aggregate on playerSlots to avoid stale-count issues
 
 ### Pending Todos
 
@@ -63,5 +66,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed 08-04 — logout button on campaign dashboard + end-to-end auth verification
+Stopped at: Completed 09-01 — Campaign schema + action updates (name/description/maxPlayers/dmId, player cap enforcement)
 Resume file: None
