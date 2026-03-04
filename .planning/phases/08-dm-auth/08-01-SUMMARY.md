@@ -80,7 +80,7 @@ Each task was committed atomically:
 1. **Task 1: Add DM and Session models to Prisma schema and install bcrypt** - `5e33d8f` (feat)
 2. **Task 2: Create src/lib/auth.ts with session utilities** - `b46075c` (feat)
 
-**Plan metadata:** (docs commit — created after SUMMARY)
+**Plan metadata:** `fb32b98` (docs: complete plan)
 
 ## Files Created/Modified
 - `prisma/schema.prisma` - Added model DM (email unique, passwordHash, sessions relation) and model Session (token auto-cuid, dmId FK, expiresAt, cascade delete)
