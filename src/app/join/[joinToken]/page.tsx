@@ -34,6 +34,20 @@ export default async function JoinPage({
     redirect(`/join/${joinToken}/availability`)
   }
 
+  // Cap check — before rendering name form
+  if (campaign.maxPlayers !== null && campaign.playerSlots.length >= campaign.maxPlayers) {
+    return (
+      <main className="min-h-screen bg-gray-950 text-gray-100 flex flex-col items-center justify-center px-4">
+        <div className="w-full max-w-sm text-center">
+          <h1 className="font-fantasy text-3xl text-amber-400 mb-4">Campaign Full</h1>
+          <p className="text-gray-400">
+            This campaign has reached its maximum number of players. Ask your DM if there&apos;s room for more.
+          </p>
+        </div>
+      </main>
+    )
+  }
+
   // New visitor — render name entry form
   return (
     <main className="min-h-screen bg-gray-950 text-gray-100 flex flex-col items-center justify-center px-4">
@@ -41,7 +55,7 @@ export default async function JoinPage({
         <h1 className="font-fantasy text-3xl text-amber-400 mb-2 text-center">
           Join the Campaign
         </h1>
-        <p className="text-gray-400 mb-8 text-center">Enter your name to get started.</p>
+        <p className="text-gray-400 mb-8 text-center">Enter your name to get started (or your character&apos;s if you want to confuse your DM).</p>
         <JoinForm
           action={registerPlayer}
           campaignId={campaign.id}

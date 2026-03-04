@@ -72,9 +72,15 @@ export default async function CampaignDetailPage({
           </button>
         </form>
         <div className="flex items-center justify-between">
-          <h1 className="font-fantasy text-3xl text-amber-400 mb-1">Campaign Dashboard</h1>
+          <h1 className="font-fantasy text-3xl text-amber-400 mb-1">
+            {campaign.name ?? 'Campaign Dashboard'}
+          </h1>
           <DeleteCampaignButton campaignId={campaign.id} />
         </div>
+
+        {campaign.description && (
+          <p className="text-gray-400 text-sm leading-relaxed -mt-2">{campaign.description}</p>
+        )}
 
         {/* Join Link */}
         <section>
@@ -86,6 +92,11 @@ export default async function CampaignDetailPage({
             <span className="flex-1 text-sm font-mono text-amber-300 truncate">{joinUrl}</span>
             <CopyLinkButton url={joinUrl} />
           </div>
+          {campaign.maxPlayers !== null && (
+            <p className="text-xs text-gray-500 mt-2">
+              {campaign.playerSlots.length} / {campaign.maxPlayers} players joined
+            </p>
+          )}
         </section>
 
         {/* Planning Window */}
