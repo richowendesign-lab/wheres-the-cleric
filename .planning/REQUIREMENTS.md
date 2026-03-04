@@ -70,4 +70,4 @@ Requirements for the Multi-Campaign DM milestone. Phase numbering continues from
 
 ---
 *Requirements defined: 2026-03-04*
-*Last updated: 2026-03-04 after initial definition*
+*Last updated: 2026-03-04 — traceability confirmed after roadmap creation*
