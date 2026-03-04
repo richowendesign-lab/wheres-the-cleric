@@ -26,16 +26,16 @@ The DM can instantly see when everyone is free — without chasing people for re
 
 ### Active
 
-_(empty — planning next milestone)_
+- DM can sign up and log in with email and password
+- DM can create multiple campaigns, each with a name, optional description, and optional max players limit
+- DM home page shows all their campaigns as cards with a "Create new campaign" button
+- Join link enforces max players cap — players see a "campaign full" message when limit is reached
 
 ### Out of Scope
 
 - Automated reminders sent to players — DM handles nudging manually
-- Account-based login — cookie-based identity is sufficient for this use case
 - Per-session polls with pre-selected dates — replaced by open availability model
 - In-app chat or session notes — scheduling only
-- Player cap / invite approval — complexity not warranted for small friend groups
-- Multiple campaigns per DM — single campaign is the use case
 
 ## Context
 
@@ -47,9 +47,21 @@ _(empty — planning next milestone)_
 - Deployed to Vercel: https://my-portfolio-henna-ten-97.vercel.app
 - Access model: No accounts — single join link per campaign; DM and players identified by httpOnly cookies
 
+## Current Milestone: v1.2 Multi-Campaign DM
+
+**Goal:** DM can create and manage multiple campaigns behind an email+password account.
+
+**Target features:**
+- DM auth (sign up / log in with email + password, persistent session)
+- Multiple campaigns per DM account
+- Campaign creation captures name, optional description, optional max players
+- DM home page shows campaign cards and a "Create new campaign" button
+- Join link enforces max players cap
+
 ## Constraints
 
-- **Access model**: No user accounts — cookie-based identity for DM and players; single join link per campaign
+- **DM auth**: Email + password with hashed storage (bcrypt); session via httpOnly cookie
+- **Player access**: Still cookie-based, no login required — single join link per campaign
 - **Group focus**: Built for small groups (5–8 people), not general-purpose event scheduling
 
 ## Key Decisions
@@ -70,4 +82,4 @@ _(empty — planning next milestone)_
 | `redirect()` outside try/catch in server actions (v1.1) | Next.js `redirect()` throws internally — must not be caught | ✓ Good — correct pattern |
 
 ---
-*Last updated: 2026-03-02 after v1.1 milestone*
+*Last updated: 2026-03-04 after v1.2 milestone start*

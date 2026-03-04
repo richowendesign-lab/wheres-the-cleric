@@ -1,9 +1,9 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.1
-milestone_name: Simplified Onboarding
-status: complete
-last_updated: "2026-03-02"
+milestone: v1.2
+milestone_name: Multi-Campaign DM
+status: planning
+last_updated: "2026-03-04"
 progress:
   total_phases: 7
   completed_phases: 7
@@ -15,16 +15,17 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-03-02 after v1.1 milestone)
+See: .planning/PROJECT.md (updated 2026-03-04 after v1.2 milestone start)
 
 **Core value:** The DM can instantly see when everyone is free — without chasing people for responses or guessing which dates to offer.
-**Current focus:** v1.1 complete — planning next milestone
+**Current focus:** v1.2 — defining requirements
 
 ## Current Position
 
-Milestone v1.1 Simplified Onboarding — SHIPPED 2026-03-02
-All 7 phases complete (22/22 plans)
-Next action: `/gsd:new-milestone` to define v1.2 or v2.0
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-03-04 — Milestone v1.2 started
 
 ## Accumulated Context
 
@@ -42,6 +43,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-02
-Stopped at: v1.1 milestone archived — tag v1.1 created
+Last session: 2026-03-04
+Stopped at: v1.2 milestone initialized — requirements definition in progress
 Resume file: None
