@@ -8,7 +8,7 @@ progress:
   total_phases: 10
   completed_phases: 7
   total_plans: 28
-  completed_plans: 25
+  completed_plans: 26
 ---
 
 # Project State
@@ -23,9 +23,9 @@ See: .planning/PROJECT.md (updated 2026-03-04 after v1.2 milestone start)
 ## Current Position
 
 Phase: Phase 8 (DM Auth) — in progress
-Plan: 3 of 6 complete (08-03 done)
-Status: Auth UI pages complete (signup/login forms + home page session gating), moving to campaigns page
-Last activity: 2026-03-04 — completed 08-03 (sign-up/login pages + updated home page)
+Plan: 4 of 6 complete (08-04 done)
+Status: Full DM auth system live and human-verified (sign-up, login, session persistence, logout all working), ready for Phase 9 campaign management
+Last activity: 2026-03-04 — completed 08-04 (logout button + end-to-end auth verification)
 
 ```
 v1.2 Progress: [█░░░░░░░░░] 0/3 phases (Phase 8 in progress)
@@ -49,6 +49,8 @@ See PROJECT.md Key Decisions table for full history.
 - Middleware appends ?next=pathname for future redirect-after-login; logIn action ignores it in Phase 8
 - useActionState from 'react' (React 19) used for auth forms — not deprecated useFormState from 'react-dom'
 - Home page removes dm_secret cookie check entirely, replaced with getSessionDM() — Create a Campaign CTA removed (middleware protects /campaigns/new)
+- Logout form uses plain HTML form with action={logOut} in Server Component — no 'use client' needed
+- dm_secret cookie ownership check retained in campaign page for Phase 8 — Phase 9 migrates ownership to authenticated DM account
 
 ### Pending Todos
 
@@ -61,5 +63,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed 08-03 — sign-up/login pages + home page session gating
+Stopped at: Completed 08-04 — logout button on campaign dashboard + end-to-end auth verification
 Resume file: None
