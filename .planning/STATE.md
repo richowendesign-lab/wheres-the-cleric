@@ -8,7 +8,7 @@ progress:
   total_phases: 10
   completed_phases: 7
   total_plans: 28
-  completed_plans: 24
+  completed_plans: 25
 ---
 
 # Project State
@@ -23,9 +23,9 @@ See: .planning/PROJECT.md (updated 2026-03-04 after v1.2 milestone start)
 ## Current Position
 
 Phase: Phase 8 (DM Auth) — in progress
-Plan: 2 of 6 complete (08-02 done)
-Status: Auth server actions and route middleware complete, moving to UI pages
-Last activity: 2026-03-04 — completed 08-02 (signUp/logIn/logOut server actions + middleware)
+Plan: 3 of 6 complete (08-03 done)
+Status: Auth UI pages complete (signup/login forms + home page session gating), moving to campaigns page
+Last activity: 2026-03-04 — completed 08-03 (sign-up/login pages + updated home page)
 
 ```
 v1.2 Progress: [█░░░░░░░░░] 0/3 phases (Phase 8 in progress)
@@ -47,6 +47,8 @@ See PROJECT.md Key Decisions table for full history.
 - db push (not migrate) for schema changes — works for both SQLite dev and Neon prod
 - Inline SESSION_COOKIE_NAME in middleware (cannot import from @/lib/auth — Edge runtime incompatibility with next/headers)
 - Middleware appends ?next=pathname for future redirect-after-login; logIn action ignores it in Phase 8
+- useActionState from 'react' (React 19) used for auth forms — not deprecated useFormState from 'react-dom'
+- Home page removes dm_secret cookie check entirely, replaced with getSessionDM() — Create a Campaign CTA removed (middleware protects /campaigns/new)
 
 ### Pending Todos
 
@@ -59,5 +61,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed 08-02 — auth server actions + Next.js middleware
+Stopped at: Completed 08-03 — sign-up/login pages + home page session gating
 Resume file: None
