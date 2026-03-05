@@ -30,7 +30,11 @@ The DM can instantly see when everyone is free — without chasing people for re
 
 ### Active
 
-(None — planning next milestone)
+- DM and player-facing pages use a unified deep purple visual theme with Cinzel headings and #BA7DF6 primary accent
+- All primary action buttons use #BA7DF6 background with dark text
+- All headings use white text in the Cinzel font
+- Background uses a deep purple radial gradient with a subtle overlay image
+- Form inputs use a dark (#200637) background with #BA7DF6 border
 
 ### Out of Scope
 

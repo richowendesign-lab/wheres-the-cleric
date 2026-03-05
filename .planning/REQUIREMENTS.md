@@ -1,73 +1,67 @@
 # Requirements: D&D Session Planner
 
-**Defined:** 2026-03-04
+**Defined:** 2026-03-05
 **Core Value:** The DM can instantly see when everyone is free — without chasing people for responses or guessing which dates to offer.
 
-## v1.2 Requirements
+## v1.3 Requirements
 
-Requirements for the Multi-Campaign DM milestone. Phase numbering continues from v1.1 (last phase: 7).
+Requirements for the Visual Redesign milestone.
 
-### Authentication
+### Design Tokens
 
-- [x] **AUTH-01**: DM can sign up with email and password
-- [x] **AUTH-02**: DM can log in with email and password
-- [x] **AUTH-03**: DM session persists across browser refresh (httpOnly session cookie)
-- [x] **AUTH-04**: DM can log out and session is cleared
+- [ ] **VIS-01**: App uses a deep purple radial gradient as the global background (from #54457F to #140326)
+- [ ] **VIS-02**: A subtle abstract background image is applied at low opacity (~30%) as an overlay on all pages
+- [ ] **VIS-03**: All heading text uses the Cinzel font (fantasy serif) and is white
+- [ ] **VIS-04**: All body/secondary text uses Inter at rgba(255,255,255,0.6)
 
-### Campaign Management
+### Interactive Elements
 
-- [x] **CAMP-01**: DM can create a campaign with a required name
-- [x] **CAMP-02**: DM can optionally add a description (notes / flavour text) when creating a campaign
-- [x] **CAMP-03**: DM can optionally set a max players limit when creating a campaign
-- [x] **CAMP-04**: DM can view all their campaigns from a home dashboard (cards)
-- [x] **CAMP-05**: DM home dashboard has a "Create new campaign" button
+- [ ] **VIS-05**: All primary action buttons use #BA7DF6 background with dark (#030712) semibold text
+- [ ] **VIS-06**: All form text inputs use #200637 background with a #BA7DF6 border and 50% opacity white placeholder text
+- [ ] **VIS-07**: Border radius is 4px throughout (inputs, buttons, cards)
 
-### Join Flow
+### Pages
 
-- [x] **JOIN-01**: Join link enforces max players cap — new player sees a "campaign full" message when limit is reached
+- [ ] **VIS-08**: Join page (/join/[joinToken]) matches the Figma reference — centered card with icon, Cinzel heading, purple form
+- [ ] **VIS-09**: Auth pages (sign-up, login) apply the same visual system
+- [ ] **VIS-10**: Campaign creation page (/campaigns/new) applies the same visual system
+- [ ] **VIS-11**: Campaign dashboard (/campaigns/[id]) applies the same visual system
+- [ ] **VIS-12**: DM home dashboard (/campaigns) applies the same visual system
 
 ## Future Requirements
 
-### Account Management
-
-- **ACCT-01**: DM can change their email address
-- **ACCT-02**: DM can change their password
-- **ACCT-03**: DM can reset forgotten password via email link
-
-### Campaign Editing
-
-- **CAMP-F01**: DM can edit campaign name, description, or max players after creation
+- **VIS-F01**: Dark/light mode toggle
+- **VIS-F02**: Player-specific theming per campaign
 
 ## Out of Scope
 
 | Feature | Reason |
 |---------|--------|
-| Automated reminders sent to players | DM handles nudging manually |
-| Per-session polls with pre-selected dates | Replaced by open availability model |
-| In-app chat or session notes | Scheduling only |
-| OAuth / magic link login | Email+password sufficient; no external service dependency |
-| Player accounts or login | Player identity stays cookie-based — zero friction |
+| Animation / transitions | Keep scope focused on static styling |
+| Mobile-specific layouts | Responsive is fine, mobile-first redesign is separate |
+| Design system / component library | Not needed for this app size |
 
 ## Traceability
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 8 | Complete |
-| AUTH-02 | Phase 8 | Complete |
-| AUTH-03 | Phase 8 | Complete |
-| AUTH-04 | Phase 8 | Complete |
-| CAMP-01 | Phase 9 | Complete |
-| CAMP-02 | Phase 9 | Complete |
-| CAMP-03 | Phase 9 | Complete |
-| CAMP-04 | Phase 10 | Complete |
-| CAMP-05 | Phase 10 | Complete |
-| JOIN-01 | Phase 9 | Complete |
+| VIS-01 | Phase 11 | Pending |
+| VIS-02 | Phase 11 | Pending |
+| VIS-03 | Phase 11 | Pending |
+| VIS-04 | Phase 11 | Pending |
+| VIS-05 | Phase 11 | Pending |
+| VIS-06 | Phase 11 | Pending |
+| VIS-07 | Phase 11 | Pending |
+| VIS-08 | Phase 11 | Pending |
+| VIS-09 | Phase 11 | Pending |
+| VIS-10 | Phase 11 | Pending |
+| VIS-11 | Phase 11 | Pending |
+| VIS-12 | Phase 11 | Pending |
 
 **Coverage:**
-- v1.2 requirements: 10 total
-- Mapped to phases: 10
+- v1.3 requirements: 12 total
+- Mapped to phases: 12
 - Unmapped: 0 ✓
 
 ---
-*Requirements defined: 2026-03-04*
-*Last updated: 2026-03-04 — CAMP-01/02/03 and JOIN-01 confirmed complete after 09-02 (UI + human verification)*
+*Requirements defined: 2026-03-05*
