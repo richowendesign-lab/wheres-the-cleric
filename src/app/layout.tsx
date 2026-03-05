@@ -10,10 +10,20 @@ export const metadata: Metadata = {
   description: 'Coordinate session scheduling for your D&D group',
 }
 
+/* eslint-disable @next/next/no-sync-scripts */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${cinzel.variable} ${inter.variable}`}>
-      <body className="bg-gray-950 text-gray-100">{children}</body>
+      {/* TEMP: Figma capture script — remove after capture */}
+      <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+      <body className="text-gray-100 relative">
+        <div
+          className="pointer-events-none fixed inset-0 opacity-30 bg-cover bg-center"
+          style={{ backgroundImage: "url('/bg-swirl.png')" }}
+          aria-hidden="true"
+        />
+        <div className="relative">{children}</div>
+      </body>
     </html>
   )
 }

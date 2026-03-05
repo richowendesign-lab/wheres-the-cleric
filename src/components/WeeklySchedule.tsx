@@ -36,7 +36,7 @@ export function WeeklySchedule({ selection, onChange }: WeeklyScheduleProps) {
             onClick={() => handleDayClick(dow)}
             className={`rounded-md px-3 py-2 text-sm font-medium transition-colors cursor-pointer ${
               active
-                ? 'bg-amber-500 text-gray-950 font-bold hover:bg-amber-400'
+                ? 'bg-[#ba7df6] text-[#030712] font-bold hover:bg-[#c994f8]'
                 : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200'
             }`}
           >

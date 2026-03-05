@@ -3,6 +3,7 @@ import { cookies } from 'next/headers'
 import { prisma } from '@/lib/prisma'
 import { registerPlayer } from '@/lib/actions/player'
 import JoinForm from './JoinForm'
+import Image from 'next/image'
 
 export default async function JoinPage({
   params,
@@ -37,9 +38,9 @@ export default async function JoinPage({
   // Cap check — before rendering name form
   if (campaign.maxPlayers !== null && campaign.playerSlots.length >= campaign.maxPlayers) {
     return (
-      <main className="min-h-screen bg-gray-950 text-gray-100 flex flex-col items-center justify-center px-4">
+      <main className="min-h-screen text-gray-100 flex flex-col items-center justify-center px-4">
         <div className="w-full max-w-sm text-center">
-          <h1 className="font-fantasy text-3xl text-amber-400 mb-4">Campaign Full</h1>
+          <h1 className="font-fantasy text-3xl text-white mb-4">Campaign Full</h1>
           <p className="text-gray-400">
             This campaign has reached its maximum number of players. Ask your DM if there&apos;s room for more.
           </p>
@@ -50,9 +51,10 @@ export default async function JoinPage({
 
   // New visitor — render name entry form
   return (
-    <main className="min-h-screen bg-gray-950 text-gray-100 flex flex-col items-center justify-center px-4">
-      <div className="w-full max-w-sm">
-        <h1 className="font-fantasy text-3xl text-amber-400 mb-2 text-center">
+    <main className="min-h-screen text-gray-100 flex flex-col items-center justify-center px-4">
+      <div className="w-full max-w-sm flex flex-col items-center">
+        <Image src="/dnd-icon.png" alt="" width={152} height={152} className="mb-4" />
+        <h1 className="font-fantasy text-3xl text-white mb-2 text-center">
           Join the Campaign
         </h1>
         <p className="text-gray-400 mb-8 text-center">Enter your name to get started (or your character&apos;s if you want to confuse your DM).</p>

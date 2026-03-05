@@ -67,11 +67,11 @@ export default async function AvailabilityPage({
   const windowEnd = slot.campaign.planningWindowEnd?.toISOString().split('T')[0] ?? ''
 
   return (
-    <main className="min-h-screen bg-gray-950 text-gray-100 px-4 py-12">
+    <main className="min-h-screen text-gray-100 px-4 py-12">
       <div className="max-w-2xl mx-auto">
-        <h1 className="font-fantasy text-3xl text-amber-400 mb-1">Your Availability</h1>
+        <h1 className="font-fantasy text-3xl text-white mb-1">{slot.name}&apos;s Availability</h1>
         <p className="text-gray-400 text-sm mb-8">
-          Hi, {slot.name}. Set your availability below — changes save automatically.
+          Set your availability below — changes save automatically.
         </p>
         <AvailabilityForm
           playerSlotId={slot.id}

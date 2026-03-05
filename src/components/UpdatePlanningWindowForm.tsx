@@ -31,7 +31,7 @@ export function UpdatePlanningWindowForm({ campaign }: { campaign: Campaign }) {
             name="planningWindowStart"
             defaultValue={toDateInputValue(campaign.planningWindowStart)}
             required
-            className="w-full rounded bg-gray-800 border border-gray-600 px-3 py-2 text-gray-100 focus:outline-none focus:border-amber-500"
+            className="w-full rounded bg-[#200637] border border-[#ba7df6] px-3 py-2 text-gray-100 focus:outline-none focus:border-[#ba7df6]"
           />
         </div>
         <div>
@@ -41,7 +41,7 @@ export function UpdatePlanningWindowForm({ campaign }: { campaign: Campaign }) {
             name="planningWindowEnd"
             defaultValue={toDateInputValue(campaign.planningWindowEnd)}
             required
-            className="w-full rounded bg-gray-800 border border-gray-600 px-3 py-2 text-gray-100 focus:outline-none focus:border-amber-500"
+            className="w-full rounded bg-[#200637] border border-[#ba7df6] px-3 py-2 text-gray-100 focus:outline-none focus:border-[#ba7df6]"
           />
         </div>
       </div>
@@ -49,7 +49,7 @@ export function UpdatePlanningWindowForm({ campaign }: { campaign: Campaign }) {
       <button
         type="submit"
         disabled={isPending}
-        className="px-5 py-2 rounded bg-amber-500 text-gray-950 font-semibold hover:bg-amber-400 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+        className="px-5 py-2 rounded bg-[#ba7df6] text-[#030712] font-semibold hover:bg-[#c994f8] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isPending ? 'Saving...' : 'Update window'}
       </button>

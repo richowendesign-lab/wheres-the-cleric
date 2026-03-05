@@ -1,6 +1,7 @@
 'use server'
 
 import { redirect } from 'next/navigation'
+import { revalidatePath } from 'next/cache'
 import { cookies } from 'next/headers'
 import { prisma } from '@/lib/prisma'
 import { getSessionDM } from '@/lib/auth'
@@ -63,6 +64,37 @@ export async function deleteCampaign(campaignId: string) {
   const cookieStore = await cookies()
   cookieStore.delete('dm_secret')
   redirect('/')
+}
+
+export async function updateMaxPlayers(campaignId: string, _prevState: unknown, formData: FormData) {
+  const rawMaxPlayers = formData.get('maxPlayers') as string
+
+  let parsedMaxPlayers: number | null = null
+  if (rawMaxPlayers && rawMaxPlayers.trim() !== '') {
+    const parsed = parseInt(rawMaxPlayers, 10)
+    if (isNaN(parsed) || parsed <= 0) {
+      return { error: 'Max players must be a positive number.' }
+    }
+    parsedMaxPlayers = parsed
+  }
+
+  if (parsedMaxPlayers !== null) {
+    const campaign = await prisma.campaign.findUnique({
+      where: { id: campaignId },
+      select: { _count: { select: { playerSlots: true } } },
+    })
+    if (campaign && parsedMaxPlayers < campaign._count.playerSlots) {
+      return { error: `Can't set below current player count (${campaign._count.playerSlots}).` }
+    }
+  }
+
+  await prisma.campaign.update({
+    where: { id: campaignId },
+    data: { maxPlayers: parsedMaxPlayers },
+  })
+
+  revalidatePath(`/campaigns/${campaignId}`)
+  return { success: true }
 }
 
 export async function updatePlanningWindow(campaignId: string, _prevState: unknown, formData: FormData) {

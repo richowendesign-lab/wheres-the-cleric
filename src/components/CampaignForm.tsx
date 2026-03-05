@@ -22,7 +22,7 @@ export function CampaignForm() {
           required
           maxLength={100}
           placeholder="The Lost Mine of Phandelver"
-          className="w-full rounded bg-gray-800 border border-gray-600 px-3 py-2 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-amber-500"
+          className="w-full rounded bg-[#200637] border border-[#ba7df6] px-3 py-2 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-[#ba7df6]"
         />
       </div>
 
@@ -33,7 +33,7 @@ export function CampaignForm() {
             type="date"
             name="planningWindowStart"
             required
-            className="w-full rounded bg-gray-800 border border-gray-600 px-3 py-2 text-gray-100 focus:outline-none focus:border-amber-500"
+            className="w-full rounded bg-[#200637] border border-[#ba7df6] px-3 py-2 text-gray-100 focus:outline-none focus:border-[#ba7df6]"
           />
         </div>
         <div>
@@ -42,7 +42,7 @@ export function CampaignForm() {
             type="date"
             name="planningWindowEnd"
             required
-            className="w-full rounded bg-gray-800 border border-gray-600 px-3 py-2 text-gray-100 focus:outline-none focus:border-amber-500"
+            className="w-full rounded bg-[#200637] border border-[#ba7df6] px-3 py-2 text-gray-100 focus:outline-none focus:border-[#ba7df6]"
           />
         </div>
       </div>
@@ -54,7 +54,7 @@ export function CampaignForm() {
           rows={3}
           maxLength={500}
           placeholder="A few words about the campaign for your players..."
-          className="w-full rounded bg-gray-800 border border-gray-600 px-3 py-2 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-amber-500 resize-none"
+          className="w-full rounded bg-[#200637] border border-[#ba7df6] px-3 py-2 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-[#ba7df6] resize-none"
         />
       </div>
 
@@ -66,14 +66,14 @@ export function CampaignForm() {
           min={1}
           max={20}
           placeholder="e.g. 5"
-          className="w-32 rounded bg-gray-800 border border-gray-600 px-3 py-2 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-amber-500"
+          className="w-32 rounded bg-[#200637] border border-[#ba7df6] px-3 py-2 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-[#ba7df6]"
         />
       </div>
 
       <button
         type="submit"
         disabled={isPending}
-        className="w-full py-3 rounded bg-amber-500 text-gray-950 font-semibold hover:bg-amber-400 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full py-3 rounded bg-[#ba7df6] text-[#030712] font-semibold hover:bg-[#c994f8] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isPending ? 'Creating...' : 'Create Campaign'}
       </button>

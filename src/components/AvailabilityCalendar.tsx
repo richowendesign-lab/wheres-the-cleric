@@ -75,6 +75,7 @@ export function AvailabilityCalendar({
   }
 
   return (
+    <div className="rounded-lg bg-[#140326]/60 p-4">
     <div className="space-y-6">
       {months.map(({ year, month }) => {
         const monthLabel = new Date(Date.UTC(year, month, 1)).toLocaleDateString('en-GB', {
@@ -106,8 +107,8 @@ export function AvailabilityCalendar({
 
                     const cellClass =
                       state === 'outside-window' ? 'text-gray-700 cursor-default' :
-                      isAvailable                ? 'bg-amber-900/40 text-amber-200 cursor-pointer hover:opacity-70 transition-opacity' :
-                      /* not available */           'text-gray-500 cursor-pointer hover:bg-amber-900/20 hover:text-amber-300 transition-colors'
+                      isAvailable                ? 'bg-[#ba7df6]/20 text-[#ba7df6] cursor-pointer hover:opacity-70 transition-opacity' :
+                      /* not available */           'text-gray-500 cursor-pointer hover:bg-[#ba7df6]/10 hover:text-[#ba7df6] transition-colors'
 
                     return (
                       <button
@@ -130,7 +131,7 @@ export function AvailabilityCalendar({
 
       <div className="flex flex-wrap gap-3 text-xs text-gray-500">
         <span className="flex items-center gap-1.5">
-          <span className="inline-block w-3 h-3 rounded bg-amber-900/40" />
+          <span className="inline-block w-3 h-3 rounded bg-[#ba7df6]/20" />
           Available
         </span>
         <span className="flex items-center gap-1.5">
@@ -138,6 +139,7 @@ export function AvailabilityCalendar({
           Not available
         </span>
       </div>
+    </div>
     </div>
   )
 }

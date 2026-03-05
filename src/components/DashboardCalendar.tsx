@@ -87,6 +87,7 @@ export function DashboardCalendar({
 
   return (
     <>
+      <div className="rounded-lg bg-[#140326]/60 p-4">
       <div className="space-y-6">
         {months.map(({ year, month }) => {
           const monthLabel = new Date(Date.UTC(year, month, 1)).toLocaleDateString('en-GB', {
@@ -180,6 +181,7 @@ export function DashboardCalendar({
             </div>
           )
         })}
+      </div>
       </div>
 
       {/* Semi-transparent backdrop — closes panel on click */}

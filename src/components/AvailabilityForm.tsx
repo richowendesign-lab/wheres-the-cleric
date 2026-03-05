@@ -163,14 +163,14 @@ export function AvailabilityForm({
       />
 
       <div>
-        <h2 className="text-amber-400 font-semibold text-lg mb-1">Quick-select your usual days</h2>
+        <h2 className="text-white font-semibold text-lg mb-1">Quick-select your usual days</h2>
         <p className="text-sm text-gray-400 mb-4">Toggle the days you&apos;re generally free — these will pre-fill the calendar below.</p>
         <WeeklySchedule selection={weeklySelection} onChange={handleWeeklyChange} />
       </div>
 
       {hasCalendar && (
         <div>
-          <h2 className="text-amber-400 font-semibold text-lg mb-1">Select available dates</h2>
+          <h2 className="text-white font-semibold text-lg mb-1">Select available dates</h2>
           <p className="text-sm text-gray-400 mb-4">Your weekly pattern is pre-filled. Click any date to add or remove it.</p>
           <AvailabilityCalendar
             planningWindowStart={planningWindowStart}

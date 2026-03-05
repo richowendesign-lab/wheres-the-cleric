@@ -11,7 +11,7 @@ export function BestDaysList({ days, playerSlots }: BestDaysListProps) {
   if (bestDays.length === 0) {
     return (
       <section>
-        <h2 className="font-fantasy text-amber-400 text-xl mb-3">Best Days</h2>
+        <h2 className="text-white font-semibold text-lg mb-3">Best Days</h2>
         <p className="text-gray-500 text-sm">
           No availability data yet — waiting for players to submit their schedules.
         </p>
@@ -21,7 +21,7 @@ export function BestDaysList({ days, playerSlots }: BestDaysListProps) {
 
   return (
     <section>
-      <h2 className="font-fantasy text-amber-400 text-xl mb-3">Best Days</h2>
+      <h2 className="text-white font-semibold text-lg mb-3">Best Days</h2>
       <ul className="space-y-2">
         {bestDays.map((day, index) => {
           const rank = index + 1
@@ -33,9 +33,9 @@ export function BestDaysList({ days, playerSlots }: BestDaysListProps) {
           return (
             <li
               key={day.date}
-              className="flex items-center gap-4 bg-gray-900 rounded-lg px-4 py-3"
+              className="flex items-center gap-4 bg-[#140326]/60 rounded-lg px-4 py-3"
             >
-              <span className="text-amber-400 font-bold w-6 text-center">
+              <span className="text-white font-bold w-6 text-center">
                 {rank}
               </span>
               <span className="font-medium text-gray-100">{dateLabel}</span>

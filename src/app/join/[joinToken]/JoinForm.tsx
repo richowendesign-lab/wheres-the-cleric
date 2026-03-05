@@ -23,7 +23,7 @@ export default function JoinForm({ action, campaignId, joinToken }: JoinFormProp
           autoFocus
           maxLength={50}
           required
-          className="w-full rounded bg-gray-800 border border-gray-700 px-4 py-3 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-amber-500"
+          className="w-full rounded bg-[#200637] border border-[#ba7df6]/40 px-4 py-3 text-gray-400 placeholder-gray-500 focus:outline-none focus:border-[#ba7df6]"
         />
         {state?.error && (
           <p className="text-red-400 text-sm">{state.error}</p>
@@ -33,7 +33,7 @@ export default function JoinForm({ action, campaignId, joinToken }: JoinFormProp
       <input type="hidden" name="joinToken" value={joinToken} />
       <button
         type="submit"
-        className="w-full rounded bg-amber-500 text-gray-950 font-semibold py-3 hover:bg-amber-400 transition-colors"
+        className="w-full rounded bg-[#ba7df6] text-[#030712] font-semibold py-3 hover:bg-[#c994f8] transition-colors"
       >
         Join
       </button>

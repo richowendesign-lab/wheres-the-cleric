@@ -21,7 +21,7 @@ export function PlayerSlotsInput() {
             onChange={e => updateSlot(i, e.target.value)}
             placeholder={`Player ${i + 1} name`}
             required
-            className="flex-1 rounded bg-gray-800 border border-gray-600 px-3 py-2 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-amber-500"
+            className="flex-1 rounded bg-[#200637] border border-[#ba7df6]/40 px-3 py-2 text-gray-400 placeholder-gray-500 focus:outline-none focus:border-[#ba7df6]"
           />
           {names.length > 1 && (
             <button
@@ -37,7 +37,7 @@ export function PlayerSlotsInput() {
       <button
         type="button"
         onClick={addSlot}
-        className="text-sm text-amber-400 hover:text-amber-300"
+        className="text-sm text-[#ba7df6] hover:text-[#c994f8]"
       >
         + Add player
       </button>

@@ -2,6 +2,24 @@
 
 @theme {
   --font-fantasy: var(--font-cinzel);
+  --color-accent: #ba7df6;
+  --color-input-bg: #200637;
+}
+
+html, body {
+  background: radial-gradient(ellipse at 53% 144%,
+    rgba(84,69,127,1) 0%,
+    rgba(68,53,105,1) 25%,
+    rgba(52,36,83,1) 50%,
+    rgba(36,20,60,1) 75%,
+    rgba(20,3,38,1) 100%
+  );
+  min-height: 100vh;
+}
+
+/* Pointer cursor on all interactive elements */
+button, [role="button"], label[for], summary {
+  cursor: pointer;
 }
 
 /* Make native date picker calendar icon visible on dark backgrounds */
