@@ -22,13 +22,13 @@ See: .planning/PROJECT.md (updated 2026-03-04 after v1.2 milestone start)
 
 ## Current Position
 
-Phase: Phase 9 (Campaign Fields and Join Cap) — complete
-Plan: 2 of 2 complete (09-01 and 09-02 done)
-Status: All four Phase 9 requirements complete and human-verified — CampaignForm has name/description/maxPlayers fields; campaign dashboard shows name, description, and player cap indicator; join page gates at cap with "Campaign Full" screen
-Last activity: 2026-03-04 — completed 09-02 (UI updates: CampaignForm, campaign dashboard, join cap gate)
+Phase: Phase 10 (Multi-Campaign Dashboard) — complete
+Plan: 1 of 1 complete (10-01 done)
+Status: All Phase 10 requirements complete and human-verified — /campaigns shows DM campaign cards, empty state, "Create new campaign" CTA; CAMP-04 and CAMP-05 satisfied; v1.2 milestone complete
+Last activity: 2026-03-05 — completed 10-01 (DM home dashboard: campaign cards, empty state, create button)
 
 ```
-v1.2 Progress: [██░░░░░░░░] 1/3 phases (Phase 9 in progress)
+v1.2 Progress: [██████████] 3/3 phases complete — v1.2 SHIPPED
 ```
 
 ## Accumulated Context
@@ -67,6 +67,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-04
-Stopped at: Completed 09-02 — Campaign fields UI + join cap gate (CampaignForm, campaign dashboard, join page)
+Last session: 2026-03-05
+Stopped at: Completed 10-01 — DM home dashboard (campaign cards, empty state, create button, human-verified)
 Resume file: None

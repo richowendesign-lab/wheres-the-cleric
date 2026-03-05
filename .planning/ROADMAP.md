@@ -83,7 +83,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 10-01-PLAN.md — DM home dashboard: campaign cards, empty state, create button + human verification
+- [x] 10-01-PLAN.md — DM home dashboard: campaign cards, empty state, create button + human verification
 
 ## Progress
 
