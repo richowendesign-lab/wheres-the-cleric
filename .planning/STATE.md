@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Multi-Campaign DM
 status: unknown
-last_updated: "2026-03-05T09:40:42.213Z"
+last_updated: "2026-03-05T10:03:49.813Z"
 progress:
   total_phases: 7
   completed_phases: 7
