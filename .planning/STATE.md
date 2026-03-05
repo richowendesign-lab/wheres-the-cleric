@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Multi-Campaign DM
 status: unknown
-last_updated: "2026-03-04T17:17:31.970Z"
+last_updated: "2026-03-05T09:40:42.213Z"
 progress:
-  total_phases: 6
-  completed_phases: 6
-  total_plans: 20
-  completed_plans: 20
+  total_phases: 7
+  completed_phases: 7
+  total_plans: 21
+  completed_plans: 21
 ---
 
 # Project State
@@ -54,6 +54,8 @@ See PROJECT.md Key Decisions table for full history.
 - Campaign name/description/maxPlayers fields nullable in DB (String?/Int?) — required-at-creation enforced in server action, not DB constraint
 - createCampaign no longer sets dm_secret cookie — ownership now via authenticated DM session (dmId FK)
 - maxPlayers cap check uses prisma _count aggregate on playerSlots to avoid stale-count issues
+- [Phase 10-multi-campaign-dashboard]: Empty state uses minimal text only on /campaigns dashboard — no illustration, consistent with app minimalism
+- [Phase 10-multi-campaign-dashboard]: Null-safety redirect to /auth/login if getSessionDM() returns null — belt-and-suspenders alongside middleware
 
 ### Pending Todos
 

@@ -19,8 +19,8 @@ Requirements for the Multi-Campaign DM milestone. Phase numbering continues from
 - [x] **CAMP-01**: DM can create a campaign with a required name
 - [x] **CAMP-02**: DM can optionally add a description (notes / flavour text) when creating a campaign
 - [x] **CAMP-03**: DM can optionally set a max players limit when creating a campaign
-- [ ] **CAMP-04**: DM can view all their campaigns from a home dashboard (cards)
-- [ ] **CAMP-05**: DM home dashboard has a "Create new campaign" button
+- [x] **CAMP-04**: DM can view all their campaigns from a home dashboard (cards)
+- [x] **CAMP-05**: DM home dashboard has a "Create new campaign" button
 
 ### Join Flow
 
@@ -59,8 +59,8 @@ Requirements for the Multi-Campaign DM milestone. Phase numbering continues from
 | CAMP-01 | Phase 9 | Complete |
 | CAMP-02 | Phase 9 | Complete |
 | CAMP-03 | Phase 9 | Complete |
-| CAMP-04 | Phase 10 | Pending |
-| CAMP-05 | Phase 10 | Pending |
+| CAMP-04 | Phase 10 | Complete |
+| CAMP-05 | Phase 10 | Complete |
 | JOIN-01 | Phase 9 | Complete |
 
 **Coverage:**

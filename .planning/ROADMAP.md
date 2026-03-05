@@ -35,7 +35,7 @@ Full phase details: `.planning/milestones/v1.1-ROADMAP.md`
 
 - [x] **Phase 8: DM Auth** — DM can create an account and log in with email and password, with session persisting across browser refreshes (completed 2026-03-04)
 - [x] **Phase 9: Campaign Fields and Join Cap** — Campaign creation captures name, description, and max players; join link enforces the player cap (completed 2026-03-04)
-- [ ] **Phase 10: Multi-Campaign Dashboard** — DM home page shows all their campaigns as cards with a button to create a new one
+- [x] **Phase 10: Multi-Campaign Dashboard** — DM home page shows all their campaigns as cards with a button to create a new one (completed 2026-03-05)
 
 ## Phase Details
 
@@ -98,4 +98,4 @@ Plans:
 | 7. Join Flow | v1.1 | 2/2 | Complete | 2026-03-02 |
 | 8. DM Auth | v1.2 | 4/4 | Complete | 2026-03-04 |
 | 9. Campaign Fields and Join Cap | v1.2 | Complete    | 2026-03-04 | 2026-03-04 |
-| 10. Multi-Campaign Dashboard | v1.2 | 0/1 | Not started | - |
+| 10. Multi-Campaign Dashboard | 1/1 | Complete   | 2026-03-05 | - |
