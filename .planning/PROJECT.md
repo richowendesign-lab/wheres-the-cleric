@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A web app for scheduling D&D sessions with a group of friends. The DM creates a campaign by entering a date range and gets a single shareable join link. Players visit the link, enter their name once, and are remembered on return by a browser cookie. The DM sees a calendar showing aggregate availability across the group plus ranked recommendations for the best session days. Deployed to Vercel with Neon PostgreSQL in production.
+A web app for scheduling D&D sessions with a group of friends. The DM creates an account, creates campaigns with a name and optional description and player cap, and shares a single join link per campaign. Players visit the link, enter their name once, and are remembered by a browser cookie. The DM sees a calendar showing aggregate availability across the group plus ranked best-day recommendations. The DM's home page shows all their campaigns as cards. Deployed to Vercel with Neon PostgreSQL in production.
 
 ## Core Value
 
@@ -23,13 +23,14 @@ The DM can instantly see when everyone is free — without chasing people for re
 - ✓ New player visits link, enters their name, and is taken to their availability page — v1.1
 - ✓ Returning player is recognised by browser (cookie) and taken straight to their availability — v1.1
 - ✓ DM is recognised by browser (cookie) and taken straight to the dashboard when visiting the link — v1.1
+- ✓ DM can sign up and log in with email and password — v1.2
+- ✓ DM can create multiple campaigns, each with a name, optional description, and optional max players limit — v1.2
+- ✓ DM home page shows all their campaigns as cards with a "Create new campaign" button — v1.2
+- ✓ Join link enforces max players cap — players see a "campaign full" message when limit is reached — v1.2
 
 ### Active
 
-- DM can sign up and log in with email and password
-- DM can create multiple campaigns, each with a name, optional description, and optional max players limit
-- DM home page shows all their campaigns as cards with a "Create new campaign" button
-- Join link enforces max players cap — players see a "campaign full" message when limit is reached
+(None — planning next milestone)
 
 ### Out of Scope
 
@@ -42,21 +43,11 @@ The DM can instantly see when everyone is free — without chasing people for re
 - Group size: 5 people (1 DM + 4 players)
 - Shipped v1.0 in 3 days (2026-02-23 → 2026-02-26): 4 phases, 14 plans, ~7,600 TypeScript LOC
 - Shipped v1.1 in 4 days (2026-02-27 → 2026-03-02): 3 phases, 8 plans, +3,053 / -241 LOC
-- Current codebase: ~7,744 TypeScript LOC
-- Tech stack: Next.js 16, React 19, TypeScript, Tailwind CSS 4, Prisma 7, SQLite (local) / Neon PostgreSQL (production)
+- Shipped v1.2 in 2 days (2026-03-04 → 2026-03-05): 3 phases, 7 plans, +2,540 / -77 LOC
+- Current codebase: ~10,200 TypeScript LOC (estimated)
+- Tech stack: Next.js 16, React 19, TypeScript, Tailwind CSS 4, Prisma 7, bcryptjs, SQLite (local) / Neon PostgreSQL (production)
 - Deployed to Vercel: https://my-portfolio-henna-ten-97.vercel.app
-- Access model: No accounts — single join link per campaign; DM and players identified by httpOnly cookies
-
-## Current Milestone: v1.2 Multi-Campaign DM
-
-**Goal:** DM can create and manage multiple campaigns behind an email+password account.
-
-**Target features:**
-- DM auth (sign up / log in with email + password, persistent session)
-- Multiple campaigns per DM account
-- Campaign creation captures name, optional description, optional max players
-- DM home page shows campaign cards and a "Create new campaign" button
-- Join link enforces max players cap
+- Access model: DM has email+password account with httpOnly session cookie; players are still cookie-based (no login required)
 
 ## Constraints
 
@@ -80,6 +71,12 @@ The DM can instantly see when everyone is free — without chasing people for re
 | Silent fallthrough on stale dm_secret cookie (v1.1) | Handles DB reset gracefully — DM can create new campaign without error state | ✓ Good — zero error UX |
 | JoinForm extracted to separate file (v1.1) | Clean `use client` boundary from server component routing logic | ✓ Good — clear separation |
 | `redirect()` outside try/catch in server actions (v1.1) | Next.js `redirect()` throws internally — must not be caught | ✓ Good — correct pattern |
+| bcryptjs over bcrypt (v1.2) | Pure JS, no native compilation — works on Vercel Edge without extra config | ✓ Good — zero build issues |
+| Session via httpOnly cookie, 30-day expiry, server-side expiry check (v1.2) | Secure, stateless reads; graceful expiry without client-side token management | ✓ Good — clean auth pattern |
+| Campaigns linked to DM via `dmId` FK (v1.2) | Enables multi-campaign per DM; required for Phase 10 home dashboard query | ✓ Good — foundation for future features |
+| Required name enforced in server action not DB constraint (v1.2) | Avoids breaking `db push` against existing campaigns that have no name; consistent with existing pattern | ✓ Good — backward-compatible migration |
+| Logout as plain HTML form with server action (v1.2) | No `use client` needed in Server Component — clean pattern for server-side mutations | ✓ Good — adopted across auth pages |
+| `useActionState` from `react` not `react-dom` (v1.2) | React 19 deprecates the `react-dom` import; avoids deprecation warnings | ✓ Good — correct for React 19 |
 
 ---
-*Last updated: 2026-03-04 after v1.2 milestone start*
+*Last updated: 2026-03-05 after v1.2 milestone*

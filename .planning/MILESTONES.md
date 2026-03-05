@@ -1,5 +1,14 @@
 # Milestones
 
+## v1.2 Multi-Campaign DM (Shipped: 2026-03-05)
+
+**Phases completed:** 3 phases, 7 plans, 0 tasks
+
+**Key accomplishments:**
+- (none recorded)
+
+---
+
 ## v1.1 Simplified Onboarding (Shipped: 2026-03-02)
 
 **Phases completed:** 3 phases, 8 plans

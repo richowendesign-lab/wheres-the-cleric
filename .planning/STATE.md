@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Multi-Campaign DM
 status: unknown
-last_updated: "2026-03-05T10:03:49.813Z"
+last_updated: "2026-03-05T10:53:57.494Z"
 progress:
   total_phases: 7
   completed_phases: 7
@@ -15,10 +15,10 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-03-04 after v1.2 milestone start)
+See: .planning/PROJECT.md (updated 2026-03-05 after v1.2 milestone)
 
 **Core value:** The DM can instantly see when everyone is free — without chasing people for responses or guessing which dates to offer.
-**Current focus:** v1.2 — Phase 8 (DM Auth) in progress
+**Current focus:** v1.2 shipped — planning next milestone
 
 ## Current Position
 
