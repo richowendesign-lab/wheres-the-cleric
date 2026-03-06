@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import { headers } from 'next/headers'
 import { prisma } from '@/lib/prisma'
 import { UpdatePlanningWindowForm } from '@/components/UpdatePlanningWindowForm'
 import { UpdateMaxPlayersForm } from '@/components/UpdateMaxPlayersForm'
@@ -35,9 +36,10 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
   const dayAggregations = (windowStartStr && windowEndStr)
     ? computeDayStatuses(serializedSlots, windowStartStr, windowEndStr) : []
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL
-    ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
-  const joinUrl = `${appUrl}/join/${campaign.joinToken}`
+  const hdrs = await headers()
+  const host = hdrs.get('host') ?? 'localhost:3000'
+  const proto = hdrs.get('x-forwarded-proto') ?? (host.startsWith('localhost') ? 'http' : 'https')
+  const joinUrl = `${proto}://${host}/join/${campaign.joinToken}`
   const missingPlayers = campaign.playerSlots.filter(s => s.availabilityEntries.length === 0)
 
   return (

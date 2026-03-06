@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import { saveWeeklyPattern, toggleDateOverride } from '@/lib/actions/availability'
 import { WeeklySchedule } from './WeeklySchedule'
@@ -21,6 +21,45 @@ interface AvailabilityFormProps {
 }
 
 type SaveStatus = 'idle' | 'saving' | 'saved' | 'error'
+
+function Tooltip({ text }: { text: string }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLSpanElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [open])
+
+  return (
+    <span ref={ref} className="relative inline-flex">
+      <button
+        type="button"
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
+        aria-label="More info"
+        className="flex items-center justify-center w-[18px] h-[18px] rounded-full border border-[var(--dnd-border-muted)] text-[var(--dnd-text-muted)] text-[10px] font-bold hover:border-[var(--dnd-accent)] hover:text-white transition-colors leading-none"
+      >
+        ?
+      </button>
+      {open && (
+        <span
+          role="tooltip"
+          className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 rounded-md bg-[#140326] border border-[var(--dnd-border-muted)] px-3 py-2 text-xs text-white z-10 shadow-lg"
+        >
+          {text}
+          <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#140326]" />
+        </span>
+      )}
+    </span>
+  )
+}
 
 function Toast({
   status,
@@ -163,15 +202,19 @@ export function AvailabilityForm({
       />
 
       <div>
-        <h2 className="text-white font-semibold text-lg mb-1">Quick-select your usual days</h2>
-        <p className="text-sm text-gray-400 mb-4">Toggle the days you&apos;re generally free — these will pre-fill the calendar below.</p>
+        <div className="flex items-center gap-2 mb-4">
+          <h2 className="text-white font-semibold text-lg">Quick-select your usual days</h2>
+          <Tooltip text="Toggle the days you're generally free — these will pre-fill the calendar below." />
+        </div>
         <WeeklySchedule selection={weeklySelection} onChange={handleWeeklyChange} />
       </div>
 
       {hasCalendar && (
         <div>
-          <h2 className="text-white font-semibold text-lg mb-1">Select available dates</h2>
-          <p className="text-sm text-gray-400 mb-4">Your weekly pattern is pre-filled. Click any date to add or remove it.</p>
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="text-white font-semibold text-lg">Select available dates</h2>
+            <Tooltip text="Your weekly pattern is pre-filled. Click any date to toggle it." />
+          </div>
           <AvailabilityCalendar
             planningWindowStart={planningWindowStart}
             planningWindowEnd={planningWindowEnd}
@@ -181,6 +224,13 @@ export function AvailabilityForm({
           />
         </div>
       )}
+
+      <div className="pt-2 space-y-1.5 border-t border-[var(--dnd-border-muted)]">
+        <p className="text-xs text-[var(--dnd-text-muted)]">
+          Calendar dates are based on the availability window set by your DM. Ask your DM to extend the window if you need more dates.
+        </p>
+        <p className="text-xs text-[var(--dnd-text-muted)]">Changes save automatically.</p>
+      </div>
     </div>
   )
 }

@@ -69,10 +69,17 @@ export default async function AvailabilityPage({
   return (
     <main className="min-h-screen text-gray-100 px-4 py-12">
       <div className="max-w-2xl mx-auto">
-        <h1 className="font-fantasy text-3xl text-white mb-1">{slot.name}&apos;s Availability</h1>
-        <p className="text-gray-400 text-sm mb-8">
-          Set your availability below — changes save automatically.
-        </p>
+        <h1 className="font-fantasy text-3xl text-white mb-4">{slot.name}&apos;s Availability</h1>
+        {(campaign.name || campaign.description) && (
+          <div className="bg-[var(--dnd-card-bg)] border border-[var(--dnd-border-muted)] rounded-lg px-4 py-3 mb-8">
+            {campaign.name && (
+              <p className="font-fantasy text-sm text-[var(--dnd-accent)] mb-0.5">{campaign.name}</p>
+            )}
+            {campaign.description && (
+              <p className="text-xs text-[var(--dnd-text-muted)] leading-relaxed">{campaign.description}</p>
+            )}
+          </div>
+        )}
         <AvailabilityForm
           playerSlotId={slot.id}
           planningWindowStart={windowStart}

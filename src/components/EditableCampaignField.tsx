@@ -31,7 +31,7 @@ export function EditableCampaignField({ campaignId, value, onSave, variant, plac
 
   const pencil = (
     <button onClick={start} aria-label="Edit"
-      className="opacity-0 group-hover:opacity-100 focus:opacity-100 ml-2 p-1 rounded text-[var(--dnd-text-muted)] hover:text-white transition-opacity shrink-0">
+      className="ml-2 p-1 rounded text-[var(--dnd-text-muted)] hover:text-white transition-colors shrink-0">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
         <path d="M11.013 1.427a1.75 1.75 0 0 1 2.475 0l1.085 1.086a1.75 1.75 0 0 1 0 2.474L5.91 13.65a.75.75 0 0 1-.364.194l-3.75.833a.75.75 0 0 1-.906-.906l.833-3.75a.75.75 0 0 1 .194-.364L11.013 1.427Zm1.414 1.06a.25.25 0 0 0-.353 0L3.51 11.05l-.585 2.635 2.634-.586 8.573-8.573a.25.25 0 0 0 0-.354L12.427 2.487Z" fill="currentColor"/>
       </svg>
@@ -54,7 +54,7 @@ export function EditableCampaignField({ campaignId, value, onSave, variant, plac
       </div>
     )
     return (
-      <div className="group flex items-center min-w-0">
+      <div className="flex items-center min-w-0">
         <h1 className="font-fantasy text-3xl text-white truncate max-w-xl">{value ?? 'Campaign Dashboard'}</h1>
         {pencil}
       </div>
@@ -70,7 +70,7 @@ export function EditableCampaignField({ campaignId, value, onSave, variant, plac
     </div>
   )
   return (
-    <div className="group flex items-start min-w-0">
+    <div className="flex items-start min-w-0">
       {value ? <p className="text-gray-400 text-sm leading-relaxed">{value}</p> : <p className="text-[var(--dnd-text-muted)] text-sm italic">{emptyLabel}</p>}
       {pencil}
     </div>

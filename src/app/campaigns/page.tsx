@@ -44,9 +44,9 @@ export default async function CampaignsPage() {
           {/* Visual create card */}
           <Link
             href="/campaigns/new"
-            className="block bg-[var(--dnd-card-bg)] border border-dashed border-[var(--dnd-border-card)] rounded-lg px-6 py-8 hover:bg-[var(--dnd-card-hover)] hover:border-[var(--dnd-accent)] transition-colors"
+            className="block bg-[var(--dnd-card-bg)] border-2 border-dashed border-[var(--dnd-border-card)] rounded-lg px-6 hover:bg-[var(--dnd-card-hover)] hover:border-[var(--dnd-accent)] transition-colors"
           >
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between h-[112px]">
               <div className="flex flex-col gap-1">
                 <span className="text-[18px] font-semibold text-[var(--dnd-accent)]">Start a new adventure</span>
                 <span className="text-sm text-[var(--dnd-text-muted)]">Create new campaign →</span>
@@ -56,9 +56,6 @@ export default async function CampaignsPage() {
           </Link>
         </div>
 
-        {campaigns.length === 0 && (
-          <p className="text-[var(--dnd-text-muted)] text-sm mt-4">No campaigns yet. Click the card above to create your first one.</p>
-        )}
       </div>
     </main>
   )
