@@ -11,14 +11,14 @@ model Campaign {
   id                  String       @id @default(cuid())
   joinToken           String       @unique @default(cuid())
   dmSecret            String       @unique @default(cuid())
+  name                String?
+  description         String?
+  maxPlayers          Int?
+  dmId                String?
   planningWindowStart DateTime?
   planningWindowEnd   DateTime?
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
-  description         String?
-  dmId                String?
-  maxPlayers          Int?
-  name                String?
   dm                  DM?          @relation(fields: [dmId], references: [id])
   playerSlots         PlayerSlot[]
 }
@@ -29,18 +29,20 @@ model PlayerSlot {
   name                String
   createdAt           DateTime            @default(now())
   updatedAt           DateTime            @updatedAt
-  availabilityEntries AvailabilityEntry[]
   campaign            Campaign            @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  availabilityEntries AvailabilityEntry[]
 }
 
+// type: "weekly" = recurring day-of-week pattern
+// type: "override" = specific date exception
 model AvailabilityEntry {
   id           String     @id @default(cuid())
   playerSlotId String
-  type         String
-  dayOfWeek    Int?
-  date         DateTime?
-  timeOfDay    String?
-  status       String
+  type         String     // "weekly" | "override"
+  dayOfWeek    Int?       // 0=Sun, 1=Mon, ..., 6=Sat (used when type="weekly")
+  date         DateTime?  // specific date (used when type="override")
+  timeOfDay    String?    // "morning" | "afternoon" | "evening"
+  status       String     // "free" | "busy"
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   playerSlot   PlayerSlot @relation(fields: [playerSlotId], references: [id], onDelete: Cascade)
@@ -53,8 +55,8 @@ model DM {
   email        String     @unique
   passwordHash String
   createdAt    DateTime   @default(now())
-  campaigns    Campaign[]
   sessions     Session[]
+  campaigns    Campaign[]
 }
 
 model Session {
