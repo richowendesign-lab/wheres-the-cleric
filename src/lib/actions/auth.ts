@@ -70,5 +70,5 @@ export async function logOut() {
   }
 
   cookieStore.delete(SESSION_COOKIE_NAME)
-  redirect('/auth/login')
+  redirect('/')
 }

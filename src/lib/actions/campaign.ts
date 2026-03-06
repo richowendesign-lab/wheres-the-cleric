@@ -97,6 +97,33 @@ export async function updateMaxPlayers(campaignId: string, _prevState: unknown, 
   return { success: true }
 }
 
+export async function updateCampaignName(campaignId: string, name: string) {
+  const trimmed = name.trim()
+  if (!trimmed) return { error: 'Campaign name is required.' }
+  if (trimmed.length > 100) return { error: 'Campaign name must be 100 characters or fewer.' }
+
+  await prisma.campaign.update({
+    where: { id: campaignId },
+    data: { name: trimmed },
+  })
+
+  revalidatePath(`/campaigns/${campaignId}`)
+  return { success: true }
+}
+
+export async function updateCampaignDescription(campaignId: string, description: string) {
+  const trimmed = description.trim()
+  if (trimmed.length > 500) return { error: 'Description must be 500 characters or fewer.' }
+
+  await prisma.campaign.update({
+    where: { id: campaignId },
+    data: { description: trimmed || null },
+  })
+
+  revalidatePath(`/campaigns/${campaignId}`)
+  return { success: true }
+}
+
 export async function updatePlanningWindow(campaignId: string, _prevState: unknown, formData: FormData) {
   const startVal = formData.get('planningWindowStart') as string
   const endVal = formData.get('planningWindowEnd') as string

@@ -1,9 +1,21 @@
 @import "tailwindcss";
 
 @theme {
+  /* Fonts only — Tailwind utility class: font-fantasy */
   --font-fantasy: var(--font-cinzel);
-  --color-accent: #ba7df6;
-  --color-input-bg: #200637;
+}
+
+/* ── Design tokens ─────────────────────────────────────────── */
+:root {
+  --dnd-accent:           #ba7df6;   /* primary purple — buttons, borders, highlights */
+  --dnd-accent-hover:     #c994f8;   /* button hover */
+  --dnd-input-bg:         #1e0439;   /* form field backgrounds */
+  --dnd-card-bg:          rgba(20, 3, 38, 0.6);   /* card default (transparent) */
+  --dnd-card-hover:       #140326;   /* card hover (opaque) */
+  --dnd-border-card:      #572182;   /* card border */
+  --dnd-border-muted:     #53366d;   /* subtle dividers */
+  --dnd-text-muted:       #a19aa8;   /* secondary text */
+  --dnd-text-placeholder: #857b8e;   /* form placeholders */
 }
 
 html, body {

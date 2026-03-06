@@ -11,8 +11,8 @@ export function BestDaysList({ days, playerSlots }: BestDaysListProps) {
   if (bestDays.length === 0) {
     return (
       <section>
-        <h2 className="text-white font-semibold text-lg mb-3">Best Days</h2>
-        <p className="text-gray-500 text-sm">
+        <h2 className="text-white font-semibold text-lg mb-2">Best Days</h2>
+        <p className="text-muted text-sm">
           No availability data yet — waiting for players to submit their schedules.
         </p>
       </section>
@@ -21,7 +21,7 @@ export function BestDaysList({ days, playerSlots }: BestDaysListProps) {
 
   return (
     <section>
-      <h2 className="text-white font-semibold text-lg mb-3">Best Days</h2>
+      <h2 className="text-white font-semibold text-lg mb-2">Best Days</h2>
       <ul className="space-y-2">
         {bestDays.map((day, index) => {
           const rank = index + 1
@@ -39,11 +39,11 @@ export function BestDaysList({ days, playerSlots }: BestDaysListProps) {
                 {rank}
               </span>
               <span className="font-medium text-gray-100">{dateLabel}</span>
-              <span className="text-gray-400 text-sm">
+              <span className="text-muted text-sm">
                 {day.freeCount}/{day.totalPlayers} players free
               </span>
               {freePlayerNames.length > 0 && (
-                <span className="text-gray-400 text-sm">
+                <span className="text-muted text-sm">
                   ({freePlayerNames.join(', ')})
                 </span>
               )}
