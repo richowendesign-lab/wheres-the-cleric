@@ -73,30 +73,30 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SHARE-01 | — | Pending |
-| SHARE-02 | — | Pending |
-| SHARE-03 | — | Pending |
-| SHARE-04 | — | Pending |
-| SHARE-05 | — | Pending |
-| DASH-01 | — | Pending |
-| DASH-02 | — | Pending |
-| DASH-03 | — | Pending |
-| DASH-04 | — | Pending |
-| DASH-05 | — | Pending |
-| DMEX-01 | — | Pending |
-| DMEX-02 | — | Pending |
-| DMEX-03 | — | Pending |
-| DMEX-04 | — | Pending |
-| COPY-01 | — | Pending |
-| COPY-02 | — | Pending |
-| PICK-01 | — | Pending |
-| PICK-02 | — | Pending |
+| SHARE-01 | Phase 12 | Pending |
+| SHARE-02 | Phase 12 | Pending |
+| SHARE-03 | Phase 12 | Pending |
+| SHARE-04 | Phase 12 | Pending |
+| SHARE-05 | Phase 12 | Pending |
+| DASH-01 | Phase 14 | Pending |
+| DASH-02 | Phase 14 | Pending |
+| DASH-03 | Phase 14 | Pending |
+| DASH-04 | Phase 14 | Pending |
+| DASH-05 | Phase 14 | Pending |
+| DMEX-01 | Phase 13 | Pending |
+| DMEX-02 | Phase 13 | Pending |
+| DMEX-03 | Phase 13 | Pending |
+| DMEX-04 | Phase 13 | Pending |
+| COPY-01 | Phase 15 | Pending |
+| COPY-02 | Phase 15 | Pending |
+| PICK-01 | Phase 16 | Pending |
+| PICK-02 | Phase 16 | Pending |
 
 **Coverage:**
 - v1.3 requirements: 18 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 18 ⚠️
+- Mapped to phases: 18 (complete)
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-09*
-*Last updated: 2026-03-09 after initial definition*
+*Last updated: 2026-03-09 after roadmap creation*
