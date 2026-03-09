@@ -22,13 +22,13 @@ See: .planning/PROJECT.md (updated 2026-03-09 after v1.3 milestone start)
 
 ## Current Position
 
-Phase: 12 in progress (1/2 plans done)
-Plan: 12-01 complete
-Status: Phase 12 in progress — Plan 12-02 is next
-Last activity: 2026-03-09 — Phase 12-01 complete: createCampaign redirects with ?share=1, ShareModal component created
+Phase: 12 complete (2/2 plans done)
+Plan: 12-02 complete
+Status: Phase 12 complete — all SHARE requirements delivered; Phase 13 is next
+Last activity: 2026-03-09 — Phase 12-02 complete: ShareModal wired into CampaignDetailPage via searchParams, full flow human-verified
 
 ```
-v1.3 Progress: [██░░░░░░░░] 1/6 phases complete — PHASE 12 IN PROGRESS (12-02 next)
+v1.3 Progress: [███░░░░░░░] 2/6 phases complete — PHASE 12 COMPLETE (Phase 13 next)
 ```
 
 ## Performance Metrics
@@ -44,6 +44,7 @@ v1.3 Progress: [██░░░░░░░░] 1/6 phases complete — PHASE 12
 |-------|-------|-------|----------|
 | Phase 11 P01 | 2 tasks | 2 min | 1 min |
 | Phase 12-share-modal P01 | 2 tasks | 5 min | 2.5 min |
+| Phase 12-share-modal P02 | 2 tasks | 10 min | 5 min |
 
 *Updated after each plan completion*
 
@@ -73,6 +74,11 @@ See PROJECT.md Key Decisions table for full history.
 - inviteMessage computed inline from joinUrl prop at render time — not in useState
 - router.replace uses window.location.pathname to strip query params without creating a new history entry
 
+**Plan 12-02 decisions:**
+- searchParams received as async Promise prop on CampaignDetailPage Server Component — not via useSearchParams() hook (requires Client Component)
+- ShareModal placed as last child in outer container div; fixed positioning makes DOM location irrelevant
+- No open state passed from page to ShareModal — ShareModal manages own open state via useState(true)
+
 ### Pending Todos
 
 None.
@@ -85,5 +91,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-09
-Stopped at: Completed 12-01-PLAN.md — ShareModal created and createCampaign redirects with ?share=1; Plan 12-02 is next
+Stopped at: Completed 12-02-PLAN.md — Phase 12 share modal fully complete; all SHARE requirements human-verified; Phase 13 is next
 Resume file: None

@@ -48,7 +48,7 @@ Full phase details: `.planning/milestones/v1.2-ROADMAP.md`
 **Milestone Goal:** Improve the DM's post-creation flow and campaign dashboard so sharing the link and acting on availability are fast and obvious.
 
 - [x] **Phase 11: Schema Foundation + Calendar Utilities** — Add DmAvailabilityException model and dmExceptionMode to Campaign; extract buildMonthGrid/formatDateKey to calendarUtils.ts (completed 2026-03-09)
-- [ ] **Phase 12: Share Modal** — Post-creation modal with one-click join link copy and pre-written invite message; ?share=1 URL param trigger pattern
+- [x] **Phase 12: Share Modal** — Post-creation modal with one-click join link copy and pre-written invite message; ?share=1 URL param trigger pattern (completed 2026-03-09)
 - [ ] **Phase 13: DM Availability Exceptions** — Click-to-toggle calendar for marking DM-unavailable dates; block/flag mode toggle; dmBlocked in DayAggregation
 - [ ] **Phase 14: Dashboard Redesign** — Adaptive calendar with prev/next navigation, ranked best-day list alongside, campaign details de-emphasised
 - [ ] **Phase 15: Shareable Best Dates** — CopyBestDaysButton client island; formatted top-3 best-dates message from the campaign dashboard
@@ -138,7 +138,7 @@ Plans:
 | 9. Campaign Fields and Join Cap | v1.2 | 2/2 | Complete | 2026-03-04 |
 | 10. Multi-Campaign Dashboard | v1.2 | 1/1 | Complete | 2026-03-05 |
 | 11. Schema Foundation + Calendar Utilities | v1.3 | 2/2 | Complete | 2026-03-09 |
-| 12. Share Modal | 1/2 | In Progress|  | - |
+| 12. Share Modal | 2/2 | Complete   | 2026-03-09 | - |
 | 13. DM Availability Exceptions | v1.3 | 0/? | Not started | - |
 | 14. Dashboard Redesign | v1.3 | 0/? | Not started | - |
 | 15. Shareable Best Dates | v1.3 | 0/? | Not started | - |
