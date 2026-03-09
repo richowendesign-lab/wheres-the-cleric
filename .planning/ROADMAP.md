@@ -78,7 +78,10 @@ Plans:
   2. DM can click "Copy link" and the button changes to "Copied!" giving clear confirmation; the join link is also visible in a read-only field in the modal
   3. DM can click "Copy invite message" and a pre-written message (including the link and player instructions) is placed on the clipboard
   4. DM can dismiss the modal and land on the campaign dashboard with the modal gone and the URL cleaned of the ?share=1 param
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 12-01-PLAN.md — Modify createCampaign redirect (?share=1) and create ShareModal component with two copy buttons
+- [ ] 12-02-PLAN.md — Wire ShareModal into CampaignDetailPage via searchParams prop; human verification of full flow
 
 ### Phase 13: DM Availability Exceptions
 **Goal**: The DM can mark their own unavailable dates on a per-campaign calendar, and those blocks or flags are reflected in the best-day data.
@@ -134,8 +137,8 @@ Plans:
 | 8. DM Auth | v1.2 | 4/4 | Complete | 2026-03-04 |
 | 9. Campaign Fields and Join Cap | v1.2 | 2/2 | Complete | 2026-03-04 |
 | 10. Multi-Campaign Dashboard | v1.2 | 1/1 | Complete | 2026-03-05 |
-| 11. Schema Foundation + Calendar Utilities | 2/2 | Complete    | 2026-03-09 | - |
-| 12. Share Modal | v1.3 | 0/? | Not started | - |
+| 11. Schema Foundation + Calendar Utilities | v1.3 | 2/2 | Complete | 2026-03-09 |
+| 12. Share Modal | v1.3 | 0/2 | Not started | - |
 | 13. DM Availability Exceptions | v1.3 | 0/? | Not started | - |
 | 14. Dashboard Redesign | v1.3 | 0/? | Not started | - |
 | 15. Shareable Best Dates | v1.3 | 0/? | Not started | - |
