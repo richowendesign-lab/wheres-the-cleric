@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.3
 milestone_name: DM Experience & Scheduling Flow
 status: unknown
-last_updated: "2026-03-09T14:33:01.832Z"
+last_updated: "2026-03-09T15:03:47.178Z"
 progress:
-  total_phases: 5
+  total_phases: 6
   completed_phases: 5
-  total_plans: 16
-  completed_plans: 16
+  total_plans: 18
+  completed_plans: 17
 ---
 
 # Project State
@@ -22,27 +22,28 @@ See: .planning/PROJECT.md (updated 2026-03-09 after v1.3 milestone start)
 
 ## Current Position
 
-Phase: 11 complete (2/2 plans done)
-Plan: 11-02 complete
-Status: Phase 11 done — ready for Phase 12
-Last activity: 2026-03-09 — Phase 11 complete: schema migration (11-01) and calendarUtils extraction (11-02)
+Phase: 12 in progress (1/2 plans done)
+Plan: 12-01 complete
+Status: Phase 12 in progress — Plan 12-02 is next
+Last activity: 2026-03-09 — Phase 12-01 complete: createCampaign redirects with ?share=1, ShareModal component created
 
 ```
-v1.3 Progress: [██░░░░░░░░] 1/6 phases complete — PHASE 12 NEXT
+v1.3 Progress: [██░░░░░░░░] 1/6 phases complete — PHASE 12 IN PROGRESS (12-02 next)
 ```
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1 (v1.3)
-- Average duration: 2 min
-- Total execution time: 2 min
+- Total plans completed: 2 (v1.3)
+- Average duration: 3.5 min
+- Total execution time: 7 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | Phase 11 P01 | 2 tasks | 2 min | 1 min |
+| Phase 12-share-modal P01 | 2 tasks | 5 min | 2.5 min |
 
 *Updated after each plan completion*
 
@@ -67,6 +68,11 @@ See PROJECT.md Key Decisions table for full history.
 - dmExceptionMode String? on Campaign — null means unset; application defaults to block behaviour
 - No @@index or @@map on DmAvailabilityException — kept minimal to match AvailabilityEntry pattern
 
+**Plan 12-01 decisions:**
+- [Phase 12-share-modal]: ShareModal uses div overlay (not native dialog) for consistent DnD styling; CopyButton is local unexported helper; dismiss cleans URL via router.replace(pathname)
+- inviteMessage computed inline from joinUrl prop at render time — not in useState
+- router.replace uses window.location.pathname to strip query params without creating a new history entry
+
 ### Pending Todos
 
 None.
@@ -79,5 +85,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-09
-Stopped at: Completed 11-01-PLAN.md — DmAvailabilityException schema live in Neon; Plan 11-02 is next
+Stopped at: Completed 12-01-PLAN.md — ShareModal created and createCampaign redirects with ?share=1; Plan 12-02 is next
 Resume file: None

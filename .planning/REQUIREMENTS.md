@@ -10,9 +10,9 @@ Requirements for Milestone v1.3: DM Experience & Scheduling Flow.
 ### Share Modal
 
 - [ ] **SHARE-01**: DM sees a share modal automatically after creating a campaign
-- [ ] **SHARE-02**: DM can copy the join link with one click (button gives "Copied!" feedback)
-- [ ] **SHARE-03**: Join link is displayed in a read-only field in the modal
-- [ ] **SHARE-04**: DM can copy a pre-written invite message (includes link + player instructions)
+- [x] **SHARE-02**: DM can copy the join link with one click (button gives "Copied!" feedback)
+- [x] **SHARE-03**: Join link is displayed in a read-only field in the modal
+- [x] **SHARE-04**: DM can copy a pre-written invite message (includes link + player instructions)
 - [ ] **SHARE-05**: DM can dismiss the modal to proceed to the campaign dashboard
 
 ### Dashboard Redesign
@@ -74,9 +74,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | SHARE-01 | Phase 12 | Pending |
-| SHARE-02 | Phase 12 | Pending |
-| SHARE-03 | Phase 12 | Pending |
-| SHARE-04 | Phase 12 | Pending |
+| SHARE-02 | Phase 12 | Complete |
+| SHARE-03 | Phase 12 | Complete |
+| SHARE-04 | Phase 12 | Complete |
 | SHARE-05 | Phase 12 | Pending |
 | DASH-01 | Phase 14 | Pending |
 | DASH-02 | Phase 14 | Pending |
