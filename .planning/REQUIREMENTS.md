@@ -1,67 +1,102 @@
-# Requirements: D&D Session Planner
+# Requirements: Where's the Cleric — D&D Session Planner
 
-**Defined:** 2026-03-05
-**Core Value:** The DM can instantly see when everyone is free — without chasing people for responses or guessing which dates to offer.
+**Defined:** 2026-03-09
+**Core Value:** DMs can coordinate session scheduling with their group without friction — from campaign creation to picking a date everyone can make.
 
 ## v1.3 Requirements
 
-Requirements for the Visual Redesign milestone.
+Requirements for Milestone v1.3: DM Experience & Scheduling Flow.
 
-### Design Tokens
+### Share Modal
 
-- [ ] **VIS-01**: App uses a deep purple radial gradient as the global background (from #54457F to #140326)
-- [ ] **VIS-02**: A subtle abstract background image is applied at low opacity (~30%) as an overlay on all pages
-- [ ] **VIS-03**: All heading text uses the Cinzel font (fantasy serif) and is white
-- [ ] **VIS-04**: All body/secondary text uses Inter at rgba(255,255,255,0.6)
+- [ ] **SHARE-01**: DM sees a share modal automatically after creating a campaign
+- [ ] **SHARE-02**: DM can copy the join link with one click (button gives "Copied!" feedback)
+- [ ] **SHARE-03**: Join link is displayed in a read-only field in the modal
+- [ ] **SHARE-04**: DM can copy a pre-written invite message (includes link + player instructions)
+- [ ] **SHARE-05**: DM can dismiss the modal to proceed to the campaign dashboard
 
-### Interactive Elements
+### Dashboard Redesign
 
-- [ ] **VIS-05**: All primary action buttons use #BA7DF6 background with dark (#030712) semibold text
-- [ ] **VIS-06**: All form text inputs use #200637 background with a #BA7DF6 border and 50% opacity white placeholder text
-- [ ] **VIS-07**: Border radius is 4px throughout (inputs, buttons, cards)
+- [ ] **DASH-01**: Calendar view adapts to the planning window — one or two months visible at a time, with prev/next arrows to navigate when the window spans more
+- [ ] **DASH-02**: Days outside the planning window are visually muted on the calendar
+- [ ] **DASH-03**: DM sees a ranked best-day list alongside the calendar
+- [ ] **DASH-04**: Each ranked date shows player count and names of unavailable players
+- [ ] **DASH-05**: Share link, planning window dates, and delete campaign remain accessible on the dashboard but are visually de-emphasised (e.g. secondary section, collapsible, or tab)
 
-### Pages
+### DM Availability Exceptions
 
-- [ ] **VIS-08**: Join page (/join/[joinToken]) matches the Figma reference — centered card with icon, Cinzel heading, purple form
-- [ ] **VIS-09**: Auth pages (sign-up, login) apply the same visual system
-- [ ] **VIS-10**: Campaign creation page (/campaigns/new) applies the same visual system
-- [ ] **VIS-11**: Campaign dashboard (/campaigns/[id]) applies the same visual system
-- [ ] **VIS-12**: DM home dashboard (/campaigns) applies the same visual system
+- [ ] **DMEX-01**: DM can click calendar dates to mark themselves as unavailable for a campaign
+- [ ] **DMEX-02**: DM can click a marked date again to remove the exception
+- [ ] **DMEX-03**: DM-unavailable dates are visually distinct from player-unavailable dates
+- [ ] **DMEX-04**: DM can toggle between "block" (removes date from rankings) and "flag" (shows warning badge)
+
+### Shareable Best Dates
+
+- [ ] **COPY-01**: DM can copy a formatted best-dates message from the campaign dashboard
+- [ ] **COPY-02**: Copied message lists top 3 dates with day name, full date, and plain-English availability ("everyone free" / "3/4 free, Alex busy")
+
+### Custom Date Picker
+
+- [ ] **PICK-01**: Planning window fields use a custom themed date picker matching the app's visual style
+- [ ] **PICK-02**: Custom picker replaces native date inputs in campaign creation and planning window update forms
 
 ## Future Requirements
 
-- **VIS-F01**: Dark/light mode toggle
-- **VIS-F02**: Player-specific theming per campaign
+Deferred to v1.4 or later. Tracked but not in current roadmap.
+
+### DM Full Availability
+
+- **DMAV-01**: DM can set recurring availability patterns (mirrors the player availability flow)
+
+### Transparency
+
+- **TRAN-01**: Players can see which dates the DM has marked as unavailable (requires UX/transparency decision)
+
+### Sharing
+
+- **SHAR-01**: Auto-send or email delivery of share messages (requires email infrastructure)
 
 ## Out of Scope
 
+Explicitly excluded from v1.3.
+
 | Feature | Reason |
 |---------|--------|
-| Animation / transitions | Keep scope focused on static styling |
-| Mobile-specific layouts | Responsive is fine, mobile-first redesign is separate |
-| Design system / component library | Not needed for this app size |
+| In-modal editing of the pre-written invite message | DMs can edit naturally in their chat app after pasting — in-app editing adds complexity for no gain |
+| More than 3 dates in the "copy best dates" message | Decision paralysis in group chat — top 3 enforced; ranked list on dashboard shows more |
+| Per-player colour coding in calendar | Aggregate fill intensity is clearer; per-player colours are already complex in the current view |
+| DM recurring unavailability patterns | Full DM availability form mirrors player flow — high complexity, defer to v1.4 |
 
 ## Traceability
 
+Which phases cover which requirements. Updated during roadmap creation.
+
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| VIS-01 | Phase 11 | Pending |
-| VIS-02 | Phase 11 | Pending |
-| VIS-03 | Phase 11 | Pending |
-| VIS-04 | Phase 11 | Pending |
-| VIS-05 | Phase 11 | Pending |
-| VIS-06 | Phase 11 | Pending |
-| VIS-07 | Phase 11 | Pending |
-| VIS-08 | Phase 11 | Pending |
-| VIS-09 | Phase 11 | Pending |
-| VIS-10 | Phase 11 | Pending |
-| VIS-11 | Phase 11 | Pending |
-| VIS-12 | Phase 11 | Pending |
+| SHARE-01 | — | Pending |
+| SHARE-02 | — | Pending |
+| SHARE-03 | — | Pending |
+| SHARE-04 | — | Pending |
+| SHARE-05 | — | Pending |
+| DASH-01 | — | Pending |
+| DASH-02 | — | Pending |
+| DASH-03 | — | Pending |
+| DASH-04 | — | Pending |
+| DASH-05 | — | Pending |
+| DMEX-01 | — | Pending |
+| DMEX-02 | — | Pending |
+| DMEX-03 | — | Pending |
+| DMEX-04 | — | Pending |
+| COPY-01 | — | Pending |
+| COPY-02 | — | Pending |
+| PICK-01 | — | Pending |
+| PICK-02 | — | Pending |
 
 **Coverage:**
-- v1.3 requirements: 12 total
-- Mapped to phases: 12
-- Unmapped: 0 ✓
+- v1.3 requirements: 18 total
+- Mapped to phases: 0 (pending roadmap)
+- Unmapped: 18 ⚠️
 
 ---
-*Requirements defined: 2026-03-05*
+*Requirements defined: 2026-03-09*
+*Last updated: 2026-03-09 after initial definition*
