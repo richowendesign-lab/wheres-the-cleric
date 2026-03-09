@@ -1,3 +1,5 @@
+import { formatDateKey } from '@/lib/calendarUtils'
+
 export type PlayerDayStatus = 'free' | 'no-response'
 
 export interface PlayerSlotWithEntries {
@@ -19,10 +21,6 @@ export interface DayAggregation {
   freeCount: number
   totalPlayers: number
   allFree: boolean
-}
-
-function formatDateKey(date: Date): string {
-  return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}`
 }
 
 /**

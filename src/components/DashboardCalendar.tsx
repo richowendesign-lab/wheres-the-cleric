@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { DayAggregation } from '@/lib/availability'
+import { buildMonthGrid, formatDateKey } from '@/lib/calendarUtils'
 
 interface DashboardCalendarProps {
   dayAggregations: DayAggregation[]
@@ -11,24 +12,6 @@ interface DashboardCalendarProps {
 }
 
 const DAY_HEADERS = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
-
-function buildMonthGrid(year: number, month: number): (Date | null)[][] {
-  const firstDay = new Date(Date.UTC(year, month, 1))
-  const startDow = firstDay.getUTCDay()
-  const daysInMonth = new Date(Date.UTC(year, month + 1, 0)).getUTCDate()
-  const cells: (Date | null)[] = [
-    ...Array(startDow).fill(null),
-    ...Array.from({ length: daysInMonth }, (_, i) => new Date(Date.UTC(year, month, i + 1))),
-  ]
-  while (cells.length % 7 !== 0) cells.push(null)
-  const weeks: (Date | null)[][] = []
-  for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7))
-  return weeks
-}
-
-function formatDateKey(date: Date): string {
-  return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}`
-}
 
 function formatPanelDate(dateKey: string): string {
   const [y, m, d] = dateKey.split('-').map(Number)
