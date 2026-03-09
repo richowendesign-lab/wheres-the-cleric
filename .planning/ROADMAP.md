@@ -64,7 +64,10 @@ Full phase details: `.planning/milestones/v1.2-ROADMAP.md`
   1. `DmAvailabilityException` table exists in the Prisma schema with `@@unique([campaignId, date])` and can be pushed to both SQLite and Neon without error
   2. `Campaign` model has a `dmExceptionMode` string field (nullable) that persists "block" or "flag" values
   3. `src/lib/calendarUtils.ts` exports `buildMonthGrid` and `formatDateKey`; existing `AvailabilityCalendar` and `DashboardCalendar` import from there with no behaviour change
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 11-01-PLAN.md — Schema migration: add DmAvailabilityException model and dmExceptionMode to Campaign, push to Neon
+- [ ] 11-02-PLAN.md — calendarUtils extraction: create src/lib/calendarUtils.ts, update DashboardCalendar, AvailabilityCalendar, and availability.ts imports
 
 ### Phase 12: Share Modal
 **Goal**: After creating a campaign, the DM immediately sees a modal with everything needed to share the join link — no extra navigation required.
@@ -131,7 +134,7 @@ Full phase details: `.planning/milestones/v1.2-ROADMAP.md`
 | 8. DM Auth | v1.2 | 4/4 | Complete | 2026-03-04 |
 | 9. Campaign Fields and Join Cap | v1.2 | 2/2 | Complete | 2026-03-04 |
 | 10. Multi-Campaign Dashboard | v1.2 | 1/1 | Complete | 2026-03-05 |
-| 11. Schema Foundation + Calendar Utilities | v1.3 | 0/? | Not started | - |
+| 11. Schema Foundation + Calendar Utilities | v1.3 | 0/2 | Not started | - |
 | 12. Share Modal | v1.3 | 0/? | Not started | - |
 | 13. DM Availability Exceptions | v1.3 | 0/? | Not started | - |
 | 14. Dashboard Redesign | v1.3 | 0/? | Not started | - |
