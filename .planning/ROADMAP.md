@@ -47,7 +47,7 @@ Full phase details: `.planning/milestones/v1.2-ROADMAP.md`
 
 **Milestone Goal:** Improve the DM's post-creation flow and campaign dashboard so sharing the link and acting on availability are fast and obvious.
 
-- [ ] **Phase 11: Schema Foundation + Calendar Utilities** — Add DmAvailabilityException model and dmExceptionMode to Campaign; extract buildMonthGrid/formatDateKey to calendarUtils.ts
+- [x] **Phase 11: Schema Foundation + Calendar Utilities** — Add DmAvailabilityException model and dmExceptionMode to Campaign; extract buildMonthGrid/formatDateKey to calendarUtils.ts (completed 2026-03-09)
 - [ ] **Phase 12: Share Modal** — Post-creation modal with one-click join link copy and pre-written invite message; ?share=1 URL param trigger pattern
 - [ ] **Phase 13: DM Availability Exceptions** — Click-to-toggle calendar for marking DM-unavailable dates; block/flag mode toggle; dmBlocked in DayAggregation
 - [ ] **Phase 14: Dashboard Redesign** — Adaptive calendar with prev/next navigation, ranked best-day list alongside, campaign details de-emphasised
@@ -134,7 +134,7 @@ Plans:
 | 8. DM Auth | v1.2 | 4/4 | Complete | 2026-03-04 |
 | 9. Campaign Fields and Join Cap | v1.2 | 2/2 | Complete | 2026-03-04 |
 | 10. Multi-Campaign Dashboard | v1.2 | 1/1 | Complete | 2026-03-05 |
-| 11. Schema Foundation + Calendar Utilities | v1.3 | 0/2 | Not started | - |
+| 11. Schema Foundation + Calendar Utilities | 2/2 | Complete   | 2026-03-09 | - |
 | 12. Share Modal | v1.3 | 0/? | Not started | - |
 | 13. DM Availability Exceptions | v1.3 | 0/? | Not started | - |
 | 14. Dashboard Redesign | v1.3 | 0/? | Not started | - |
