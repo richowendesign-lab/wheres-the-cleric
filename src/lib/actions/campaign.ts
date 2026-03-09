@@ -56,7 +56,7 @@ export async function createCampaign(_prevState: unknown, formData: FormData) {
     },
   })
 
-  redirect(`/campaigns/${campaign.id}`)
+  redirect(`/campaigns/${campaign.id}?share=1`)
 }
 
 export async function deleteCampaign(campaignId: string) {
