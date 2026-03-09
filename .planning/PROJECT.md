@@ -30,11 +30,16 @@ The DM can instantly see when everyone is free — without chasing people for re
 
 ### Active
 
-- DM and player-facing pages use a unified deep purple visual theme with Cinzel headings and #BA7DF6 primary accent
-- All primary action buttons use #BA7DF6 background with dark text
-- All headings use white text in the Cinzel font
-- Background uses a deep purple radial gradient with a subtle overlay image
-- Form inputs use a dark (#200637) background with #BA7DF6 border
+## Current Milestone: v1.3 DM Experience & Scheduling Flow
+
+**Goal:** Improve the DM's post-creation flow and campaign dashboard so sharing the link and acting on availability are fast and obvious.
+
+**Target features:**
+- Post-creation share modal with one-click join link copy and pre-written paste message
+- Campaign page redesign: planning window → best days → all days (Basecamp-style two-month calendar + ranked list)
+- Shareable best days: copy a formatted message listing the top dates
+- DM availability exceptions: mark unavailable dates during campaign setup, with per-campaign toggle to block or flag those days for players
+- Custom date picker: replace native browser popups with a styled component matching the purple theme
 
 ### Out of Scope
 
@@ -83,4 +88,4 @@ The DM can instantly see when everyone is free — without chasing people for re
 | `useActionState` from `react` not `react-dom` (v1.2) | React 19 deprecates the `react-dom` import; avoids deprecation warnings | ✓ Good — correct for React 19 |
 
 ---
-*Last updated: 2026-03-05 after v1.2 milestone*
+*Last updated: 2026-03-09 after v1.3 milestone start*

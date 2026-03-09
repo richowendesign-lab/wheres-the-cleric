@@ -1,34 +1,34 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.2
-milestone_name: Multi-Campaign DM
-status: unknown
-last_updated: "2026-03-05T10:53:57.494Z"
+milestone: v1.3
+milestone_name: DM Experience & Scheduling Flow
+status: planning
+last_updated: "2026-03-09T00:00:00.000Z"
 progress:
-  total_phases: 7
-  completed_phases: 7
-  total_plans: 21
-  completed_plans: 21
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-03-05 after v1.2 milestone)
+See: .planning/PROJECT.md (updated 2026-03-09 after v1.3 milestone start)
 
 **Core value:** The DM can instantly see when everyone is free — without chasing people for responses or guessing which dates to offer.
-**Current focus:** v1.2 shipped — planning next milestone
+**Current focus:** v1.3 — DM Experience & Scheduling Flow
 
 ## Current Position
 
-Phase: Phase 10 (Multi-Campaign Dashboard) — complete
-Plan: 1 of 1 complete (10-01 done)
-Status: All Phase 10 requirements complete and human-verified — /campaigns shows DM campaign cards, empty state, "Create new campaign" CTA; CAMP-04 and CAMP-05 satisfied; v1.2 milestone complete
-Last activity: 2026-03-05 — completed 10-01 (DM home dashboard: campaign cards, empty state, create button)
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements for v1.3
+Last activity: 2026-03-09 — Milestone v1.3 started
 
 ```
-v1.2 Progress: [██████████] 3/3 phases complete — v1.2 SHIPPED
+v1.3 Progress: [░░░░░░░░░░] 0/0 phases complete — IN PLANNING
 ```
 
 ## Accumulated Context
