@@ -60,6 +60,12 @@ export async function createCampaign(_prevState: unknown, formData: FormData) {
 }
 
 export async function deleteCampaign(campaignId: string) {
+  const dm = await getSessionDM()
+  if (!dm) return { error: 'Not authenticated' }
+
+  const campaign = await prisma.campaign.findUnique({ where: { id: campaignId }, select: { dmId: true } })
+  if (!campaign || campaign.dmId !== dm.id) return { error: 'Unauthorized' }
+
   await prisma.campaign.delete({ where: { id: campaignId } })
   const cookieStore = await cookies()
   cookieStore.delete('dm_secret')
@@ -67,6 +73,9 @@ export async function deleteCampaign(campaignId: string) {
 }
 
 export async function updateMaxPlayers(campaignId: string, _prevState: unknown, formData: FormData) {
+  const dm = await getSessionDM()
+  if (!dm) return { error: 'Not authenticated' }
+
   const rawMaxPlayers = formData.get('maxPlayers') as string
 
   let parsedMaxPlayers: number | null = null
@@ -78,14 +87,14 @@ export async function updateMaxPlayers(campaignId: string, _prevState: unknown, 
     parsedMaxPlayers = parsed
   }
 
-  if (parsedMaxPlayers !== null) {
-    const campaign = await prisma.campaign.findUnique({
-      where: { id: campaignId },
-      select: { _count: { select: { playerSlots: true } } },
-    })
-    if (campaign && parsedMaxPlayers < campaign._count.playerSlots) {
-      return { error: `Can't set below current player count (${campaign._count.playerSlots}).` }
-    }
+  const campaign = await prisma.campaign.findUnique({
+    where: { id: campaignId },
+    select: { dmId: true, _count: { select: { playerSlots: true } } },
+  })
+  if (!campaign || campaign.dmId !== dm.id) return { error: 'Unauthorized' }
+
+  if (parsedMaxPlayers !== null && parsedMaxPlayers < campaign._count.playerSlots) {
+    return { error: `Can't set below current player count (${campaign._count.playerSlots}).` }
   }
 
   await prisma.campaign.update({
@@ -98,6 +107,12 @@ export async function updateMaxPlayers(campaignId: string, _prevState: unknown, 
 }
 
 export async function updateCampaignName(campaignId: string, name: string) {
+  const dm = await getSessionDM()
+  if (!dm) return { error: 'Not authenticated' }
+
+  const campaign = await prisma.campaign.findUnique({ where: { id: campaignId }, select: { dmId: true } })
+  if (!campaign || campaign.dmId !== dm.id) return { error: 'Unauthorized' }
+
   const trimmed = name.trim()
   if (!trimmed) return { error: 'Campaign name is required.' }
   if (trimmed.length > 100) return { error: 'Campaign name must be 100 characters or fewer.' }
@@ -112,6 +127,12 @@ export async function updateCampaignName(campaignId: string, name: string) {
 }
 
 export async function updateCampaignDescription(campaignId: string, description: string) {
+  const dm = await getSessionDM()
+  if (!dm) return { error: 'Not authenticated' }
+
+  const campaign = await prisma.campaign.findUnique({ where: { id: campaignId }, select: { dmId: true } })
+  if (!campaign || campaign.dmId !== dm.id) return { error: 'Unauthorized' }
+
   const trimmed = description.trim()
   if (trimmed.length > 500) return { error: 'Description must be 500 characters or fewer.' }
 
@@ -125,6 +146,12 @@ export async function updateCampaignDescription(campaignId: string, description:
 }
 
 export async function updatePlanningWindow(campaignId: string, _prevState: unknown, formData: FormData) {
+  const dm = await getSessionDM()
+  if (!dm) return { error: 'Not authenticated' }
+
+  const campaign = await prisma.campaign.findUnique({ where: { id: campaignId }, select: { dmId: true } })
+  if (!campaign || campaign.dmId !== dm.id) return { error: 'Unauthorized' }
+
   const startVal = formData.get('planningWindowStart') as string
   const endVal = formData.get('planningWindowEnd') as string
 
