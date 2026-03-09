@@ -12,9 +12,17 @@ import { DeleteCampaignButton } from '@/components/DeleteCampaignButton'
 import { EditableCampaignField } from '@/components/EditableCampaignField'
 import { logOut } from '@/lib/actions/auth'
 import { updateCampaignName, updateCampaignDescription } from '@/lib/actions/campaign'
+import { ShareModal } from '@/components/ShareModal'
 
-export default async function CampaignDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function CampaignDetailPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ share?: string }>
+}) {
   const { id } = await params
+  const { share } = await searchParams
 
   const campaign = await prisma.campaign.findUnique({
     where: { id },
@@ -113,6 +121,8 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
           <h2 className="text-lg font-semibold text-white mb-3">Danger Zone</h2>
           <DeleteCampaignButton campaignId={campaign.id} />
         </div>
+
+        {share === '1' && <ShareModal joinUrl={joinUrl} />}
       </div>
     </main>
   )
