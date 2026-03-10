@@ -63,7 +63,7 @@ export default async function CampaignDetailPage({
 
   return (
     <main className="min-h-screen text-gray-100 px-4 py-12">
-      <div className="max-w-2xl mx-auto space-y-8">
+      <div className="max-w-5xl mx-auto space-y-8">
         {/* Header row — stays outside tabs */}
         <div className="flex items-center justify-between">
           <Link href="/campaigns" className="inline-flex items-center gap-1 text-sm text-[var(--dnd-text-muted)] hover:text-white hover:underline transition-colors">

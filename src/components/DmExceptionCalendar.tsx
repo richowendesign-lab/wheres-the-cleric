@@ -121,7 +121,7 @@ export function DmExceptionCalendar({
               : 'bg-amber-900/30 border-amber-700/40 text-amber-300'
           }`}
         >
-          {mode === 'block' ? 'Block (hide from rankings)' : 'Flag (warn in rankings)'}
+          {mode === 'block' ? 'Exclude from Best Days' : 'Show as busy in Best Days'}
         </button>
         {modeStatus === 'saving' && <span className="text-xs text-gray-500">Saving...</span>}
       </div>

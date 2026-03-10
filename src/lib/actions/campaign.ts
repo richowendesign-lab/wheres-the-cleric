@@ -173,6 +173,7 @@ export async function toggleDmException(
         create: { campaignId, date: parsedDate },
       })
     }
+    revalidatePath(`/campaigns/${campaignId}`)
     return { success: true }
   } catch (error) {
     console.error('toggleDmException error:', error)

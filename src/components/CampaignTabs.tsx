@@ -81,10 +81,15 @@ export function CampaignTabs({
             </section>
           )}
 
-          {/* Group Availability — DashboardCalendar + BestDaysList side by side */}
           {windowStartStr && windowEndStr && (
-            <div className="flex flex-col lg:flex-row gap-8 items-start">
-              <section className="flex-1 min-w-0">
+            <>
+              {/* Best Days — full width, above calendar */}
+              <section>
+                <BestDaysList days={dayAggregations} playerSlots={playerSlots} dmExceptionMode={dmExceptionMode} />
+              </section>
+
+              {/* Group Availability Calendar — full width */}
+              <section>
                 <h2 className="text-lg font-semibold text-white mb-2">Group Availability</h2>
                 <div className="flex flex-wrap gap-4 text-xs text-gray-500 mb-4">
                   <span className="flex items-center gap-1.5"><span className="inline-block w-2.5 h-2.5 rounded-full bg-green-400" />Free</span>
@@ -97,31 +102,15 @@ export function CampaignTabs({
                   windowEnd={windowEndStr}
                 />
               </section>
-              <section className="w-full lg:w-72 shrink-0">
-                <BestDaysList days={dayAggregations} playerSlots={playerSlots} dmExceptionMode={dmExceptionMode} />
-              </section>
-            </div>
-          )}
-
-          {/* DM Availability Exceptions */}
-          {windowStartStr && windowEndStr && (
-            <section>
-              <DmExceptionCalendar
-                campaignId={campaignId}
-                planningWindowStart={windowStartStr}
-                planningWindowEnd={windowEndStr}
-                initialExceptions={dmExceptionDates}
-                exceptionMode={dmExceptionMode}
-              />
-            </section>
+            </>
           )}
         </div>
       )}
 
       {/* Settings tab */}
       {activeTab === 'settings' && (
-        <div className="space-y-8">
-          {/* Join Link + UpdateMaxPlayersForm */}
+        <div className="max-w-2xl space-y-8">
+          {/* Join Link */}
           <section>
             <h2 className="text-lg font-semibold text-white mb-2">Join Link</h2>
             <p className="text-sm text-[var(--dnd-text-muted)] mb-3">Share this link with your players. Anyone who visits it can join the campaign.</p>
@@ -141,6 +130,27 @@ export function CampaignTabs({
               planningWindowEnd={windowEndStr}
             />
           </section>
+
+          {/* DM Unavailable Dates — expandable */}
+          {windowStartStr && windowEndStr && (
+            <section>
+              <details className="group">
+                <summary className="flex items-center gap-2 cursor-pointer list-none select-none">
+                  <span className="text-sm text-gray-400 group-open:rotate-90 transition-transform inline-block">▶</span>
+                  <h2 className="text-lg font-semibold text-white">My Unavailable Dates</h2>
+                </summary>
+                <div className="mt-4">
+                  <DmExceptionCalendar
+                    campaignId={campaignId}
+                    planningWindowStart={windowStartStr}
+                    planningWindowEnd={windowEndStr}
+                    initialExceptions={dmExceptionDates}
+                    exceptionMode={dmExceptionMode}
+                  />
+                </div>
+              </details>
+            </section>
+          )}
 
           {/* Danger Zone */}
           <div className="border-t border-[var(--dnd-border-muted)] pt-6 mt-4">
