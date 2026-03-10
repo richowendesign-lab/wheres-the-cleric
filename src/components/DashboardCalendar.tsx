@@ -27,6 +27,7 @@ export function DashboardCalendar({
   windowEnd,
 }: DashboardCalendarProps) {
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
+  const [currentMonthIndex, setCurrentMonthIndex] = useState(0)
 
   // Escape key handler — close panel on Escape
   useEffect(() => {
@@ -68,11 +69,39 @@ export function DashboardCalendar({
     if (mo > 11) { mo = 0; y++ }
   }
 
+  const showNav = months.length > 1
+  const displayedMonths = months.slice(currentMonthIndex, currentMonthIndex + 2)
+
   return (
     <>
       <div className="rounded-lg bg-[#140326]/60 p-4">
-      <div className="space-y-6">
-        {months.map(({ year, month }) => {
+      {showNav && (
+        <div className="flex items-center justify-between mb-3">
+          <button
+            type="button"
+            onClick={() => setCurrentMonthIndex(i => Math.max(0, i - 1))}
+            disabled={currentMonthIndex === 0}
+            className="p-1.5 rounded text-[var(--dnd-text-muted)] hover:text-white disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+            aria-label="Previous month"
+          >
+            &#8592;
+          </button>
+          <span className="text-xs text-gray-400">
+            {currentMonthIndex + 1} / {months.length}
+          </span>
+          <button
+            type="button"
+            onClick={() => setCurrentMonthIndex(i => Math.min(months.length - 1, i + 1))}
+            disabled={currentMonthIndex >= months.length - 1}
+            className="p-1.5 rounded text-[var(--dnd-text-muted)] hover:text-white disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+            aria-label="Next month"
+          >
+            &#8594;
+          </button>
+        </div>
+      )}
+      <div className={displayedMonths.length > 1 ? 'grid grid-cols-1 lg:grid-cols-2 gap-6' : ''}>
+        {displayedMonths.map(({ year, month }) => {
           const monthLabel = new Date(Date.UTC(year, month, 1)).toLocaleDateString('en-GB', {
             month: 'long', year: 'numeric', timeZone: 'UTC',
           })
