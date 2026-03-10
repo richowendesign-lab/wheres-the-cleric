@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.3
 milestone_name: DM Experience & Scheduling Flow
 status: unknown
-last_updated: "2026-03-10T12:44:15.414Z"
+last_updated: "2026-03-10T14:43:22.590Z"
 progress:
-  total_phases: 7
+  total_phases: 8
   completed_phases: 7
-  total_plans: 20
-  completed_plans: 20
+  total_plans: 24
+  completed_plans: 22
 ---
 
 # Project State
@@ -22,13 +22,13 @@ See: .planning/PROJECT.md (updated 2026-03-09 after v1.3 milestone start)
 
 ## Current Position
 
-Phase: 13 complete (2/2 plans done)
-Plan: 13-02 complete
-Status: Phase 13 complete — DM availability exceptions fully delivered (data layer + UI); Phase 14 (dashboard redesign) is next
-Last activity: 2026-03-10 — Phase 13-02 complete: DmExceptionCalendar built and wired; DashboardCalendar and BestDaysList updated with dmBlocked visual treatments; human-verified end-to-end
+Phase: 14-dashboard-redesign (1/4 plans done)
+Plan: 14-01 complete
+Status: Phase 14 in progress — component prerequisites fixed; CampaignTabs creation (Plan 02) is next
+Last activity: 2026-03-10 — Phase 14-01 complete: UpdatePlanningWindowForm refactored to string props; BestDaysList corrected to show unavailable player names (DASH-04)
 
 ```
-v1.3 Progress: [████░░░░░░] 3/6 phases complete — PHASE 13 COMPLETE
+v1.3 Progress: [████░░░░░░] 3/6 phases complete — PHASE 14 IN PROGRESS
 ```
 
 ## Performance Metrics
@@ -49,6 +49,8 @@ v1.3 Progress: [████░░░░░░] 3/6 phases complete — PHASE 13
 
 *Updated after each plan completion*
 | Phase 13-dm-availability-exceptions P13-02 | 2 | 2 tasks | 4 files |
+| Phase 14-dashboard-redesign P01 | 1 | 2 tasks | 2 files |
+| Phase 14-dashboard-redesign P02 | 2 | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -95,6 +97,11 @@ See PROJECT.md Key Decisions table for full history.
 - Separate modeStatus from saveStatus — prevents date click feedback and mode toggle feedback from clobbering each other
 - DashboardCalendar amber ring uses ring-amber-400/60 (60% opacity) to overlay without replacing existing green/gray states
 - UX refinement deferred per user note — current implementation is functional and verified; interaction design to be revisited in a future phase
+- [Phase 14-dashboard-redesign]: UpdatePlanningWindowForm accepts campaignId + planningWindowStart/End as string | null — Date objects cannot cross Server->Client boundary
+- [Phase 14-dashboard-redesign]: BestDaysList unavailable = \!free: PlayerDayStatus is 'free' | 'no-response', so \!=='free' correctly captures all unavailability
+- [Phase 14-dashboard-redesign]: displayedMonths slices up to 2 months from currentMonthIndex — single state variable drives both navigation and responsive 2-up display
+- [Phase 14-dashboard-redesign]: Navigation header hidden when months.length === 1 — avoids visual noise for single-month planning windows
+- [Phase 14-dashboard-redesign]: Responsive 2-up calendar via Tailwind CSS lg:grid-cols-2 only — no JS media query needed
 
 ### Pending Todos
 
@@ -107,5 +114,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-10
-Stopped at: Completed 13-02-PLAN.md — DM availability exceptions UI complete; DmExceptionCalendar built, wired, and human-verified; Phase 14 (dashboard redesign) is next
+Stopped at: Completed 14-01-PLAN.md — UpdatePlanningWindowForm string props + BestDaysList unavailable names fixed; Phase 14 Plan 02 (CampaignTabs) is next
 Resume file: None

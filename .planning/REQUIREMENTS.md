@@ -17,10 +17,10 @@ Requirements for Milestone v1.3: DM Experience & Scheduling Flow.
 
 ### Dashboard Redesign
 
-- [ ] **DASH-01**: Calendar view adapts to the planning window — one or two months visible at a time, with prev/next arrows to navigate when the window spans more
-- [ ] **DASH-02**: Days outside the planning window are visually muted on the calendar
+- [x] **DASH-01**: Calendar view adapts to the planning window — one or two months visible at a time, with prev/next arrows to navigate when the window spans more
+- [x] **DASH-02**: Days outside the planning window are visually muted on the calendar
 - [ ] **DASH-03**: DM sees a ranked best-day list alongside the calendar
-- [ ] **DASH-04**: Each ranked date shows player count and names of unavailable players
+- [x] **DASH-04**: Each ranked date shows player count and names of unavailable players
 - [ ] **DASH-05**: Share link, planning window dates, and delete campaign remain accessible on the dashboard but are visually de-emphasised (e.g. secondary section, collapsible, or tab)
 
 ### DM Availability Exceptions
@@ -78,10 +78,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SHARE-03 | Phase 12 | Complete |
 | SHARE-04 | Phase 12 | Complete |
 | SHARE-05 | Phase 12 | Complete |
-| DASH-01 | Phase 14 | Pending |
-| DASH-02 | Phase 14 | Pending |
+| DASH-01 | Phase 14 | Complete |
+| DASH-02 | Phase 14 | Complete |
 | DASH-03 | Phase 14 | Pending |
-| DASH-04 | Phase 14 | Pending |
+| DASH-04 | Phase 14 | Complete |
 | DASH-05 | Phase 14 | Pending |
 | DMEX-01 | Phase 13 | Complete |
 | DMEX-02 | Phase 13 | Complete |
