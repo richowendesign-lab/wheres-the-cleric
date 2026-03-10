@@ -106,7 +106,12 @@ Plans:
   2. Days outside the planning window are visually muted on the calendar so the DM's attention stays on the schedulable range
   3. A ranked best-day list appears alongside the calendar; each entry shows the date, the player count available, and the names of any unavailable players
   4. Share link, planning window dates, and delete campaign controls remain accessible on the dashboard but are visually de-emphasised (secondary section, collapsible, or tab) so they do not compete with the availability view
-**Plans**: TBD
+**Plans**: 4 plans
+Plans:
+- [ ] 14-01-PLAN.md — UpdatePlanningWindowForm string props fix + BestDaysList unavailable names (DASH-04)
+- [ ] 14-02-PLAN.md — DashboardCalendar prev/next navigation and responsive 2-up (DASH-01, DASH-02)
+- [ ] 14-03-PLAN.md — CampaignTabs Client Component + CampaignDetailPage refactor (DASH-03, DASH-05)
+- [ ] 14-04-PLAN.md — Human verification of all five DASH requirements
 
 ### Phase 15: Shareable Best Dates
 **Goal**: The DM can copy a formatted best-dates message from the dashboard and paste it directly into group chat to communicate the top scheduling options.
@@ -143,6 +148,6 @@ Plans:
 | 11. Schema Foundation + Calendar Utilities | v1.3 | 2/2 | Complete | 2026-03-09 |
 | 12. Share Modal | 2/2 | Complete    | 2026-03-10 | - |
 | 13. DM Availability Exceptions | 2/2 | Complete    | 2026-03-10 | - |
-| 14. Dashboard Redesign | v1.3 | 0/? | Not started | - |
+| 14. Dashboard Redesign | v1.3 | 0/4 | Not started | - |
 | 15. Shareable Best Dates | v1.3 | 0/? | Not started | - |
 | 16. Custom Date Picker | v1.3 | 0/? | Not started | - |
