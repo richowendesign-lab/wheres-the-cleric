@@ -92,7 +92,10 @@ Plans:
   2. DM can click a marked date again to remove the exception; the date returns to its normal appearance immediately
   3. DM can switch between "block" mode (date removed from best-day rankings) and "flag" mode (date stays ranked but shows a warning badge); the selected mode persists on save
   4. The `DayAggregation` type carries a `dmBlocked` boolean that downstream rendering components (BestDaysList, DashboardCalendar) use to hide or badge blocked days
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 13-01-PLAN.md — Data layer: extract Toast, extend DayAggregation with dmBlocked, add toggleDmException + setDmExceptionMode Server Actions, update CampaignDetailPage data fetch
+- [ ] 13-02-PLAN.md — UI layer: build DmExceptionCalendar component, wire into page, add dmBlocked visual treatment to DashboardCalendar and BestDaysList; human verification
 
 ### Phase 14: Dashboard Redesign
 **Goal**: The campaign dashboard calendar adapts to the planning window width with navigation arrows, and the ranked best-day list is visible alongside it — making the DM's primary question ("when can we play?") answerable at a glance.
@@ -139,7 +142,7 @@ Plans:
 | 10. Multi-Campaign Dashboard | v1.2 | 1/1 | Complete | 2026-03-05 |
 | 11. Schema Foundation + Calendar Utilities | v1.3 | 2/2 | Complete | 2026-03-09 |
 | 12. Share Modal | 2/2 | Complete    | 2026-03-10 | - |
-| 13. DM Availability Exceptions | v1.3 | 0/? | Not started | - |
+| 13. DM Availability Exceptions | v1.3 | 0/2 | Not started | - |
 | 14. Dashboard Redesign | v1.3 | 0/? | Not started | - |
 | 15. Shareable Best Dates | v1.3 | 0/? | Not started | - |
 | 16. Custom Date Picker | v1.3 | 0/? | Not started | - |
