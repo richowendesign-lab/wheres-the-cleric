@@ -27,7 +27,7 @@ Requirements for Milestone v1.3: DM Experience & Scheduling Flow.
 
 - [x] **DMEX-01**: DM can click calendar dates to mark themselves as unavailable for a campaign
 - [x] **DMEX-02**: DM can click a marked date again to remove the exception
-- [ ] **DMEX-03**: DM-unavailable dates are visually distinct from player-unavailable dates
+- [x] **DMEX-03**: DM-unavailable dates are visually distinct from player-unavailable dates
 - [x] **DMEX-04**: DM can toggle between "block" (removes date from rankings) and "flag" (shows warning badge)
 
 ### Shareable Best Dates
@@ -85,7 +85,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DASH-05 | Phase 14 | Pending |
 | DMEX-01 | Phase 13 | Complete |
 | DMEX-02 | Phase 13 | Complete |
-| DMEX-03 | Phase 13 | Pending |
+| DMEX-03 | Phase 13 | Complete |
 | DMEX-04 | Phase 13 | Complete |
 | COPY-01 | Phase 15 | Pending |
 | COPY-02 | Phase 15 | Pending |

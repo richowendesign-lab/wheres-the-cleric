@@ -49,7 +49,7 @@ Full phase details: `.planning/milestones/v1.2-ROADMAP.md`
 
 - [x] **Phase 11: Schema Foundation + Calendar Utilities** — Add DmAvailabilityException model and dmExceptionMode to Campaign; extract buildMonthGrid/formatDateKey to calendarUtils.ts (completed 2026-03-09)
 - [x] **Phase 12: Share Modal** — Post-creation modal with one-click join link copy and pre-written invite message; ?share=1 URL param trigger pattern (completed 2026-03-09)
-- [ ] **Phase 13: DM Availability Exceptions** — Click-to-toggle calendar for marking DM-unavailable dates; block/flag mode toggle; dmBlocked in DayAggregation
+- [x] **Phase 13: DM Availability Exceptions** — Click-to-toggle calendar for marking DM-unavailable dates; block/flag mode toggle; dmBlocked in DayAggregation (completed 2026-03-10)
 - [ ] **Phase 14: Dashboard Redesign** — Adaptive calendar with prev/next navigation, ranked best-day list alongside, campaign details de-emphasised
 - [ ] **Phase 15: Shareable Best Dates** — CopyBestDaysButton client island; formatted top-3 best-dates message from the campaign dashboard
 - [ ] **Phase 16: Custom Date Picker** — Hand-rolled themed picker using hidden input pattern; replaces native date inputs in campaign forms
@@ -142,7 +142,7 @@ Plans:
 | 10. Multi-Campaign Dashboard | v1.2 | 1/1 | Complete | 2026-03-05 |
 | 11. Schema Foundation + Calendar Utilities | v1.3 | 2/2 | Complete | 2026-03-09 |
 | 12. Share Modal | 2/2 | Complete    | 2026-03-10 | - |
-| 13. DM Availability Exceptions | 1/2 | In Progress|  | - |
+| 13. DM Availability Exceptions | 2/2 | Complete   | 2026-03-10 | - |
 | 14. Dashboard Redesign | v1.3 | 0/? | Not started | - |
 | 15. Shareable Best Dates | v1.3 | 0/? | Not started | - |
 | 16. Custom Date Picker | v1.3 | 0/? | Not started | - |

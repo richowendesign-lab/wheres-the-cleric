@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.3
 milestone_name: DM Experience & Scheduling Flow
-status: in-progress
-last_updated: "2026-03-10T09:57:46Z"
+status: unknown
+last_updated: "2026-03-10T10:03:32.707Z"
 progress:
-  total_phases: 6
-  completed_phases: 2
-  total_plans: 18
-  completed_plans: 19
+  total_phases: 7
+  completed_phases: 7
+  total_plans: 20
+  completed_plans: 20
 ---
 
 # Project State
@@ -48,6 +48,7 @@ v1.3 Progress: [███░░░░░░░] 2/6 phases complete — PHASE 13
 | Phase 13-dm-availability-exceptions P01 | 2 tasks | 8 min | 4 min |
 
 *Updated after each plan completion*
+| Phase 13-dm-availability-exceptions P13-02 | 2 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -86,6 +87,7 @@ See PROJECT.md Key Decisions table for full history.
 - dmBlocked is required (not optional) on DayAggregation — TypeScript enforces correctness at all call sites
 - Toast text genericized from "Availability saved" to "Saved" to support reuse in DmExceptionCalendar
 - dmExceptionDates array and dmExceptionMode computed in CampaignDetailPage now; Plan 13-02 passes them as props to DmExceptionCalendar
+- [Phase 13-dm-availability-exceptions]: DmExceptionCalendar empty state uses displayDays.length (post-filter) so block mode blocking all best days correctly shows empty state
 
 ### Pending Todos
 
