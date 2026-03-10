@@ -22,13 +22,13 @@ See: .planning/PROJECT.md (updated 2026-03-09 after v1.3 milestone start)
 
 ## Current Position
 
-Phase: 13 in progress (1/2 plans done)
-Plan: 13-01 complete
-Status: Phase 13 Plan 01 complete — data layer for DM availability exceptions delivered; Plan 13-02 (DmExceptionCalendar UI) is next
-Last activity: 2026-03-10 — Phase 13-01 complete: DayAggregation extended with dmBlocked, toggleDmException and setDmExceptionMode Server Actions added, CampaignDetailPage wired with exception data
+Phase: 13 complete (2/2 plans done)
+Plan: 13-02 complete
+Status: Phase 13 complete — DM availability exceptions fully delivered (data layer + UI); Phase 14 (dashboard redesign) is next
+Last activity: 2026-03-10 — Phase 13-02 complete: DmExceptionCalendar built and wired; DashboardCalendar and BestDaysList updated with dmBlocked visual treatments; human-verified end-to-end
 
 ```
-v1.3 Progress: [███░░░░░░░] 2/6 phases complete — PHASE 13 IN PROGRESS (Plan 1/2 done)
+v1.3 Progress: [████░░░░░░] 3/6 phases complete — PHASE 13 COMPLETE
 ```
 
 ## Performance Metrics
@@ -89,6 +89,13 @@ See PROJECT.md Key Decisions table for full history.
 - dmExceptionDates array and dmExceptionMode computed in CampaignDetailPage now; Plan 13-02 passes them as props to DmExceptionCalendar
 - [Phase 13-dm-availability-exceptions]: DmExceptionCalendar empty state uses displayDays.length (post-filter) so block mode blocking all best days correctly shows empty state
 
+**Plan 13-02 decisions:**
+- DmExceptionCalendar wraps its own section header inside the component — self-contained for clarity
+- BestDaysList empty state checks displayDays.length (post-filter) not bestDays.length — block mode hiding all best days correctly shows empty state
+- Separate modeStatus from saveStatus — prevents date click feedback and mode toggle feedback from clobbering each other
+- DashboardCalendar amber ring uses ring-amber-400/60 (60% opacity) to overlay without replacing existing green/gray states
+- UX refinement deferred per user note — current implementation is functional and verified; interaction design to be revisited in a future phase
+
 ### Pending Todos
 
 None.
@@ -100,5 +107,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-10
-Stopped at: Completed 13-01-PLAN.md — DM availability exceptions data layer complete; toggleDmException and setDmExceptionMode Server Actions added; Plan 13-02 (DmExceptionCalendar UI) is next
+Stopped at: Completed 13-02-PLAN.md — DM availability exceptions UI complete; DmExceptionCalendar built, wired, and human-verified; Phase 14 (dashboard redesign) is next
 Resume file: None

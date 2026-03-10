@@ -40,6 +40,7 @@ key-decisions:
   - "DmExceptionCalendar wraps content in <section> (not a standalone section in page) — consistent with existing section pattern"
   - "BestDaysList empty state check uses displayDays.length (post-filter) not bestDays.length — DM-blocking all best days should show empty state"
   - "DashboardCalendar amber ring uses ring-amber-400/60 (60% opacity) to overlay without replacing existing green/gray states"
+  - "UX refinement deferred — user approved with note 'we will need to work on the UX later'; current implementation is functional but not final design"
 
 patterns-established:
   - "DM exception UI: separate saveStatus and modeStatus states prevent date-click and mode-toggle feedback from conflicting"
@@ -61,7 +62,7 @@ completed: 2026-03-10
 - **Duration:** ~2 min
 - **Started:** 2026-03-10T10:00:45Z
 - **Completed:** 2026-03-10T10:02:36Z
-- **Tasks:** 2 auto-tasks complete; Task 3 awaiting human verification
+- **Tasks:** 2 auto-tasks + 1 human verification checkpoint (approved)
 - **Files modified:** 4
 
 ## Accomplishments
@@ -89,6 +90,7 @@ Each task was committed atomically:
 - Empty state for BestDaysList checks displayDays.length (post-filter) not bestDays.length — if DM blocks all ranked days in block mode, empty state is correct behaviour
 - Separate modeStatus from saveStatus — prevents date click feedback and mode toggle feedback from clobbering each other
 - Amber ring uses 60% opacity (ring-amber-400/60) to overlay both green and gray cell states without fully covering them
+- UX refinement deferred per user note: "we will need to work on the UX later" — current implementation is functional and verified but the interaction design will be revisited in a future phase
 
 ## Deviations from Plan
 
@@ -104,9 +106,10 @@ None - no external service configuration required.
 
 ## Next Phase Readiness
 
-- Full DM exception UI complete: click-toggle, mode switch, visual treatments across all calendar/list views
-- Task 3 (human-verify checkpoint) pending — requires manual verification of end-to-end flow
-- Phase 14 (dashboard redesign) can proceed once human verification is approved — exception data and UI are now fully available
+- Full DM exception UI complete and human-verified: click-toggle, mode switch, visual treatments across all calendar/list views
+- Phase 14 (dashboard redesign) can proceed — exception data and amber visual token established here are ready for the full redesign
+- Phase 15 (shareable message) can use BestDaysList dmExceptionMode filtering as the ranking source of truth
+- UX improvement pass noted for a future phase (user-requested deferral)
 
 ## Self-Check: PASSED
 
