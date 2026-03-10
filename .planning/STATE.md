@@ -22,10 +22,10 @@ See: .planning/PROJECT.md (updated 2026-03-09 after v1.3 milestone start)
 
 ## Current Position
 
-Phase: 14-dashboard-redesign (1/4 plans done)
-Plan: 14-01 complete
-Status: Phase 14 in progress — component prerequisites fixed; CampaignTabs creation (Plan 02) is next
-Last activity: 2026-03-10 — Phase 14-01 complete: UpdatePlanningWindowForm refactored to string props; BestDaysList corrected to show unavailable player names (DASH-04)
+Phase: 14-dashboard-redesign (2/4 plans done)
+Plan: 14-02 complete
+Status: Phase 14 in progress — DashboardCalendar navigation added; Plan 03 (wire into page) is next
+Last activity: 2026-03-10 — Phase 14-02 complete: DashboardCalendar prev/next navigation added with currentMonthIndex state, responsive 2-up lg:grid-cols-2 layout, DASH-01 satisfied
 
 ```
 v1.3 Progress: [████░░░░░░] 3/6 phases complete — PHASE 14 IN PROGRESS
@@ -114,5 +114,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-10
-Stopped at: Completed 14-01-PLAN.md — UpdatePlanningWindowForm string props + BestDaysList unavailable names fixed; Phase 14 Plan 02 (CampaignTabs) is next
+Stopped at: Completed 14-02-PLAN.md — DashboardCalendar prev/next navigation added; DASH-01 satisfied with currentMonthIndex state and responsive 2-up layout; Phase 14 Plan 03 is next
 Resume file: None
