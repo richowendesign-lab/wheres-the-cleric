@@ -67,8 +67,8 @@ export function DmExceptionCalendar({
       })
   }
 
-  function handleModeToggle() {
-    const newMode = mode === 'block' ? 'flag' : 'block'
+  function handleModeChange(newMode: 'block' | 'flag') {
+    if (newMode === mode) return
     const prevMode = mode
 
     setMode(newMode)   // optimistic update
@@ -106,25 +106,30 @@ export function DmExceptionCalendar({
   }
 
   return (
-    <section>
-      <h2 className="text-lg font-semibold text-white mb-3">My Unavailable Dates</h2>
-
-      {/* Mode toggle */}
-      <div className="flex items-center gap-3 mb-3">
-        <span className="text-sm text-gray-400">Blocked dates:</span>
-        <button
-          type="button"
-          onClick={handleModeToggle}
-          className={`text-xs px-3 py-1 rounded-full border transition-colors ${
-            mode === 'block'
-              ? 'bg-red-900/40 border-red-700/50 text-red-300'
-              : 'bg-amber-900/30 border-amber-700/40 text-amber-300'
-          }`}
-        >
-          {mode === 'block' ? 'Exclude from Best Days' : 'Show as busy in Best Days'}
-        </button>
-        {modeStatus === 'saving' && <span className="text-xs text-gray-500">Saving...</span>}
-      </div>
+    <div>
+      {/* Mode — side-by-side radios */}
+      <fieldset className="mb-4">
+        <legend className="text-xs text-gray-400 mb-2">When I mark a date as unavailable:</legend>
+        <div className="flex gap-6">
+          {([
+            { value: 'block', label: 'Exclude from Best Days' },
+            { value: 'flag',  label: 'Show as busy in Best Days' },
+          ] as const).map(({ value, label }) => (
+            <label key={value} className="flex items-center gap-2 cursor-pointer select-none">
+              <input
+                type="radio"
+                name={`dm-exception-mode-${campaignId}`}
+                value={value}
+                checked={mode === value}
+                onChange={() => handleModeChange(value)}
+                className="accent-[var(--dnd-accent)] cursor-pointer"
+              />
+              <span className={`text-sm ${mode === value ? 'text-gray-200' : 'text-gray-400'}`}>{label}</span>
+            </label>
+          ))}
+          {modeStatus === 'saving' && <span className="text-xs text-gray-500 self-center">Saving…</span>}
+        </div>
+      </fieldset>
 
       {/* Calendar grid */}
       <div className="rounded-lg bg-[#140326]/60 p-4">
@@ -201,6 +206,6 @@ export function DmExceptionCalendar({
         onRetry={() => setSaveStatus('idle')}
         onDismiss={() => setSaveStatus('idle')}
       />
-    </section>
+    </div>
   )
 }
