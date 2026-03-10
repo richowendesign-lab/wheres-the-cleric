@@ -8,7 +8,7 @@ export function DeleteCampaignButton({ campaignId }: { campaignId: string }) {
 
   function handleClick() {
     if (!confirm('Delete this campaign? This cannot be undone.')) return
-    startTransition(() => deleteCampaign(campaignId))
+    startTransition(async () => { await deleteCampaign(campaignId) })
   }
 
   return (
