@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.3
 milestone_name: DM Experience & Scheduling Flow
-status: unknown
-last_updated: "2026-03-10T09:03:15.503Z"
+status: in-progress
+last_updated: "2026-03-10T09:57:46Z"
 progress:
   total_phases: 6
-  completed_phases: 6
+  completed_phases: 2
   total_plans: 18
-  completed_plans: 18
+  completed_plans: 19
 ---
 
 # Project State
@@ -18,25 +18,25 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-09 after v1.3 milestone start)
 
 **Core value:** The DM can instantly see when everyone is free — without chasing people for responses or guessing which dates to offer.
-**Current focus:** v1.3 — DM Experience & Scheduling Flow (Phase 11 ready to plan)
+**Current focus:** v1.3 — DM Experience & Scheduling Flow (Phase 13 in progress)
 
 ## Current Position
 
-Phase: 12 complete (2/2 plans done)
-Plan: 12-02 complete
-Status: Phase 12 complete — all SHARE requirements delivered; Phase 13 is next
-Last activity: 2026-03-09 — Phase 12-02 complete: ShareModal wired into CampaignDetailPage via searchParams, full flow human-verified
+Phase: 13 in progress (1/2 plans done)
+Plan: 13-01 complete
+Status: Phase 13 Plan 01 complete — data layer for DM availability exceptions delivered; Plan 13-02 (DmExceptionCalendar UI) is next
+Last activity: 2026-03-10 — Phase 13-01 complete: DayAggregation extended with dmBlocked, toggleDmException and setDmExceptionMode Server Actions added, CampaignDetailPage wired with exception data
 
 ```
-v1.3 Progress: [███░░░░░░░] 2/6 phases complete — PHASE 12 COMPLETE (Phase 13 next)
+v1.3 Progress: [███░░░░░░░] 2/6 phases complete — PHASE 13 IN PROGRESS (Plan 1/2 done)
 ```
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2 (v1.3)
-- Average duration: 3.5 min
-- Total execution time: 7 min
+- Total plans completed: 3 (v1.3)
+- Average duration: 4.7 min
+- Total execution time: 15 min
 
 **By Phase:**
 
@@ -45,6 +45,7 @@ v1.3 Progress: [███░░░░░░░] 2/6 phases complete — PHASE 12
 | Phase 11 P01 | 2 tasks | 2 min | 1 min |
 | Phase 12-share-modal P01 | 2 tasks | 5 min | 2.5 min |
 | Phase 12-share-modal P02 | 2 tasks | 10 min | 5 min |
+| Phase 13-dm-availability-exceptions P01 | 2 tasks | 8 min | 4 min |
 
 *Updated after each plan completion*
 
@@ -79,17 +80,23 @@ See PROJECT.md Key Decisions table for full history.
 - ShareModal placed as last child in outer container div; fixed positioning makes DOM location irrelevant
 - No open state passed from page to ShareModal — ShareModal manages own open state via useState(true)
 
+**Plan 13-01 decisions:**
+- toggleDmException does NOT call revalidatePath — client manages optimistic state (same discipline as toggleDateOverride)
+- setDmExceptionMode DOES call revalidatePath — mode change requires Server Component to re-render with new exceptionMode prop
+- dmBlocked is required (not optional) on DayAggregation — TypeScript enforces correctness at all call sites
+- Toast text genericized from "Availability saved" to "Saved" to support reuse in DmExceptionCalendar
+- dmExceptionDates array and dmExceptionMode computed in CampaignDetailPage now; Plan 13-02 passes them as props to DmExceptionCalendar
+
 ### Pending Todos
 
 None.
 
 ### Blockers/Concerns
 
-- [Phase 13] Product decision needed before implementation: do DM-blocked dates affect the player-facing availability calendar view? Default is "no player-facing change in v1.3" — confirm before Phase 13 planning.
 - [Phase 16] Confirm whether `updatePlanningWindow` server action calls `revalidatePath` before implementing key-based remount strategy for the custom date picker.
 
 ## Session Continuity
 
-Last session: 2026-03-09
-Stopped at: Completed 12-02-PLAN.md — Phase 12 share modal fully complete; all SHARE requirements human-verified; Phase 13 is next
+Last session: 2026-03-10
+Stopped at: Completed 13-01-PLAN.md — DM availability exceptions data layer complete; toggleDmException and setDmExceptionMode Server Actions added; Plan 13-02 (DmExceptionCalendar UI) is next
 Resume file: None
