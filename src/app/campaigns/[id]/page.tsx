@@ -26,7 +26,10 @@ export default async function CampaignDetailPage({
 
   const campaign = await prisma.campaign.findUnique({
     where: { id },
-    include: { playerSlots: { include: { availabilityEntries: true }, orderBy: { createdAt: 'asc' } } },
+    include: {
+      playerSlots: { include: { availabilityEntries: true }, orderBy: { createdAt: 'asc' } },
+      dmAvailabilityExceptions: true,
+    },
   })
   if (!campaign) notFound()
 
@@ -41,8 +44,21 @@ export default async function CampaignDetailPage({
 
   const windowStartStr = campaign.planningWindowStart?.toISOString().split('T')[0] ?? null
   const windowEndStr = campaign.planningWindowEnd?.toISOString().split('T')[0] ?? null
+
+  const dmExceptionDateKeys = new Set(
+    campaign.dmAvailabilityExceptions.map(e =>
+      e.date.toISOString().split('T')[0]
+      // Safe: stored as UTC midnight by toggleDmException
+    )
+  )
+  const dmExceptionDates = Array.from(dmExceptionDateKeys) // for DmExceptionCalendar prop
+
   const dayAggregations = (windowStartStr && windowEndStr)
-    ? computeDayStatuses(serializedSlots, windowStartStr, windowEndStr) : []
+    ? computeDayStatuses(serializedSlots, windowStartStr, windowEndStr, dmExceptionDateKeys) : []
+
+  const dmExceptionMode = (campaign.dmExceptionMode === 'block' || campaign.dmExceptionMode === 'flag')
+    ? campaign.dmExceptionMode
+    : null
 
   const hdrs = await headers()
   const host = hdrs.get('host') ?? 'localhost:3000'

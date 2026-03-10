@@ -145,6 +145,65 @@ export async function updateCampaignDescription(campaignId: string, description:
   return { success: true }
 }
 
+export async function toggleDmException(
+  campaignId: string,
+  date: string,   // 'YYYY-MM-DD'
+  isBlocked: boolean
+): Promise<{ success: true } | { error: string }> {
+  try {
+    const dm = await getSessionDM()
+    if (!dm) return { error: 'Not authenticated' }
+
+    const campaign = await prisma.campaign.findUnique({ where: { id: campaignId }, select: { dmId: true } })
+    if (!campaign || campaign.dmId !== dm.id) return { error: 'Unauthorized' }
+
+    const [y, m, d] = date.split('-').map(Number)
+    const parsedDate = new Date(Date.UTC(y, m - 1, d))
+
+    if (!isBlocked) {
+      // Toggle off — remove the exception
+      await prisma.dmAvailabilityException.deleteMany({
+        where: { campaignId, date: parsedDate },
+      })
+    } else {
+      // Toggle on — safe upsert via @@unique
+      await prisma.dmAvailabilityException.upsert({
+        where: { campaignId_date: { campaignId, date: parsedDate } },
+        update: {},
+        create: { campaignId, date: parsedDate },
+      })
+    }
+    return { success: true }
+  } catch (error) {
+    console.error('toggleDmException error:', error)
+    return { error: 'Failed to save. Please try again.' }
+  }
+}
+
+export async function setDmExceptionMode(
+  campaignId: string,
+  mode: 'block' | 'flag'
+): Promise<{ success: true } | { error: string }> {
+  try {
+    const dm = await getSessionDM()
+    if (!dm) return { error: 'Not authenticated' }
+
+    const campaign = await prisma.campaign.findUnique({ where: { id: campaignId }, select: { dmId: true } })
+    if (!campaign || campaign.dmId !== dm.id) return { error: 'Unauthorized' }
+
+    await prisma.campaign.update({
+      where: { id: campaignId },
+      data: { dmExceptionMode: mode },
+    })
+
+    revalidatePath(`/campaigns/${campaignId}`)
+    return { success: true }
+  } catch (error) {
+    console.error('setDmExceptionMode error:', error)
+    return { error: 'Failed to save. Please try again.' }
+  }
+}
+
 export async function updatePlanningWindow(campaignId: string, _prevState: unknown, formData: FormData) {
   const dm = await getSessionDM()
   if (!dm) return { error: 'Not authenticated' }
