@@ -21,6 +21,7 @@ export interface DayAggregation {
   freeCount: number
   totalPlayers: number
   allFree: boolean
+  dmBlocked: boolean
 }
 
 /**
@@ -63,6 +64,7 @@ export function computeDayStatuses(
   playerSlots: PlayerSlotWithEntries[],
   windowStart: string,
   windowEnd: string,
+  dmExceptionDateKeys?: Set<string>,
 ): DayAggregation[] {
   if (!windowStart || !windowEnd) return []
 
@@ -92,12 +94,15 @@ export function computeDayStatuses(
       if (status === 'free') freeCount++
     }
 
+    const isDmException = dmExceptionDateKeys?.has(dateKey) ?? false
+
     result.push({
       date: dateKey,
       playerStatuses,
       freeCount,
       totalPlayers: playerSlots.length,
       allFree: freeCount === playerSlots.length && playerSlots.length > 0,
+      dmBlocked: isDmException,
     })
 
     cursor.setUTCDate(cursor.getUTCDate() + 1)
