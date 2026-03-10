@@ -3,12 +3,18 @@ import { DayAggregation, computeBestDays, formatBestDayLabel } from '@/lib/avail
 interface BestDaysListProps {
   days: DayAggregation[]
   playerSlots: { id: string; name: string }[]
+  dmExceptionMode?: 'block' | 'flag' | null  // new optional prop
 }
 
-export function BestDaysList({ days, playerSlots }: BestDaysListProps) {
+export function BestDaysList({ days, playerSlots, dmExceptionMode }: BestDaysListProps) {
   const bestDays = computeBestDays(days)
 
-  if (bestDays.length === 0) {
+  // When mode is 'block': hide dmBlocked days from the ranked list
+  const displayDays = dmExceptionMode === 'block'
+    ? bestDays.filter(d => !d.dmBlocked)
+    : bestDays
+
+  if (displayDays.length === 0) {
     return (
       <section>
         <h2 className="text-white font-semibold text-lg mb-2">Best Days</h2>
@@ -23,7 +29,7 @@ export function BestDaysList({ days, playerSlots }: BestDaysListProps) {
     <section>
       <h2 className="text-white font-semibold text-lg mb-2">Best Days</h2>
       <ul className="space-y-2">
-        {bestDays.map((day, index) => {
+        {displayDays.map((day, index) => {
           const rank = index + 1
           const dateLabel = formatBestDayLabel(day.date)
           const freePlayerNames = playerSlots
@@ -39,6 +45,11 @@ export function BestDaysList({ days, playerSlots }: BestDaysListProps) {
                 {rank}
               </span>
               <span className="font-medium text-gray-100">{dateLabel}</span>
+              {day.dmBlocked && dmExceptionMode === 'flag' && (
+                <span className="text-xs px-2 py-0.5 rounded-full bg-amber-900/40 text-amber-400 border border-amber-700/40">
+                  DM busy
+                </span>
+              )}
               <span className="text-muted text-sm">
                 {day.freeCount}/{day.totalPlayers} players free
               </span>

@@ -117,7 +117,8 @@ export function DashboardCalendar({
                             className={`w-full rounded-md py-1.5 text-sm text-center transition-colors leading-none cursor-pointer
                               ${agg?.allFree
                                 ? 'bg-green-800/60 hover:bg-green-700/60 text-gray-100'
-                                : 'text-gray-400 hover:bg-gray-800'}`}
+                                : 'text-gray-400 hover:bg-gray-800'}
+                              ${agg?.dmBlocked ? 'ring-1 ring-amber-400/60' : ''}`}
                           >
                             <span className="block">{date.getUTCDate()}</span>
                             {/* Player dots — one per player */}

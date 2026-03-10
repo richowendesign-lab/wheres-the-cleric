@@ -13,6 +13,7 @@ import { EditableCampaignField } from '@/components/EditableCampaignField'
 import { logOut } from '@/lib/actions/auth'
 import { updateCampaignName, updateCampaignDescription } from '@/lib/actions/campaign'
 import { ShareModal } from '@/components/ShareModal'
+import { DmExceptionCalendar } from '@/components/DmExceptionCalendar'
 
 export default async function CampaignDetailPage({
   params,
@@ -101,6 +102,19 @@ export default async function CampaignDetailPage({
           <UpdatePlanningWindowForm campaign={campaign} />
         </section>
 
+        {/* DM Availability Exceptions */}
+        {windowStartStr && windowEndStr && (
+          <section>
+            <DmExceptionCalendar
+              campaignId={campaign.id}
+              planningWindowStart={windowStartStr}
+              planningWindowEnd={windowEndStr}
+              initialExceptions={dmExceptionDates}
+              exceptionMode={dmExceptionMode}
+            />
+          </section>
+        )}
+
         <hr className="border-[var(--dnd-border-muted)]" />
 
         {missingPlayers.length > 0 && (
@@ -129,7 +143,7 @@ export default async function CampaignDetailPage({
             <DashboardCalendar dayAggregations={dayAggregations} playerSlots={serializedSlots.map(s => ({ id: s.id, name: s.name }))} windowStart={windowStartStr ?? ''} windowEnd={windowEndStr ?? ''} />
           </section>
           <section className="w-full lg:w-72 shrink-0">
-            <BestDaysList days={dayAggregations} playerSlots={serializedSlots.map(s => ({ id: s.id, name: s.name }))} />
+            <BestDaysList days={dayAggregations} playerSlots={serializedSlots.map(s => ({ id: s.id, name: s.name }))} dmExceptionMode={dmExceptionMode} />
           </section>
         </div>
 
