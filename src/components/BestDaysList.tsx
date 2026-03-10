@@ -32,8 +32,8 @@ export function BestDaysList({ days, playerSlots, dmExceptionMode }: BestDaysLis
         {displayDays.map((day, index) => {
           const rank = index + 1
           const dateLabel = formatBestDayLabel(day.date)
-          const freePlayerNames = playerSlots
-            .filter(slot => day.playerStatuses[slot.id] === 'free')
+          const unavailablePlayerNames = playerSlots
+            .filter(slot => day.playerStatuses[slot.id] !== 'free')
             .map(slot => slot.name)
 
           return (
@@ -53,9 +53,9 @@ export function BestDaysList({ days, playerSlots, dmExceptionMode }: BestDaysLis
               <span className="text-muted text-sm">
                 {day.freeCount}/{day.totalPlayers} players free
               </span>
-              {freePlayerNames.length > 0 && (
-                <span className="text-muted text-sm">
-                  ({freePlayerNames.join(', ')})
+              {unavailablePlayerNames.length > 0 && (
+                <span className="text-[var(--dnd-text-muted)] text-sm">
+                  ({unavailablePlayerNames.join(', ')} unavailable)
                 </span>
               )}
             </li>
