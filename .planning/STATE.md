@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.3
 milestone_name: DM Experience & Scheduling Flow
 status: unknown
-last_updated: "2026-03-10T14:43:22.590Z"
+last_updated: "2026-03-10T14:49:35.896Z"
 progress:
   total_phases: 8
   completed_phases: 7
   total_plans: 24
-  completed_plans: 22
+  completed_plans: 23
 ---
 
 # Project State
@@ -22,10 +22,10 @@ See: .planning/PROJECT.md (updated 2026-03-09 after v1.3 milestone start)
 
 ## Current Position
 
-Phase: 14-dashboard-redesign (2/4 plans done)
-Plan: 14-02 complete
-Status: Phase 14 in progress — DashboardCalendar navigation added; Plan 03 (wire into page) is next
-Last activity: 2026-03-10 — Phase 14-02 complete: DashboardCalendar prev/next navigation added with currentMonthIndex state, responsive 2-up lg:grid-cols-2 layout, DASH-01 satisfied
+Phase: 14-dashboard-redesign (3/4 plans done)
+Plan: 14-03 complete
+Status: Phase 14 in progress — CampaignTabs wired; Plan 04 is next
+Last activity: 2026-03-10 — Phase 14-03 complete: CampaignTabs Client Component created; CampaignDetailPage refactored to pass serialised props; DASH-03 and DASH-05 satisfied
 
 ```
 v1.3 Progress: [████░░░░░░] 3/6 phases complete — PHASE 14 IN PROGRESS
@@ -51,6 +51,7 @@ v1.3 Progress: [████░░░░░░] 3/6 phases complete — PHASE 14
 | Phase 13-dm-availability-exceptions P13-02 | 2 | 2 tasks | 4 files |
 | Phase 14-dashboard-redesign P01 | 1 | 2 tasks | 2 files |
 | Phase 14-dashboard-redesign P02 | 2 | 1 tasks | 1 files |
+| Phase 14-dashboard-redesign P03 | 3 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -102,6 +103,9 @@ See PROJECT.md Key Decisions table for full history.
 - [Phase 14-dashboard-redesign]: displayedMonths slices up to 2 months from currentMonthIndex — single state variable drives both navigation and responsive 2-up display
 - [Phase 14-dashboard-redesign]: Navigation header hidden when months.length === 1 — avoids visual noise for single-month planning windows
 - [Phase 14-dashboard-redesign]: Responsive 2-up calendar via Tailwind CSS lg:grid-cols-2 only — no JS media query needed
+- [Phase 14-dashboard-redesign]: CampaignTabs is single Server->Client boundary: all data serialised in page.tsx before passing through props
+- [Phase 14-dashboard-redesign]: Tab state is client-side only (useState) — no URL change on tab switch
+- [Phase 14-dashboard-redesign]: Header, title, description and ShareModal remain outside CampaignTabs — always visible regardless of active tab
 
 ### Pending Todos
 
@@ -114,5 +118,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-10
-Stopped at: Completed 14-02-PLAN.md — DashboardCalendar prev/next navigation added; DASH-01 satisfied with currentMonthIndex state and responsive 2-up layout; Phase 14 Plan 03 is next
+Stopped at: Completed 14-03-PLAN.md — CampaignTabs Client Component created; CampaignDetailPage refactored; DASH-03 and DASH-05 satisfied; Phase 14 Plan 04 is next
 Resume file: None
