@@ -107,15 +107,21 @@ export function DmExceptionCalendar({
 
   return (
     <div>
-      {/* Mode — side-by-side radios */}
+      {/* Mode — side-by-side radios styled like boxed inputs */}
       <fieldset className="mb-4">
-        <legend className="text-xs text-gray-400 mb-2">When I mark a date as unavailable:</legend>
-        <div className="flex gap-6">
+        <legend className="block text-sm text-gray-300 mb-1">When I mark a date as unavailable:</legend>
+        <div className="flex gap-3 flex-wrap">
           {([
             { value: 'block', label: 'Exclude from Best Days' },
             { value: 'flag',  label: 'Show as busy in Best Days' },
           ] as const).map(({ value, label }) => (
-            <label key={value} className="flex items-center gap-2 cursor-pointer select-none">
+            <label
+              key={value}
+              className={`flex items-center gap-2.5 px-3 py-2 rounded cursor-pointer select-none border transition-colors
+                ${mode === value
+                  ? 'bg-[var(--dnd-input-bg)] border-[var(--dnd-accent)] text-gray-100'
+                  : 'bg-[var(--dnd-input-bg)] border-gray-700 text-gray-400 hover:border-gray-500'}`}
+            >
               <input
                 type="radio"
                 name={`dm-exception-mode-${campaignId}`}
@@ -124,7 +130,7 @@ export function DmExceptionCalendar({
                 onChange={() => handleModeChange(value)}
                 className="accent-[var(--dnd-accent)] cursor-pointer"
               />
-              <span className={`text-sm ${mode === value ? 'text-gray-200' : 'text-gray-400'}`}>{label}</span>
+              <span className="text-sm">{label}</span>
             </label>
           ))}
           {modeStatus === 'saving' && <span className="text-xs text-gray-500 self-center">Saving…</span>}

@@ -4,12 +4,21 @@ import { useState } from 'react'
 import { useActionState } from 'react'
 import { updateMaxPlayers } from '@/lib/actions/campaign'
 
-export function UpdateMaxPlayersForm({ campaignId, currentMax, currentCount }: { campaignId: string; currentMax: number | null; currentCount: number }) {
-  const [editing, setEditing] = useState(false)
+interface Props {
+  campaignId: string
+  currentMax: number | null
+  currentCount: number
+  /** When true, the form is always shown without the edit-icon toggle */
+  alwaysShowForm?: boolean
+}
+
+export function UpdateMaxPlayersForm({ campaignId, currentMax, currentCount, alwaysShowForm }: Props) {
+  const [editing, setEditing] = useState(alwaysShowForm ?? false)
   const [state, formAction, isPending] = useActionState(
     async (prev: { error?: string; success?: boolean } | null, formData: FormData) => {
       const result = await updateMaxPlayers(campaignId, prev, formData)
-      if (!result?.error) setEditing(false)
+      // Only collapse back to read-only if in toggle mode (not alwaysShowForm)
+      if (!result?.error && !alwaysShowForm) setEditing(false)
       return result
     },
     null
@@ -39,17 +48,20 @@ export function UpdateMaxPlayersForm({ campaignId, currentMax, currentCount }: {
       <p className="text-xs text-gray-400">{currentCount} joined</p>
       <span className="text-xs text-gray-500">/</span>
       <input type="number" name="maxPlayers" min={currentCount > 0 ? currentCount : 1} max={99}
-        defaultValue={currentMax ?? ''} placeholder="No limit" autoFocus
+        defaultValue={currentMax ?? ''} placeholder="No limit" autoFocus={!alwaysShowForm}
         className="w-24 rounded bg-[var(--dnd-input-bg)] border border-[#ba7df6]/40 px-2 py-1 text-xs text-gray-400 placeholder-gray-500 focus:outline-none focus:border-[var(--dnd-accent)]" />
       <button type="submit" disabled={isPending}
         className="text-xs px-3 py-1 rounded bg-[var(--dnd-accent)] text-black font-semibold hover:bg-[var(--dnd-accent-hover)] transition-colors disabled:opacity-50">
         {isPending ? 'Saving…' : 'Save'}
       </button>
-      <button type="button" onClick={() => setEditing(false)}
-        className="text-xs text-[var(--dnd-text-muted)] hover:text-white transition-colors">
-        Cancel
-      </button>
+      {!alwaysShowForm && (
+        <button type="button" onClick={() => setEditing(false)}
+          className="text-xs text-[var(--dnd-text-muted)] hover:text-white transition-colors">
+          Cancel
+        </button>
+      )}
       {state?.error && <p className="text-red-400 text-xs w-full">{state.error}</p>}
+      {state?.success && alwaysShowForm && <p className="text-green-400 text-xs w-full">Saved.</p>}
     </form>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { DayAggregation } from '@/lib/availability'
 import { buildMonthGrid, formatDateKey } from '@/lib/calendarUtils'
 
@@ -9,35 +9,23 @@ interface DashboardCalendarProps {
   playerSlots: { id: string; name: string }[]
   windowStart: string  // 'YYYY-MM-DD'
   windowEnd: string    // 'YYYY-MM-DD'
+  /** Controlled selected date — set by parent */
+  selectedDate: string | null
+  /** Callback when a date cell is clicked */
+  onSelectDate: (date: string | null) => void
 }
 
 const DAY_HEADERS = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
-
-function formatPanelDate(dateKey: string): string {
-  const [y, m, d] = dateKey.split('-').map(Number)
-  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString('en-GB', {
-    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC',
-  })
-}
 
 export function DashboardCalendar({
   dayAggregations,
   playerSlots,
   windowStart,
   windowEnd,
+  selectedDate,
+  onSelectDate,
 }: DashboardCalendarProps) {
-  const [selectedDate, setSelectedDate] = useState<string | null>(null)
   const [currentMonthIndex, setCurrentMonthIndex] = useState(0)
-
-  // Escape key handler — close panel on Escape
-  useEffect(() => {
-    if (!selectedDate) return
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape') setSelectedDate(null)
-    }
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [selectedDate])
 
   // Empty state — no planning window set
   if (dayAggregations.length === 0) {
@@ -73,8 +61,7 @@ export function DashboardCalendar({
   const displayedMonths = months.slice(currentMonthIndex, currentMonthIndex + 2)
 
   return (
-    <>
-      <div className="rounded-lg bg-[#140326]/60 p-4">
+    <div className="rounded-lg bg-[#140326]/60 p-4">
       {showNav && (
         <div className="flex items-center justify-between mb-3">
           <button
@@ -138,16 +125,19 @@ export function DashboardCalendar({
                         )
                       }
 
+                      const isSelected = selectedDate === dateKey
+
                       return (
                         <div key={di} className="relative group">
                           <button
                             type="button"
-                            onClick={() => setSelectedDate(dateKey)}
+                            onClick={() => onSelectDate(isSelected ? null : dateKey)}
                             className={`w-full rounded-md py-1.5 text-sm text-center transition-colors leading-none cursor-pointer
                               ${agg?.allFree
                                 ? 'bg-green-800/60 hover:bg-green-700/60 text-gray-100'
                                 : 'text-gray-400 hover:bg-gray-800'}
-                              ${agg?.dmBlocked ? 'ring-1 ring-amber-400/60' : ''}`}
+                              ${agg?.dmBlocked ? 'ring-1 ring-amber-400/60' : ''}
+                              ${isSelected ? 'ring-2 ring-[var(--dnd-accent)]' : ''}`}
                           >
                             <span className="block">{date.getUTCDate()}</span>
                             {/* Player dots — one per player */}
@@ -195,56 +185,6 @@ export function DashboardCalendar({
           )
         })}
       </div>
-      </div>
-
-      {/* Semi-transparent backdrop — closes panel on click */}
-      {selectedDate && (
-        <div
-          className="fixed inset-0 z-10"
-          onClick={() => setSelectedDate(null)}
-          aria-hidden="true"
-        />
-      )}
-
-      {/* Side panel */}
-      <div className={`fixed inset-y-0 right-0 w-80 bg-gray-900 border-l border-gray-800
-        shadow-2xl z-20 flex flex-col transition-transform duration-200
-        ${selectedDate ? 'translate-x-0' : 'translate-x-full'}`}>
-        {selectedDate && (() => {
-          const agg = aggMap.get(selectedDate)
-          return (
-            <>
-              <div className="flex items-center justify-between p-4 border-b border-gray-800">
-                <h3 className="font-semibold text-gray-100">{formatPanelDate(selectedDate)}</h3>
-                <button
-                  onClick={() => setSelectedDate(null)}
-                  className="text-gray-400 hover:text-gray-100 transition-colors cursor-pointer"
-                  aria-label="Close panel"
-                >
-                  ✕
-                </button>
-              </div>
-              <div className="p-4 space-y-3 overflow-y-auto flex-1">
-                {playerSlots.map(slot => {
-                  const status = agg?.playerStatuses[slot.id] ?? 'no-response'
-                  return (
-                    <div key={slot.id} className="flex items-center gap-3">
-                      <span className={`w-3 h-3 rounded-full shrink-0
-                        ${status === 'free' ? 'bg-green-400' : 'bg-gray-500'}`}
-                      />
-                      <span className="text-gray-100 font-medium">{slot.name}</span>
-                      <span className={`text-sm ml-auto
-                        ${status === 'free' ? 'text-green-400' : 'text-gray-500'}`}>
-                        {status === 'free' ? 'Free' : 'No response'}
-                      </span>
-                    </div>
-                  )
-                })}
-              </div>
-            </>
-          )
-        })()}
-      </div>
-    </>
+    </div>
   )
 }
