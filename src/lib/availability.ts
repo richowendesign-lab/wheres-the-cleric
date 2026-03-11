@@ -135,3 +135,44 @@ export function formatBestDayLabel(dateKey: string): string {
     weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC',
   })
 }
+
+/**
+ * Build a clipboard-ready message listing the top 3 best scheduling dates.
+ * Mirrors BestDaysList filter logic exactly so the message matches what the DM sees.
+ * If fewer than 3 best days exist, includes however many are available.
+ * Clipboard API requires HTTPS or localhost — no special handling needed (production is HTTPS).
+ */
+export function formatBestDatesMessage(
+  days: DayAggregation[],
+  playerSlots: { id: string; name: string }[],
+  dmExceptionMode: 'block' | 'flag' | null,
+): string {
+  const bestDays = computeBestDays(days)
+  const displayDays = dmExceptionMode === 'block'
+    ? bestDays.filter(d => !d.dmBlocked)
+    : bestDays
+  const top3 = displayDays.slice(0, 3)
+
+  if (top3.length === 0) return 'No scheduling data yet.'
+
+  const lines = top3.map(day => {
+    const [y, m, d] = day.date.split('-').map(Number)
+    const label = new Date(Date.UTC(y, m - 1, d)).toLocaleDateString('en-GB', {
+      weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC',
+    })
+
+    let availabilitySummary: string
+    if (day.allFree) {
+      availabilitySummary = 'everyone free'
+    } else {
+      const busyNames = playerSlots
+        .filter(slot => day.playerStatuses[slot.id] !== 'free')
+        .map(slot => slot.name)
+      availabilitySummary = `${day.freeCount}/${day.totalPlayers} free, ${busyNames.join(', ')} busy`
+    }
+
+    return `${label} — ${availabilitySummary}`
+  })
+
+  return `Best dates for our next session:\n\n${lines.join('\n')}`
+}
