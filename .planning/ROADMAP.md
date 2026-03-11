@@ -132,7 +132,10 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. The campaign creation form and planning window update form display a custom date picker that matches the app's purple/dark visual style — no native browser date popup appears
   2. The custom picker emits a hidden input, so all existing Server Actions read date values from FormData unchanged; form validation errors do not reset the picked date
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 16-01-PLAN.md — Create DatePickerInput component + wire into CampaignForm (PICK-01, PICK-02)
+- [ ] 16-02-PLAN.md — Wire DatePickerInput into UpdatePlanningWindowForm + human verification (PICK-01, PICK-02)
 
 ## Progress
 
@@ -153,4 +156,4 @@ Plans:
 | 13. DM Availability Exceptions | 2/2 | Complete    | 2026-03-10 | - |
 | 14. Dashboard Redesign | v1.3 | 4/4 | Complete | 2026-03-11 |
 | 15. Shareable Best Dates | 2/2 | Complete   | 2026-03-11 | 2026-03-11 |
-| 16. Custom Date Picker | v1.3 | 0/? | Not started | - |
+| 16. Custom Date Picker | v1.3 | 0/2 | Not started | - |
