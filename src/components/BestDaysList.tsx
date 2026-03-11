@@ -36,7 +36,7 @@ export function BestDaysList({ days, playerSlots, dmExceptionMode, selectedDate,
 
   return (
     <section>
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center gap-1 mb-2">
         <h2 className="text-white font-semibold text-lg">Best Days</h2>
         <CopyBestDatesButton message={message} />
       </div>
