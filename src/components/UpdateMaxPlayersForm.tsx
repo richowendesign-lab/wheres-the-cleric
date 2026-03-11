@@ -45,13 +45,13 @@ export function UpdateMaxPlayersForm({ campaignId, currentMax, currentCount, alw
 
   return (
     <form action={formAction} className="flex flex-wrap items-center gap-3 mt-2">
-      <p className="text-xs text-gray-400">{currentCount} joined</p>
-      <span className="text-xs text-gray-500">/</span>
+      <p className="text-sm text-gray-400">{currentCount} joined</p>
+      <span className="text-sm text-gray-500">/</span>
       <input type="number" name="maxPlayers" min={currentCount > 0 ? currentCount : 1} max={99}
         defaultValue={currentMax ?? ''} placeholder="No limit" autoFocus={!alwaysShowForm}
-        className="w-24 rounded bg-[var(--dnd-input-bg)] border border-[#ba7df6]/40 px-2 py-1 text-xs text-gray-400 placeholder-gray-500 focus:outline-none focus:border-[var(--dnd-accent)]" />
+        className="w-32 rounded bg-[var(--dnd-input-bg)] border border-[var(--dnd-accent)] px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:outline-none" />
       <button type="submit" disabled={isPending}
-        className="text-xs px-3 py-1 rounded bg-[var(--dnd-accent)] text-black font-semibold hover:bg-[var(--dnd-accent-hover)] transition-colors disabled:opacity-50">
+        className="px-5 py-2 rounded bg-[var(--dnd-accent)] text-black text-sm font-semibold hover:bg-[var(--dnd-accent-hover)] transition-colors disabled:opacity-50">
         {isPending ? 'Saving…' : 'Save'}
       </button>
       {!alwaysShowForm && (
