@@ -37,8 +37,8 @@ Requirements for Milestone v1.3: DM Experience & Scheduling Flow.
 
 ### Custom Date Picker
 
-- [ ] **PICK-01**: Planning window fields use a custom themed date picker matching the app's visual style
-- [ ] **PICK-02**: Custom picker replaces native date inputs in campaign creation and planning window update forms
+- [x] **PICK-01**: Planning window fields use a custom themed date picker matching the app's visual style
+- [x] **PICK-02**: Custom picker replaces native date inputs in campaign creation and planning window update forms
 
 ## Future Requirements
 
@@ -89,8 +89,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DMEX-04 | Phase 13 | Complete |
 | COPY-01 | Phase 15 | Complete |
 | COPY-02 | Phase 15 | Complete |
-| PICK-01 | Phase 16 | Pending |
-| PICK-02 | Phase 16 | Pending |
+| PICK-01 | Phase 16 | Complete |
+| PICK-02 | Phase 16 | Complete |
 
 **Coverage:**
 - v1.3 requirements: 18 total

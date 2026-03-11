@@ -156,4 +156,4 @@ Plans:
 | 13. DM Availability Exceptions | 2/2 | Complete    | 2026-03-10 | - |
 | 14. Dashboard Redesign | v1.3 | 4/4 | Complete | 2026-03-11 |
 | 15. Shareable Best Dates | 2/2 | Complete   | 2026-03-11 | 2026-03-11 |
-| 16. Custom Date Picker | v1.3 | 0/2 | Not started | - |
+| 16. Custom Date Picker | 1/2 | In Progress|  | - |

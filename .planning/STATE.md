@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.3
 milestone_name: DM Experience & Scheduling Flow
 status: unknown
-last_updated: "2026-03-11T10:33:00.000Z"
+last_updated: "2026-03-11T16:15:10.829Z"
 progress:
-  total_phases: 9
-  completed_phases: 8
-  total_plans: 26
-  completed_plans: 25
+  total_phases: 10
+  completed_phases: 9
+  total_plans: 28
+  completed_plans: 27
 ---
 
 # Project State
@@ -22,12 +22,12 @@ See: .planning/PROJECT.md (updated 2026-03-09 after v1.3 milestone start)
 
 ## Current Position
 
-Phase: 15-shareable-best-dates — COMPLETE (2/2 plans complete)
-Current: Phase 15 complete — Phase 16 (Custom Date Picker) is next
-Last activity: 2026-03-11 — CopyBestDatesButton icon wired, human-verify checkpoint approved; COPY-01 and COPY-02 satisfied
+Phase: 16-custom-date-picker — IN PROGRESS (1/2 plans complete)
+Current: Phase 16 plan 01 complete — Plan 02 (wire DatePickerInput into UpdatePlanningWindowForm) is next
+Last activity: 2026-03-11 — DatePickerInput created, CampaignForm wired; PICK-01 and PICK-02 satisfied
 
 ```
-v1.3 Progress: [███████░░░] 5/6 phases near-complete — PHASE 15 CHECKPOINT
+v1.3 Progress: [████████░░] Phase 16 in progress — 1/2 plans done
 ```
 
 ## Performance Metrics
@@ -53,6 +53,7 @@ v1.3 Progress: [███████░░░] 5/6 phases near-complete — PHA
 | Phase 14-dashboard-redesign P03 | 3 | 2 tasks | 3 files |
 | Phase 15-shareable-best-dates P01 | 4 | 2 tasks | 2 files |
 | Phase 15-shareable-best-dates P02 | 5 | 1 task | 1 file |
+| Phase 16-custom-date-picker P01 | 17 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -111,6 +112,7 @@ See PROJECT.md Key Decisions table for full history.
 - [Phase 15-shareable-best-dates]: CopyBestDatesButton receives pre-built message string as prop — message computation stays in Server Component, component stays stateless except copied flag
 - [Phase 15-02]: message computed unconditionally before empty-state branch — formatBestDatesMessage is pure and cheap; avoids duplication across both return paths
 - [Phase 15-02]: mb-2 moved from h2 to wrapper div to preserve spacing below header row when CopyBestDatesButton added
+- [Phase 16-custom-date-picker]: DatePickerInput uses hidden input (no required attr) — server-side validation handles missing dates; both mousedown+touchstart for outside-click dismiss; type=button on trigger prevents form submit
 
 ### Pending Todos
 
@@ -118,10 +120,10 @@ None.
 
 ### Blockers/Concerns
 
-- [Phase 16] Confirm whether `updatePlanningWindow` server action calls `revalidatePath` before implementing key-based remount strategy for the custom date picker.
+- [Phase 16 - RESOLVED] `updatePlanningWindow` server action calls `revalidatePath` — key-based remount strategy needed in Plan 16-02 when wiring DatePickerInput into UpdatePlanningWindowForm.
 
 ## Session Continuity
 
 Last session: 2026-03-11
-Stopped at: Completed 15-02-PLAN.md — Phase 15 complete, human-verify checkpoint approved
+Stopped at: Completed 16-01-PLAN.md — Phase 16 plan 01 complete, DatePickerInput created and wired into CampaignForm
 Resume file: None
