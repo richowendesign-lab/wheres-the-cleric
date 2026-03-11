@@ -51,7 +51,7 @@ Full phase details: `.planning/milestones/v1.2-ROADMAP.md`
 - [x] **Phase 12: Share Modal** — Post-creation modal with one-click join link copy and pre-written invite message; ?share=1 URL param trigger pattern (completed 2026-03-09)
 - [x] **Phase 13: DM Availability Exceptions** — Click-to-toggle calendar for marking DM-unavailable dates; block/flag mode toggle; dmBlocked in DayAggregation (completed 2026-03-10)
 - [x] **Phase 14: Dashboard Redesign** — Adaptive calendar with prev/next navigation, ranked best-day list alongside, campaign details de-emphasised (completed 2026-03-11)
-- [ ] **Phase 15: Shareable Best Dates** — CopyBestDaysButton client island; formatted top-3 best-dates message from the campaign dashboard
+- [x] **Phase 15: Shareable Best Dates** — CopyBestDaysButton client island; formatted top-3 best-dates message from the campaign dashboard (completed 2026-03-11)
 - [ ] **Phase 16: Custom Date Picker** — Hand-rolled themed picker using hidden input pattern; replaces native date inputs in campaign forms
 
 ## Phase Details
@@ -152,5 +152,5 @@ Plans:
 | 12. Share Modal | 2/2 | Complete    | 2026-03-10 | - |
 | 13. DM Availability Exceptions | 2/2 | Complete    | 2026-03-10 | - |
 | 14. Dashboard Redesign | v1.3 | 4/4 | Complete | 2026-03-11 |
-| 15. Shareable Best Dates | v1.3 | 1/2 | In Progress (checkpoint) | - |
+| 15. Shareable Best Dates | 2/2 | Complete   | 2026-03-11 | 2026-03-11 |
 | 16. Custom Date Picker | v1.3 | 0/? | Not started | - |
