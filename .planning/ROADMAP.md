@@ -5,7 +5,7 @@
 - ✅ **v1.0 MVP** — Phases 1-4 (shipped 2026-02-26)
 - ✅ **v1.1 Simplified Onboarding** — Phases 5-7 (shipped 2026-03-02)
 - ✅ **v1.2 Multi-Campaign DM** — Phases 8-10 (shipped 2026-03-05)
-- 🚧 **v1.3 DM Experience & Scheduling Flow** — Phases 11-16 (in progress)
+- ✅ **v1.3 DM Experience & Scheduling Flow** — Phases 11-16 (shipped 2026-03-11)
 
 ## Phases
 
@@ -43,7 +43,7 @@ Full phase details: `.planning/milestones/v1.2-ROADMAP.md`
 
 </details>
 
-### 🚧 v1.3 DM Experience & Scheduling Flow (In Progress)
+### ✅ v1.3 DM Experience & Scheduling Flow (Shipped 2026-03-11)
 
 **Milestone Goal:** Improve the DM's post-creation flow and campaign dashboard so sharing the link and acting on availability are fast and obvious.
 
@@ -52,7 +52,7 @@ Full phase details: `.planning/milestones/v1.2-ROADMAP.md`
 - [x] **Phase 13: DM Availability Exceptions** — Click-to-toggle calendar for marking DM-unavailable dates; block/flag mode toggle; dmBlocked in DayAggregation (completed 2026-03-10)
 - [x] **Phase 14: Dashboard Redesign** — Adaptive calendar with prev/next navigation, ranked best-day list alongside, campaign details de-emphasised (completed 2026-03-11)
 - [x] **Phase 15: Shareable Best Dates** — CopyBestDaysButton client island; formatted top-3 best-dates message from the campaign dashboard (completed 2026-03-11)
-- [ ] **Phase 16: Custom Date Picker** — Hand-rolled themed picker using hidden input pattern; replaces native date inputs in campaign forms
+- [x] **Phase 16: Custom Date Picker** — Hand-rolled themed picker using hidden input pattern; replaces native date inputs in campaign forms (completed 2026-03-11)
 
 ## Phase Details
 
@@ -156,4 +156,4 @@ Plans:
 | 13. DM Availability Exceptions | 2/2 | Complete    | 2026-03-10 | - |
 | 14. Dashboard Redesign | v1.3 | 4/4 | Complete | 2026-03-11 |
 | 15. Shareable Best Dates | 2/2 | Complete   | 2026-03-11 | 2026-03-11 |
-| 16. Custom Date Picker | 1/2 | In Progress|  | - |
+| 16. Custom Date Picker | 2/2 | Complete   | 2026-03-11 | 2026-03-11 |

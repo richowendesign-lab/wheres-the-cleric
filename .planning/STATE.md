@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.3
 milestone_name: DM Experience & Scheduling Flow
-status: unknown
-last_updated: "2026-03-11T16:15:10.829Z"
+status: complete
+last_updated: "2026-03-11T16:40:00.000Z"
 progress:
   total_phases: 10
-  completed_phases: 9
+  completed_phases: 10
   total_plans: 28
-  completed_plans: 27
+  completed_plans: 28
 ---
 
 # Project State
@@ -22,12 +22,12 @@ See: .planning/PROJECT.md (updated 2026-03-09 after v1.3 milestone start)
 
 ## Current Position
 
-Phase: 16-custom-date-picker — IN PROGRESS (1/2 plans complete)
-Current: Phase 16 plan 01 complete — Plan 02 (wire DatePickerInput into UpdatePlanningWindowForm) is next
-Last activity: 2026-03-11 — DatePickerInput created, CampaignForm wired; PICK-01 and PICK-02 satisfied
+Phase: 16-custom-date-picker — COMPLETE (2/2 plans complete)
+Current: Phase 16 complete — all plans done; v1.3 milestone complete
+Last activity: 2026-03-11 — DatePickerInput wired into UpdatePlanningWindowForm, upgraded with typed input + keyboard nav; PICK-01 and PICK-02 satisfied
 
 ```
-v1.3 Progress: [████████░░] Phase 16 in progress — 1/2 plans done
+v1.3 Progress: [██████████] Phase 16 complete — 2/2 plans done — v1.3 COMPLETE
 ```
 
 ## Performance Metrics
@@ -54,6 +54,7 @@ v1.3 Progress: [████████░░] Phase 16 in progress — 1/2 pla
 | Phase 15-shareable-best-dates P01 | 4 | 2 tasks | 2 files |
 | Phase 15-shareable-best-dates P02 | 5 | 1 task | 1 file |
 | Phase 16-custom-date-picker P01 | 17 | 2 tasks | 2 files |
+| Phase 16-custom-date-picker P02 | 25 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -113,6 +114,9 @@ See PROJECT.md Key Decisions table for full history.
 - [Phase 15-02]: message computed unconditionally before empty-state branch — formatBestDatesMessage is pure and cheap; avoids duplication across both return paths
 - [Phase 15-02]: mb-2 moved from h2 to wrapper div to preserve spacing below header row when CopyBestDatesButton added
 - [Phase 16-custom-date-picker]: DatePickerInput uses hidden input (no required attr) — server-side validation handles missing dates; both mousedown+touchstart for outside-click dismiss; type=button on trigger prevents form submit
+- [Phase 16-02]: planningWindowStart ?? undefined (not ?? '') — empty string would call parseDateKey('') producing NaN
+- [Phase 16-02]: Text input replaces button trigger — typed date entry (DD/MM/YYYY, YYYY-MM-DD, D MMM YYYY) with live calendar sync; Enter confirms, blur reverts
+- [Phase 16-02]: ArrowLeft/Right keyboard nav guarded by activeElement !== inputRef.current — preserves cursor movement inside text input
 
 ### Pending Todos
 
@@ -120,10 +124,10 @@ None.
 
 ### Blockers/Concerns
 
-- [Phase 16 - RESOLVED] `updatePlanningWindow` server action calls `revalidatePath` — key-based remount strategy needed in Plan 16-02 when wiring DatePickerInput into UpdatePlanningWindowForm.
+None.
 
 ## Session Continuity
 
 Last session: 2026-03-11
-Stopped at: 16-02 paused at checkpoint:human-verify (Task 2) — Task 1 complete (52dcdae), DatePickerInput wired into UpdatePlanningWindowForm; awaiting visual verification of all four date pickers
+Stopped at: Completed 16-02-PLAN.md — Phase 16 complete; v1.3 milestone complete
 Resume file: None

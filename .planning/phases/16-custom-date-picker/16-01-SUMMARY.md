@@ -70,7 +70,7 @@ Each task was committed atomically:
 1. **Task 1: Create DatePickerInput component** - `af959e3` (feat)
 2. **Task 2: Wire DatePickerInput into CampaignForm** - `c4e91c8` (feat)
 
-**Plan metadata:** _(docs commit to follow)_
+**Plan metadata:** `2fa2bfd` (docs: complete plan)
 
 ## Files Created/Modified
 
