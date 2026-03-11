@@ -94,6 +94,14 @@ None - no external service configuration required. DATABASE_URL was already set;
 - Phase 13 (DM Availability Exceptions UI) unblocked — DmAvailabilityException table is live
 - Pre-existing TS errors in AvailabilityCalendar.tsx and DeleteCampaignButton.tsx should be resolved in Plan 11-02 where those files will be touched
 
+## Self-Check: PASSED
+
+- `prisma/schema.prisma` — FOUND (contains DmAvailabilityException model and dmExceptionMode field)
+- `11-01-SUMMARY.md` — FOUND
+- Commit `47a5989` — FOUND (feat: schema additions)
+- Commit `a9daeb2` — FOUND (chore: db push + deferred items)
+- Commit `5023879` — FOUND (docs: plan complete)
+
 ---
 *Phase: 11-schema-foundation-calendar-utilities*
 *Completed: 2026-03-09*
