@@ -1,6 +1,7 @@
 'use client'
 
-import { DayAggregation, computeBestDays, formatBestDayLabel } from '@/lib/availability'
+import { DayAggregation, computeBestDays, formatBestDayLabel, formatBestDatesMessage } from '@/lib/availability'
+import { CopyBestDatesButton } from '@/components/CopyBestDatesButton'
 
 interface BestDaysListProps {
   days: DayAggregation[]
@@ -20,6 +21,8 @@ export function BestDaysList({ days, playerSlots, dmExceptionMode, selectedDate,
     ? bestDays.filter(d => !d.dmBlocked)
     : bestDays
 
+  const message = formatBestDatesMessage(days, playerSlots, dmExceptionMode ?? null)
+
   if (displayDays.length === 0) {
     return (
       <section>
@@ -33,7 +36,10 @@ export function BestDaysList({ days, playerSlots, dmExceptionMode, selectedDate,
 
   return (
     <section>
-      <h2 className="text-white font-semibold text-lg mb-2">Best Days</h2>
+      <div className="flex items-center justify-between mb-2">
+        <h2 className="text-white font-semibold text-lg">Best Days</h2>
+        <CopyBestDatesButton message={message} />
+      </div>
       <ul className="space-y-2">
         {displayDays.map((day, index) => {
           const rank = index + 1
