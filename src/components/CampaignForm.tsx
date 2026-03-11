@@ -2,6 +2,7 @@
 
 import { useActionState } from 'react'
 import { createCampaign } from '@/lib/actions/campaign'
+import { DatePickerInput } from '@/components/DatePickerInput'
 
 const inputCls = "w-full rounded bg-[var(--dnd-input-bg)] border border-[var(--dnd-accent)] px-3 py-2 text-gray-100 placeholder-gray-500 focus:outline-none"
 
@@ -20,11 +21,11 @@ export function CampaignForm() {
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-sm text-gray-300 mb-1">Planning window start</label>
-          <input type="date" name="planningWindowStart" required className={inputCls} />
+          <DatePickerInput name="planningWindowStart" required placeholder="Planning window start" />
         </div>
         <div>
           <label className="block text-sm text-gray-300 mb-1">Planning window end</label>
-          <input type="date" name="planningWindowEnd" required className={inputCls} />
+          <DatePickerInput name="planningWindowEnd" required placeholder="Planning window end" />
         </div>
       </div>
 
