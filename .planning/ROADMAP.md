@@ -152,5 +152,5 @@ Plans:
 | 12. Share Modal | 2/2 | Complete    | 2026-03-10 | - |
 | 13. DM Availability Exceptions | 2/2 | Complete    | 2026-03-10 | - |
 | 14. Dashboard Redesign | 3/4 | In Progress|  | - |
-| 15. Shareable Best Dates | v1.3 | 0/2 | Not started | - |
+| 15. Shareable Best Dates | 1/2 | In Progress|  | - |
 | 16. Custom Date Picker | v1.3 | 0/? | Not started | - |

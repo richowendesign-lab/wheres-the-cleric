@@ -32,8 +32,8 @@ Requirements for Milestone v1.3: DM Experience & Scheduling Flow.
 
 ### Shareable Best Dates
 
-- [ ] **COPY-01**: DM can copy a formatted best-dates message from the campaign dashboard
-- [ ] **COPY-02**: Copied message lists top 3 dates with day name, full date, and plain-English availability ("everyone free" / "3/4 free, Alex busy")
+- [x] **COPY-01**: DM can copy a formatted best-dates message from the campaign dashboard
+- [x] **COPY-02**: Copied message lists top 3 dates with day name, full date, and plain-English availability ("everyone free" / "3/4 free, Alex busy")
 
 ### Custom Date Picker
 
@@ -87,8 +87,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DMEX-02 | Phase 13 | Complete |
 | DMEX-03 | Phase 13 | Complete |
 | DMEX-04 | Phase 13 | Complete |
-| COPY-01 | Phase 15 | Pending |
-| COPY-02 | Phase 15 | Pending |
+| COPY-01 | Phase 15 | Complete |
+| COPY-02 | Phase 15 | Complete |
 | PICK-01 | Phase 16 | Pending |
 | PICK-02 | Phase 16 | Pending |
 

@@ -2,12 +2,12 @@
 gsd_state_version: 1.0
 milestone: v1.3
 milestone_name: DM Experience & Scheduling Flow
-status: in_progress
-last_updated: "2026-03-11T00:00:00.000Z"
+status: unknown
+last_updated: "2026-03-11T10:30:09.214Z"
 progress:
-  total_phases: 6
-  completed_phases: 4
-  total_plans: 25
+  total_phases: 9
+  completed_phases: 8
+  total_plans: 26
   completed_plans: 25
 ---
 
@@ -51,6 +51,7 @@ v1.3 Progress: [██████░░░░] 4/6 phases complete — PHASE 15
 | Phase 14-dashboard-redesign P01 | 1 | 2 tasks | 2 files |
 | Phase 14-dashboard-redesign P02 | 2 | 1 tasks | 1 files |
 | Phase 14-dashboard-redesign P03 | 3 | 2 tasks | 3 files |
+| Phase 15-shareable-best-dates P01 | 4 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -105,6 +106,8 @@ See PROJECT.md Key Decisions table for full history.
 - [Phase 14-dashboard-redesign]: CampaignTabs is single Server->Client boundary: all data serialised in page.tsx before passing through props
 - [Phase 14-dashboard-redesign]: Tab state is client-side only (useState) — no URL change on tab switch
 - [Phase 14-dashboard-redesign]: Header, title, description and ShareModal remain outside CampaignTabs — always visible regardless of active tab
+- [Phase 15-shareable-best-dates]: formatBestDatesMessage accepts dmExceptionMode directly and mirrors BestDaysList filter so copied message always matches visible UI
+- [Phase 15-shareable-best-dates]: CopyBestDatesButton receives pre-built message string as prop — message computation stays in Server Component, component stays stateless except copied flag
 
 ### Pending Todos
 
