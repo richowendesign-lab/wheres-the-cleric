@@ -120,7 +120,10 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. A "Copy best dates" button is present on the campaign dashboard and clicking it places a formatted message on the clipboard with one-click "Copied!" feedback
   2. The copied message lists the top 3 dates with the day name, full date, and plain-English availability summary ("everyone free" or "3/4 free, Alex busy") — exactly 3 dates, no more
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 15-01-PLAN.md — formatBestDatesMessage utility + CopyBestDatesButton component (availability.ts, new component)
+- [ ] 15-02-PLAN.md — Wire CopyBestDatesButton into BestDaysList + human verification
 
 ### Phase 16: Custom Date Picker
 **Goal**: Planning window date fields use a styled date picker that matches the app's purple theme, replacing native browser date inputs in all campaign forms.
@@ -149,5 +152,5 @@ Plans:
 | 12. Share Modal | 2/2 | Complete    | 2026-03-10 | - |
 | 13. DM Availability Exceptions | 2/2 | Complete    | 2026-03-10 | - |
 | 14. Dashboard Redesign | 3/4 | In Progress|  | - |
-| 15. Shareable Best Dates | v1.3 | 0/? | Not started | - |
+| 15. Shareable Best Dates | v1.3 | 0/2 | Not started | - |
 | 16. Custom Date Picker | v1.3 | 0/? | Not started | - |
