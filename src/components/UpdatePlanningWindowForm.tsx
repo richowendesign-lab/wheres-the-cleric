@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect, useRef } from 'react'
 import { updatePlanningWindow } from '@/lib/actions/campaign'
+import { DatePickerInput } from '@/components/DatePickerInput'
 
 interface UpdatePlanningWindowFormProps {
   campaignId: string
@@ -30,13 +31,21 @@ export function UpdatePlanningWindowForm({ campaignId, planningWindowStart, plan
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-sm text-gray-300 mb-1">Start date</label>
-          <input type="date" name="planningWindowStart" defaultValue={planningWindowStart ?? ''} required
-            className="w-full rounded bg-[var(--dnd-input-bg)] border border-[var(--dnd-accent)] px-3 py-2 text-gray-100 focus:outline-none" />
+          <DatePickerInput
+            name="planningWindowStart"
+            defaultValue={planningWindowStart ?? undefined}
+            required
+            placeholder="Start date"
+          />
         </div>
         <div>
           <label className="block text-sm text-gray-300 mb-1">End date</label>
-          <input type="date" name="planningWindowEnd" defaultValue={planningWindowEnd ?? ''} required
-            className="w-full rounded bg-[var(--dnd-input-bg)] border border-[var(--dnd-accent)] px-3 py-2 text-gray-100 focus:outline-none" />
+          <DatePickerInput
+            name="planningWindowEnd"
+            defaultValue={planningWindowEnd ?? undefined}
+            required
+            placeholder="End date"
+          />
         </div>
       </div>
       <button type="submit" disabled={isPending}
