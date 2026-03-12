@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A web app for scheduling D&D sessions with a group of friends. The DM creates an account, creates campaigns with a name and optional description and player cap, and shares a single join link per campaign. Players visit the link, enter their name once, and are remembered by a browser cookie. The DM sees a calendar showing aggregate availability across the group plus ranked best-day recommendations. The DM's home page shows all their campaigns as cards. Deployed to Vercel with Neon PostgreSQL in production.
+A web app for scheduling D&D sessions with a group of friends. The DM creates an account, creates campaigns with a name and optional description and player cap, and shares a single join link per campaign. Players visit the link, enter their name once, and are remembered by a browser cookie. The DM sees a calendar showing aggregate availability across the group plus ranked best-day recommendations, with a Settings tab for campaign administration. The DM can mark their own unavailable dates and copy a formatted scheduling message to paste into group chat. Deployed to Vercel with Neon PostgreSQL in production.
 
 ## Core Value
 
@@ -27,33 +27,33 @@ The DM can instantly see when everyone is free — without chasing people for re
 - ✓ DM can create multiple campaigns, each with a name, optional description, and optional max players limit — v1.2
 - ✓ DM home page shows all their campaigns as cards with a "Create new campaign" button — v1.2
 - ✓ Join link enforces max players cap — players see a "campaign full" message when limit is reached — v1.2
+- ✓ DM sees a share modal automatically after creating a campaign with one-click copy and pre-written invite message — v1.3
+- ✓ DM can mark their own unavailable dates on a per-campaign calendar with block/flag mode toggle — v1.3
+- ✓ Dashboard shows adaptive paginated calendar and ranked best-day list; campaign controls in Settings tab — v1.3
+- ✓ DM can copy a formatted top-3 best-dates message from the dashboard to paste into group chat — v1.3
+- ✓ Planning window date fields use a custom themed date picker matching the app's visual style — v1.3
 
 ### Active
 
-## Current Milestone: v1.3 DM Experience & Scheduling Flow
-
-**Goal:** Improve the DM's post-creation flow and campaign dashboard so sharing the link and acting on availability are fast and obvious.
-
-**Target features:**
-- Post-creation share modal with one-click join link copy and pre-written paste message
-- Campaign page redesign: planning window → best days → all days (Basecamp-style two-month calendar + ranked list)
-- Shareable best days: copy a formatted message listing the top dates
-- DM availability exceptions: mark unavailable dates during campaign setup, with per-campaign toggle to block or flag those days for players
-- Custom date picker: replace native browser popups with a styled component matching the purple theme
+(Define with /gsd:new-milestone for v1.4)
 
 ### Out of Scope
 
 - Automated reminders sent to players — DM handles nudging manually
 - Per-session polls with pre-selected dates — replaced by open availability model
 - In-app chat or session notes — scheduling only
+- DM recurring unavailability patterns — full DM availability form mirrors player flow, high complexity, defer to v1.4
+- Per-player colour coding in calendar — aggregate fill intensity is clearer
+- In-modal editing of the pre-written invite message — DMs edit in their chat app after pasting
 
 ## Context
 
 - Group size: 5 people (1 DM + 4 players)
-- Shipped v1.0 in 3 days (2026-02-23 → 2026-02-26): 4 phases, 14 plans, ~7,600 TypeScript LOC
+- Shipped v1.0 in 3 days (2026-02-23 → 2026-02-26): 4 phases, 14 plans
 - Shipped v1.1 in 4 days (2026-02-27 → 2026-03-02): 3 phases, 8 plans, +3,053 / -241 LOC
 - Shipped v1.2 in 2 days (2026-03-04 → 2026-03-05): 3 phases, 7 plans, +2,540 / -77 LOC
-- Current codebase: ~10,200 TypeScript LOC (estimated)
+- Shipped v1.3 in 3 days (2026-03-09 → 2026-03-12): 6 phases, 14 plans, +9,558 / -348 LOC
+- Current codebase: ~16,000 TypeScript LOC (estimated)
 - Tech stack: Next.js 16, React 19, TypeScript, Tailwind CSS 4, Prisma 7, bcryptjs, SQLite (local) / Neon PostgreSQL (production)
 - Deployed to Vercel: https://my-portfolio-henna-ten-97.vercel.app
 - Access model: DM has email+password account with httpOnly session cookie; players are still cookie-based (no login required)
@@ -86,6 +86,14 @@ The DM can instantly see when everyone is free — without chasing people for re
 | Required name enforced in server action not DB constraint (v1.2) | Avoids breaking `db push` against existing campaigns that have no name; consistent with existing pattern | ✓ Good — backward-compatible migration |
 | Logout as plain HTML form with server action (v1.2) | No `use client` needed in Server Component — clean pattern for server-side mutations | ✓ Good — adopted across auth pages |
 | `useActionState` from `react` not `react-dom` (v1.2) | React 19 deprecates the `react-dom` import; avoids deprecation warnings | ✓ Good — correct for React 19 |
+| ?share=1 URL param triggers share modal (v1.3) | Server Component reads searchParams — no extra DB field or cookie needed | ✓ Good — clean stateless pattern |
+| DmAvailabilityException toggle: delete+create instead of upsert (v1.3) | Same discipline as toggleDateOverride — avoids partial-write risk on upsert | ✓ Good — consistent toggle pattern |
+| block/flag mode stored on Campaign (not per-exception) (v1.3) | Applies uniformly across all DM exceptions; simpler than per-date mode | ✓ Good — DM expects one mode per campaign |
+| CampaignTabs Client Component owns all tab state (v1.3) | Single `use client` boundary; Server Component passes all data as serialised props | ✓ Good — clean boundary, no extra fetches |
+| Pre-compute best-dates message in Server Component (v1.3) | CopyBestDatesButton stays stateless except for copied flag; message always matches what DM sees | ✓ Good — no stale message risk |
+| DatePickerInput uses hidden input for FormData (v1.3) | Zero changes to Server Actions; existing validation paths unaffected | ✓ Good — clean form data bridge |
+| Calendar pagination steps by exactly 2 with canGoNext gate (v1.3) | Avoids month repetition on odd-count windows; last page may show 1 month — consistent with no-overlap expectation | ✓ Good — user confirmed this is cleaner |
+| revalidatePath in updatePlanningWindow server action (v1.3) | Dashboard must re-render after window change; same fix pattern as toggleDmException | ✓ Good — consistent revalidation approach |
 
 ---
-*Last updated: 2026-03-09 after v1.3 milestone start*
+*Last updated: 2026-03-12 after v1.3 milestone*
