@@ -1,0 +1,70 @@
+# Requirements: Where's the Cleric — D&D Session Planner
+
+**Defined:** 2026-03-12
+**Core Value:** DMs can instantly see when everyone is free — without chasing people for responses or guessing which dates to offer.
+
+## v1.4 Requirements
+
+Requirements for Milestone v1.4: Clarity & Polish.
+
+### How It Works Modal
+
+- [ ] **HOW-01**: DM and player can open a "How it works" explainer from the logged-out home page, DM campaigns page, and player-facing pages (join + availability)
+- [ ] **HOW-02**: The trigger on the DM campaigns page is a small `?` icon button in the page heading; on other pages it suits the page context
+- [ ] **HOW-03**: The explainer modal displays visual numbered step cards (step number + heading + 1-line description) covering both DM and player perspectives
+- [ ] **HOW-04**: Modal is dismissible via backdrop click or Escape; focus is properly trapped while open
+
+### Calendar & Panel Clarity
+
+- [ ] **CLAR-01**: Group Availability calendar legend includes a DM unavailable colour swatch — only shown when the DM has marked at least one date
+- [ ] **CLAR-02**: Clicking a DM-marked date in the Group Availability calendar shows a DM unavailable indicator in the date panel alongside normal player availability
+- [ ] **CLAR-03**: Date panel shows a clear single message when no players are available, instead of listing each player as "no response"
+
+## Future Requirements
+
+Deferred to v1.5 or later.
+
+### DM Full Availability
+
+- **DMAV-01**: DM can set recurring availability patterns (mirrors the player availability flow)
+
+### Transparency
+
+- **TRAN-01**: Players can see which dates the DM has marked as unavailable
+
+### Sharing
+
+- **SHAR-01**: Auto-send or email delivery of share messages (requires email infrastructure)
+
+## Out of Scope
+
+| Feature | Reason |
+|---------|--------|
+| Tabbed DM/Player sections in explainer modal | All steps shown together in one scrollable modal — simpler, no state needed |
+| Next/back navigation in explainer | All steps visible at once — no carousel needed |
+| Per-player colour coding in calendar | Aggregate fill intensity is clearer; per-player colours are complex |
+| DM recurring unavailability patterns | Full DM availability form mirrors player flow — high complexity, defer to future |
+| ShareModal accessibility upgrade | Out of scope for this milestone; tracked as future cleanup |
+
+## Traceability
+
+Which phases cover which requirements. Updated during roadmap creation.
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| HOW-01 | TBD | Pending |
+| HOW-02 | TBD | Pending |
+| HOW-03 | TBD | Pending |
+| HOW-04 | TBD | Pending |
+| CLAR-01 | TBD | Pending |
+| CLAR-02 | TBD | Pending |
+| CLAR-03 | TBD | Pending |
+
+**Coverage:**
+- v1.4 requirements: 7 total
+- Mapped to phases: 0 (roadmap pending)
+- Unmapped: 7
+
+---
+*Requirements defined: 2026-03-12*
+*Last updated: 2026-03-12 after initial definition*
