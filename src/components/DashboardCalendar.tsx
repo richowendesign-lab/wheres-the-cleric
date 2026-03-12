@@ -82,7 +82,7 @@ export function DashboardCalendar({
           </span>
           <button
             type="button"
-            onClick={() => setCurrentMonthIndex(i => Math.min(months.length - 2, i + 2))}
+            onClick={() => setCurrentMonthIndex(i => i + 2)}
             disabled={!canGoNext}
             className="p-1.5 rounded text-[var(--dnd-text-muted)] hover:text-white disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
             aria-label="Next months"
