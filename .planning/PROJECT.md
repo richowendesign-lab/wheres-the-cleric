@@ -35,7 +35,11 @@ The DM can instantly see when everyone is free — without chasing people for re
 
 ### Active
 
-(Define with /gsd:new-milestone for v1.4)
+- [ ] DM and player can access a "How it works" explainer from the home page, DM campaigns page, and player-facing pages
+- [ ] Explainer displays as a modal with visual numbered cards (step number + heading + 1-line description) covering both DM and player perspectives
+- [ ] Group Availability calendar legend includes a DM unavailable colour swatch
+- [ ] Clicking a DM-marked date in the Group Availability calendar shows a DM unavailable indicator in the info modal
+- [ ] Date modal shows a clear single message when no players are available (instead of listing players as "no response")
 
 ### Out of Scope
 
@@ -96,4 +100,5 @@ The DM can instantly see when everyone is free — without chasing people for re
 | revalidatePath in updatePlanningWindow server action (v1.3) | Dashboard must re-render after window change; same fix pattern as toggleDmException | ✓ Good — consistent revalidation approach |
 
 ---
-*Last updated: 2026-03-12 after v1.3 milestone*
+*Last updated: 2026-03-12 after v1.4 milestone start*
+
