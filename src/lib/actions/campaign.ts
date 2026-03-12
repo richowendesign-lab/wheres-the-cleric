@@ -231,5 +231,6 @@ export async function updatePlanningWindow(campaignId: string, _prevState: unkno
     data: { planningWindowStart, planningWindowEnd },
   })
 
+  revalidatePath(`/campaigns/${campaignId}`)
   return { success: true }
 }

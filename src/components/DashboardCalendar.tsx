@@ -57,8 +57,10 @@ export function DashboardCalendar({
     if (mo > 11) { mo = 0; y++ }
   }
 
-  const showNav = months.length > 1
+  const showNav = months.length > 2
   const displayedMonths = months.slice(currentMonthIndex, currentMonthIndex + 2)
+  const canGoPrev = currentMonthIndex > 0
+  const canGoNext = currentMonthIndex + 2 < months.length
 
   return (
     <div className="rounded-lg bg-[#140326]/60 p-4">
@@ -66,22 +68,24 @@ export function DashboardCalendar({
         <div className="flex items-center justify-between mb-3">
           <button
             type="button"
-            onClick={() => setCurrentMonthIndex(i => Math.max(0, i - 1))}
-            disabled={currentMonthIndex === 0}
+            onClick={() => setCurrentMonthIndex(i => Math.max(0, i - 2))}
+            disabled={!canGoPrev}
             className="p-1.5 rounded text-[var(--dnd-text-muted)] hover:text-white disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
-            aria-label="Previous month"
+            aria-label="Previous months"
           >
             &#8592;
           </button>
           <span className="text-xs text-gray-400">
-            {currentMonthIndex + 1} / {months.length}
+            {displayedMonths.map(({ year, month }) =>
+              new Date(Date.UTC(year, month, 1)).toLocaleDateString('en-GB', { month: 'short', year: 'numeric', timeZone: 'UTC' })
+            ).join(' – ')}
           </span>
           <button
             type="button"
-            onClick={() => setCurrentMonthIndex(i => Math.min(months.length - 1, i + 1))}
-            disabled={currentMonthIndex >= months.length - 1}
+            onClick={() => setCurrentMonthIndex(i => Math.min(months.length - 2, i + 2))}
+            disabled={!canGoNext}
             className="p-1.5 rounded text-[var(--dnd-text-muted)] hover:text-white disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
-            aria-label="Next month"
+            aria-label="Next months"
           >
             &#8594;
           </button>
