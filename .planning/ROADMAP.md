@@ -6,6 +6,7 @@
 - ✅ **v1.1 Simplified Onboarding** — Phases 5-7 (shipped 2026-03-02)
 - ✅ **v1.2 Multi-Campaign DM** — Phases 8-10 (shipped 2026-03-05)
 - ✅ **v1.3 DM Experience & Scheduling Flow** — Phases 11-16 (shipped 2026-03-12)
+- 🚧 **v1.4 Clarity & Polish** — Phases 17-19 (in progress)
 
 ## Phases
 
@@ -57,6 +58,59 @@ Full phase details: `.planning/milestones/v1.3-ROADMAP.md`
 
 </details>
 
+### 🚧 v1.4 Clarity & Polish (In Progress)
+
+**Milestone Goal:** Surface information the calendar already has (DM unavailability, empty date states) and give every user a way to understand the app without reading documentation.
+
+- [ ] **Phase 17: Calendar & Panel Clarity** — Legend shows DM unavailable swatch; date panel shows DM blocked indicator and a clear empty state when no players are free
+- [ ] **Phase 18: How It Works Modal** — Standalone HowItWorksModal and HowItWorksButton components built and verified in isolation; native dialog with focus trap
+- [ ] **Phase 19: How It Works Page Integration** — HowItWorksButton wired into all four pages (home, campaigns, join, availability)
+
+## Phase Details
+
+### Phase 17: Calendar & Panel Clarity
+**Goal**: The Group Availability calendar and date panel accurately communicate all availability state — including DM unavailability and the absence of any free players — so the DM never misreads a date.
+**Depends on**: Phase 16 (CampaignTabs.tsx is the target file; no data changes needed)
+**Requirements**: CLAR-01, CLAR-02, CLAR-03
+**Success Criteria** (what must be TRUE):
+  1. When the DM has marked at least one unavailable date, a DM unavailable colour swatch appears in the calendar legend; when no dates are marked the swatch is absent
+  2. Clicking a DM-marked date in the Group Availability calendar shows a DM unavailable indicator in the date side panel alongside normal player rows
+  3. When a date has zero free players, the date panel shows a single clear "No players available" message rather than listing every player as "no response"
+**Plans**: TBD
+
+Plans:
+- [ ] 17-01: TBD
+
+### Phase 18: How It Works Modal
+**Goal**: A self-contained, accessible "How it works" modal component exists and works correctly in isolation — with proper focus trap, keyboard dismiss, and step-card content for both DM and player perspectives — before being added to any page.
+**Depends on**: Nothing (new component, no page wiring yet)
+**Requirements**: HOW-03, HOW-04
+**Success Criteria** (what must be TRUE):
+  1. The modal displays numbered step cards covering the DM workflow and the player workflow in a single scrollable view
+  2. Pressing Escape closes the modal from any focused element inside it
+  3. Clicking the backdrop closes the modal
+  4. Focus is trapped inside the modal while open — tabbing does not reach elements behind it
+  5. Opening and closing the modal does not change the URL or browser history
+**Plans**: TBD
+
+Plans:
+- [ ] 18-01: TBD
+
+### Phase 19: How It Works Page Integration
+**Goal**: Every user — whether a prospective DM on the home page, an active DM on the campaigns page, or a player on the join or availability page — can open the "How it works" explainer from the page they are currently on.
+**Depends on**: Phase 18 (HowItWorksButton and HowItWorksModal must be complete)
+**Requirements**: HOW-01, HOW-02
+**Success Criteria** (what must be TRUE):
+  1. A "How it works" trigger is visible on the logged-out home page (/) and opens the modal
+  2. A small "?" icon button in the campaigns page heading (/campaigns) opens the modal without navigating away
+  3. A "How it works" trigger is present on the player join page (/join/[joinToken]) and opens the modal
+  4. A "How it works" trigger is present on the player availability page (/join/[joinToken]/availability) and opens the modal
+  5. None of the four pages gain a "use client" directive as a result of adding the trigger
+**Plans**: TBD
+
+Plans:
+- [ ] 19-01: TBD
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -77,3 +131,6 @@ Full phase details: `.planning/milestones/v1.3-ROADMAP.md`
 | 14. Dashboard Redesign | v1.3 | 4/4 | Complete | 2026-03-11 |
 | 15. Shareable Best Dates | v1.3 | 2/2 | Complete | 2026-03-11 |
 | 16. Custom Date Picker | v1.3 | 2/2 | Complete | 2026-03-11 |
+| 17. Calendar & Panel Clarity | v1.4 | 0/TBD | Not started | - |
+| 18. How It Works Modal | v1.4 | 0/TBD | Not started | - |
+| 19. How It Works Page Integration | v1.4 | 0/TBD | Not started | - |

@@ -52,19 +52,19 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| HOW-01 | TBD | Pending |
-| HOW-02 | TBD | Pending |
-| HOW-03 | TBD | Pending |
-| HOW-04 | TBD | Pending |
-| CLAR-01 | TBD | Pending |
-| CLAR-02 | TBD | Pending |
-| CLAR-03 | TBD | Pending |
+| HOW-01 | Phase 19 | Pending |
+| HOW-02 | Phase 19 | Pending |
+| HOW-03 | Phase 18 | Pending |
+| HOW-04 | Phase 18 | Pending |
+| CLAR-01 | Phase 17 | Pending |
+| CLAR-02 | Phase 17 | Pending |
+| CLAR-03 | Phase 17 | Pending |
 
 **Coverage:**
 - v1.4 requirements: 7 total
-- Mapped to phases: 0 (roadmap pending)
-- Unmapped: 7
+- Mapped to phases: 7 (roadmap complete)
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-12*
-*Last updated: 2026-03-12 after initial definition*
+*Last updated: 2026-03-12 after roadmap creation*
