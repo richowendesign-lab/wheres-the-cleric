@@ -1,12 +1,24 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
+import { useInView } from '@/hooks/useInView'
 
 export function HeroSection() {
+  const { ref, inView } = useInView({ threshold: 0 })
+
   return (
-    <section className="flex flex-col items-center justify-center text-center px-8 py-24 gap-6">
+    <section
+      ref={ref as React.RefObject<HTMLElement>}
+      className={[
+        'flex flex-col items-center justify-center text-center px-8 py-16 gap-6',
+        'transition-all duration-700 ease-out motion-reduce:transition-none',
+        inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
+      ].join(' ')}
+    >
       <Image src="/dnd-icon.png" alt="" width={82} height={82} />
       <h1 className="font-fantasy text-5xl text-white max-w-2xl">schedule your next D&D Session</h1>
-      <p className="text-[var(--dnd-text-muted)] text-lg max-w-lg">Beat the final boss - scheduling - and coordinate your group&apos;s availability without the back-and-forth.</p>
+      <p className="text-white text-base max-w-lg">Beat the final boss - scheduling - and coordinate your group&apos;s availability without the back-and-forth.</p>
       <div className="flex gap-4">
         <Link
           href="/auth/signup"
@@ -21,8 +33,8 @@ export function HeroSection() {
           Log in
         </Link>
       </div>
-      <div className="mt-12 rounded-xl overflow-hidden shadow-2xl border border-[#ba7df6]/20 max-w-[672px] w-full mx-auto">
-        <img src="/hero-screenshot.png" alt="DM dashboard preview" width={672} height={329} className="w-full h-auto" />
+      <div className="mt-6 rounded-xl overflow-hidden shadow-[0px_3px_12px_1px_rgba(253,253,253,0.25)] w-full max-w-[800px]">
+        <img src="/hero-screenshot.png" alt="DM dashboard preview" className="w-full h-auto" />
       </div>
     </section>
   )

@@ -1,8 +1,21 @@
+'use client'
+
+import { useInView } from '@/hooks/useInView'
+
 export function FeaturesBlock() {
+  const { ref, inView } = useInView({ threshold: 0.1 })
+
   return (
-    <section className="px-8 py-24 max-w-5xl mx-auto w-full">
+    <section
+      ref={ref as React.RefObject<HTMLElement>}
+      className={[
+        'px-8 py-16 max-w-[800px] mx-auto w-full',
+        'transition-all duration-700 ease-out motion-reduce:transition-none',
+        inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
+      ].join(' ')}
+    >
       <h2 className="font-fantasy text-3xl text-white text-center mb-4">Simple scheduling for your next game</h2>
-      <p className="text-[var(--dnd-text-muted)] text-center max-w-2xl mx-auto mb-12">No more manually creating polls. No more back and forth. Simply create a campaign, share the link, and let your players tell you when they&apos;re free, leaving you to focus on practicing your accents for that new NPC.</p>
+      <p className="text-white text-base text-center max-w-2xl mx-auto mb-10">No more manually creating polls. No more back and forth. Simply create a campaign, share the link, and let your players tell you when they&apos;re free, leaving you to focus on practicing your accents for that new NPC.</p>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
         {/* Left column: step cards */}
         <div className="flex flex-col gap-4">
