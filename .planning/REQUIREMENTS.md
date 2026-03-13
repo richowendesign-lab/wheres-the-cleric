@@ -40,7 +40,7 @@ Requirements for the Marketing Home Page milestone. Each maps to roadmap phases.
 
 ### Integrity
 
-- [ ] **INT-01**: Logged-in DMs visiting `/` are still redirected to `/campaigns` — landing page renders only for logged-out visitors
+- [x] **INT-01**: Logged-in DMs visiting `/` are still redirected to `/campaigns` — landing page renders only for logged-out visitors
 
 ## Future Requirements
 
@@ -78,7 +78,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CTA-02 | Phase 20 | Complete |
 | ANIM-01 | Phase 21 | Pending |
 | ANIM-02 | Phase 21 | Pending |
-| INT-01 | Phase 20 | Pending |
+| INT-01 | Phase 20 | Complete |
 
 **Coverage:**
 - v1.5 requirements: 14 total

@@ -23,11 +23,11 @@ See: .planning/PROJECT.md (updated 2026-03-13)
 ## Current Position
 
 Phase: 20 of 24 (Static Page Shell)
-Plan: 1 of 2 in current phase (20-01 complete)
+Plan: 2 of 2 in current phase (20-02 complete — phase 20 done)
 Status: In progress
-Last activity: 2026-03-13 — Completed 20-01 (LandingPage static shell)
+Last activity: 2026-03-13 — Completed 20-02 (page.tsx rewired — landing page live at /)
 
-Progress: [████████████░░░░░░░░] 0/5 v1.5 phases complete (Phase 20 in progress — 1/2 plans done)
+Progress: [████████████░░░░░░░░] 0/5 v1.5 phases complete (Phase 20 complete — 2/2 plans done)
 
 ## Pending Todos
 
