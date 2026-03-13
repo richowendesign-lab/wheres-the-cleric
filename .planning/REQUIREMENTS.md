@@ -35,8 +35,8 @@ Requirements for the Marketing Home Page milestone. Each maps to roadmap phases.
 
 ### Animations
 
-- [ ] **ANIM-01**: Each page section (Hero, Features, Easy for Players, CTA) animates in with a fade + slide-up as it enters the viewport
-- [ ] **ANIM-02**: Animations are suppressed for visitors with `prefers-reduced-motion` enabled
+- [x] **ANIM-01**: Each page section (Hero, Features, Easy for Players, CTA) animates in with a fade + slide-up as it enters the viewport
+- [x] **ANIM-02**: Animations are suppressed for visitors with `prefers-reduced-motion` enabled
 
 ### Integrity
 
@@ -76,8 +76,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PLAY-02 | Phase 23 | Pending |
 | CTA-01 | Phase 20 | Complete |
 | CTA-02 | Phase 20 | Complete |
-| ANIM-01 | Phase 21 | Pending |
-| ANIM-02 | Phase 21 | Pending |
+| ANIM-01 | Phase 21 | Complete |
+| ANIM-02 | Phase 21 | Complete |
 | INT-01 | Phase 20 | Complete |
 
 **Coverage:**
