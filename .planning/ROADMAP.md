@@ -104,7 +104,10 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. Each section (Hero, Features, Easy for Players, CTA) fades and slides up when it enters the viewport
   2. Visitor with prefers-reduced-motion enabled sees sections appear without animation
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 21-01-PLAN.md — Create useInView hook + wire fade/slide-up animations into all four sections
+- [ ] 21-02-PLAN.md — Start dev server + human verify animations and reduced-motion behaviour
 
 ### Phase 22: Features Step-Selector
 **Goal**: Visitors can explore the four scheduling steps interactively, seeing an expanded description and paired illustration for each step
@@ -114,7 +117,10 @@ Plans:
   1. Clicking any step card highlights it and expands its description text
   2. Clicking a step swaps the accompanying illustration image to match that step
   3. Only one step is active at a time; switching to a new step deactivates the previous one
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 21-01-PLAN.md — Create useInView hook + wire fade/slide-up animations into all four sections
+- [ ] 21-02-PLAN.md — Start dev server + human verify animations and reduced-motion behaviour
 
 ### Phase 23: Availability Demo
 **Goal**: Visitors can interact with a live-feeling player availability demo that shows what filling in availability looks like — with no auth, no DB, and no navigation required
@@ -124,7 +130,10 @@ Plans:
   1. Visitor can interact with a demo embed in the hero area showing a mock campaign with placeholder player data and best-day recommendations
   2. Visitor can interact with a demo embed in the "Easy for players" section showing the player availability view with a planning window based on placeholder dates
   3. Both demo embeds function without requiring login, creating a session, or making any server requests
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 21-01-PLAN.md — Create useInView hook + wire fade/slide-up animations into all four sections
+- [ ] 21-02-PLAN.md — Start dev server + human verify animations and reduced-motion behaviour
 
 ### Phase 24: Sticky Nav Scroll Behaviour
 **Goal**: The nav feels polished and always legible — transparent over the hero image, then solidly dark once the visitor scrolls into content
@@ -134,7 +143,10 @@ Plans:
   1. Nav background is transparent when the visitor is at the top of the page
   2. Nav background transitions to dark opaque when the visitor scrolls past the hero
   3. Nav remains readable and above all other page content at all scroll positions
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 21-01-PLAN.md — Create useInView hook + wire fade/slide-up animations into all four sections
+- [ ] 21-02-PLAN.md — Start dev server + human verify animations and reduced-motion behaviour
 
 ## Progress
 
