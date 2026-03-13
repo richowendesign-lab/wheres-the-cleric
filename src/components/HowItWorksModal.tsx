@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 const DM_STEPS = [
-  { number: 1, heading: 'Create your campaign', description: 'Set a planning window and share the link with your players.' },
+  { number: 1, heading: 'Create and share your campaign', description: 'Set a planning window and share the link with your players.' },
   { number: 2, heading: 'Players mark their availability', description: 'Everyone sets their free days — you see it live on the calendar.' },
   { number: 3, heading: 'Add your unavailable dates', description: 'Block dates when you cannot run a session in the Settings tab.' },
   { number: 4, heading: 'Pick the best day', description: 'The ranked list shows which days work for everyone — copy it to your group chat.' },
@@ -40,7 +40,8 @@ export function HowItWorksModal({ onClose, defaultRole }: HowItWorksModalProps) 
       onClose={onClose}
       onClick={handleBackdropClick}
       aria-labelledby="how-it-works-title"
-      className="bg-[var(--dnd-input-bg)] border border-[#ba7df6]/30 rounded-lg p-0 max-w-lg w-full mx-4"
+      className="bg-[var(--dnd-input-bg)] border border-[#ba7df6]/30 rounded-lg p-0 max-w-lg w-full"
+      style={{ margin: 'auto' }}
     >
       <div className="relative p-6 max-h-[90vh] overflow-y-auto">
         {/* Title row */}
