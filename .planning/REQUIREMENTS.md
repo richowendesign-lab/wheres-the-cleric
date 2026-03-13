@@ -20,7 +20,7 @@ Requirements for the Marketing Home Page milestone. Each maps to roadmap phases.
 ### Features Section
 
 - [x] **FEAT-01**: Visitor sees a "Simple scheduling for your next game" section with descriptive copy
-- [ ] **FEAT-02**: Visitor can click any of the 4 step cards; the selected step is highlighted, its description text expands, and a paired illustration image is shown
+- [x] **FEAT-02**: Visitor can click any of the 4 step cards; the selected step is highlighted, its description text expands, and a paired illustration image is shown
 - [x] **FEAT-03**: Step 1 is active by default on page load
 
 ### Easy for Players Section
@@ -70,7 +70,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | HERO-01 | Phase 20 | Complete |
 | HERO-02 | Phase 23 | Pending |
 | FEAT-01 | Phase 20 | Complete |
-| FEAT-02 | Phase 22 | Pending |
+| FEAT-02 | Phase 22 | Complete |
 | FEAT-03 | Phase 20 | Complete |
 | PLAY-01 | Phase 20 | Complete |
 | PLAY-02 | Phase 23 | Pending |

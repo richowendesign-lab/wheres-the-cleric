@@ -23,9 +23,9 @@ See: .planning/PROJECT.md (updated 2026-03-13)
 ## Current Position
 
 Phase: 22 of 24 (Features Step-Selector)
-Plan: 0 of 0 in current phase (phase 22 not yet started)
+Plan: 1 of 1 in current phase (22-01 complete)
 Status: In progress
-Last activity: 2026-03-13 — Completed phase 21 (scroll animations verified by human — ANIM-01 + ANIM-02 satisfied)
+Last activity: 2026-03-13 — Completed 22-01 (FeaturesBlock interactive step-selector — FEAT-02 satisfied)
 
 Progress: [████████████░░░░░░░░] 0/5 v1.5 phases complete (Phase 21 complete — 2/2 plans done)
 
@@ -46,8 +46,9 @@ None.
 - page.tsx must never gain 'use client' — auth redirect guard stays as first lines of default export
 - Logo asset is Logo.svg (capital L) in /public — reference as /Logo.svg in src
 - Nav CTA buttons present in DOM but hidden via opacity-0 pointer-events-none — Phase 24 reveals on scroll
-- FeaturesBlock step 1 active state is hard-coded HTML/CSS (no useState) — Phase 22 adds interactivity
+- FeaturesBlock is now a fully interactive step-selector (useState(1), steps.map(), dynamic img src) — FEAT-02 satisfied
 - Landing sub-components split into src/components/landing/ directory (one file per section)
 - useInView hook at src/hooks/useInView.ts — native IntersectionObserver, fires once via disconnect(), reusable across phases
 - All four landing sections use 'use client' + useInView; HeroSection threshold 0 (above fold), others 0.1/0.15
 - Decisions: threshold 0 for HeroSection (fires on mount); observer.disconnect() for one-shot animation; no animation library added
+- Phase 22: useState(1) (1-indexed to match image filenames); steps array at module scope; plain <img> kept (not Next.js Image); opacity-60 on inactive cards without pointer-events-none
