@@ -76,10 +76,10 @@ Full phase details: `.planning/milestones/v1.3-ROADMAP.md`
   1. When the DM has marked at least one unavailable date, a DM unavailable colour swatch appears in the calendar legend; when no dates are marked the swatch is absent
   2. Clicking a DM-marked date in the Group Availability calendar shows a DM unavailable indicator in the date side panel alongside normal player rows
   3. When a date has zero free players, the date panel shows a single clear "No players available" message rather than listing every player as "no response"
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 17-01: TBD
+- [ ] 17-01-PLAN.md — Add DM unavailable legend swatch, panel indicator, and empty-state message to CampaignTabs.tsx
 
 ### Phase 18: How It Works Modal
 **Goal**: A self-contained, accessible "How it works" modal component exists and works correctly in isolation — with proper focus trap, keyboard dismiss, and step-card content for both DM and player perspectives — before being added to any page.
@@ -131,6 +131,6 @@ Plans:
 | 14. Dashboard Redesign | v1.3 | 4/4 | Complete | 2026-03-11 |
 | 15. Shareable Best Dates | v1.3 | 2/2 | Complete | 2026-03-11 |
 | 16. Custom Date Picker | v1.3 | 2/2 | Complete | 2026-03-11 |
-| 17. Calendar & Panel Clarity | v1.4 | 0/TBD | Not started | - |
+| 17. Calendar & Panel Clarity | v1.4 | 0/1 | Not started | - |
 | 18. How It Works Modal | v1.4 | 0/TBD | Not started | - |
 | 19. How It Works Page Integration | v1.4 | 0/TBD | Not started | - |
