@@ -15,7 +15,7 @@ Requirements for the Marketing Home Page milestone. Each maps to roadmap phases.
 ### Hero
 
 - [x] **HERO-01**: Visitor sees a hero section with the app icon, large heading, subtitle copy, and Sign up / Log in CTA buttons
-- [ ] **HERO-02**: Visitor can interact with an embedded DM dashboard demo showing a mock campaign with placeholder player data and best-day recommendations
+- [x] **HERO-02**: Visitor can interact with an embedded DM dashboard demo showing a mock campaign with placeholder player data and best-day recommendations
 
 ### Features Section
 
@@ -26,7 +26,7 @@ Requirements for the Marketing Home Page milestone. Each maps to roadmap phases.
 ### Easy for Players Section
 
 - [x] **PLAY-01**: Visitor sees an "Easy for players" section with a 3-card grid explaining the player onboarding flow
-- [ ] **PLAY-02**: Visitor can interact with an embedded player availability demo using placeholder data, with a planning window computed from the current date
+- [x] **PLAY-02**: Visitor can interact with an embedded player availability demo using placeholder data, with a planning window computed from the current date
 
 ### CTA & Footer
 
@@ -68,12 +68,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | NAV-01 | Phase 20 | Complete |
 | NAV-02 | Phase 24 | Pending |
 | HERO-01 | Phase 20 | Complete |
-| HERO-02 | Phase 23 | Pending |
+| HERO-02 | Phase 23 | Complete |
 | FEAT-01 | Phase 20 | Complete |
 | FEAT-02 | Phase 22 | Complete |
 | FEAT-03 | Phase 20 | Complete |
 | PLAY-01 | Phase 20 | Complete |
-| PLAY-02 | Phase 23 | Pending |
+| PLAY-02 | Phase 23 | Complete |
 | CTA-01 | Phase 20 | Complete |
 | CTA-02 | Phase 20 | Complete |
 | ANIM-01 | Phase 21 | Complete |

@@ -174,5 +174,5 @@ Plans:
 | 20. Static Page Shell | 2/2 | Complete   | 2026-03-13 | - |
 | 21. Scroll Animations | 2/2 | Complete   | 2026-03-13 | - |
 | 22. Features Step-Selector | 2/2 | Complete   | 2026-03-13 | - |
-| 23. Availability Demo | v1.5 | 0/2 | Not started | - |
+| 23. Availability Demo | 1/2 | In Progress|  | - |
 | 24. Sticky Nav Scroll Behaviour | v1.5 | 0/? | Not started | - |

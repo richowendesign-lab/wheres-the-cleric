@@ -23,9 +23,9 @@ See: .planning/PROJECT.md (updated 2026-03-13)
 ## Current Position
 
 Phase: 23 of 24 (Availability Demo)
-Plan: 0 of 2 in current phase
+Plan: 1 of 2 in current phase
 Status: In progress
-Last activity: 2026-03-13 — Completed Phase 22 (FeaturesBlock step-selector verified — FEAT-02 satisfied)
+Last activity: 2026-03-13 — Completed Phase 23 Plan 01 (useScrollInView hook + HeroDemoWidget + PlayerDemoWidget — HERO-02 and PLAY-02 building blocks ready)
 
 Progress: [████████████░░░░░░░░] 0/5 v1.5 phases complete (Phase 21 complete — 2/2 plans done)
 
@@ -52,3 +52,4 @@ None.
 - All four landing sections use 'use client' + useInView; HeroSection threshold 0 (above fold), others 0.1/0.15
 - Decisions: threshold 0 for HeroSection (fires on mount); observer.disconnect() for one-shot animation; no animation library added
 - Phase 22: useState(1) (1-indexed to match image filenames); steps array at module scope; plain <img> kept (not Next.js Image); opacity-60 on inactive cards without pointer-events-none
+- Phase 23-01: useScrollInView hook created — continuous bidirectional IntersectionObserver, no disconnect() in callback; HeroDemoWidget + PlayerDemoWidget self-contained with hardcoded mock data; DAY_AGGREGATIONS at module scope; PlayerDemoWidget Fri+Sat pre-selected
