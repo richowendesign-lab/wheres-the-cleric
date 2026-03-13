@@ -10,8 +10,8 @@ export default async function HomePage() {
   return (
     <main className="min-h-screen text-gray-100 flex flex-col items-center justify-center px-4">
       <Image src="/dnd-icon.png" alt="" width={96} height={96} className="mb-6" />
-      <div className="flex items-center gap-3 mb-4">
-        <h1 className="font-fantasy text-4xl text-white">D&amp;D Session Planner</h1>
+      <div className="flex flex-wrap items-center justify-center gap-3 mb-4">
+        <h1 className="font-fantasy text-4xl text-white text-center">D&amp;D Session Planner</h1>
         <span className="text-xs font-semibold bg-[#ba7df6]/20 text-[var(--dnd-accent)] border border-[#ba7df6]/40 rounded px-2 py-0.5 translate-y-[-2px]">
           Beta
         </span>
