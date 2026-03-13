@@ -18,14 +18,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-13)
 
 **Core value:** The DM can instantly see when everyone is free — without chasing people for responses or guessing which dates to offer.
-**Current focus:** Phase 22 — Features Step-Selector
+**Current focus:** Phase 23 — Availability Demo
 
 ## Current Position
 
-Phase: 22 of 24 (Features Step-Selector)
-Plan: 1 of 1 in current phase (22-01 complete)
+Phase: 23 of 24 (Availability Demo)
+Plan: 0 of 2 in current phase
 Status: In progress
-Last activity: 2026-03-13 — Completed 22-01 (FeaturesBlock interactive step-selector — FEAT-02 satisfied)
+Last activity: 2026-03-13 — Completed Phase 22 (FeaturesBlock step-selector verified — FEAT-02 satisfied)
 
 Progress: [████████████░░░░░░░░] 0/5 v1.5 phases complete (Phase 21 complete — 2/2 plans done)
 
