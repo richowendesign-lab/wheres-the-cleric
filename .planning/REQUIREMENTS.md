@@ -11,8 +11,8 @@ Requirements for Milestone v1.4: Clarity & Polish.
 
 - [ ] **HOW-01**: DM and player can open a "How it works" explainer from the logged-out home page, DM campaigns page, and player-facing pages (join + availability)
 - [ ] **HOW-02**: The trigger on the DM campaigns page is a small `?` icon button in the page heading; on other pages it suits the page context
-- [ ] **HOW-03**: The explainer modal displays visual numbered step cards (step number + heading + 1-line description) covering both DM and player perspectives
-- [ ] **HOW-04**: Modal is dismissible via backdrop click or Escape; focus is properly trapped while open
+- [x] **HOW-03**: The explainer modal displays visual numbered step cards (step number + heading + 1-line description) covering both DM and player perspectives
+- [x] **HOW-04**: Modal is dismissible via backdrop click or Escape; focus is properly trapped while open
 
 ### Calendar & Panel Clarity
 
@@ -54,8 +54,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 |-------------|-------|--------|
 | HOW-01 | Phase 19 | Pending |
 | HOW-02 | Phase 19 | Pending |
-| HOW-03 | Phase 18 | Pending |
-| HOW-04 | Phase 18 | Pending |
+| HOW-03 | Phase 18 | Complete |
+| HOW-04 | Phase 18 | Complete |
 | CLAR-01 | Phase 17 | Complete |
 | CLAR-02 | Phase 17 | Complete |
 | CLAR-03 | Phase 17 | Complete |
