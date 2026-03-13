@@ -127,6 +127,7 @@
 | v1.1 Onboarding | 3 | 8 | Phased migration pattern proven — schema → server → UI → verify |
 | v1.2 Multi-Campaign DM | 3 | 7 | Auth-first approach; data layer before UI; fastest milestone |
 | v1.3 DM Experience | 6 | 14 | Server Component boundary discipline; post-approval polish iterations; largest LOC delta |
+| v1.4 Clarity & Polish | 3 | 3 | Purely additive UI — fastest milestone; native dialog; icon consistency audit pattern |
 
 ### Top Lessons (Verified Across Milestones)
 
@@ -135,6 +136,7 @@
 3. **Ship and learn** — v1.0 revealed invite link friction that became v1.1; shipping quickly generates real product insight
 4. **Data layer before UI** — splitting schema/action plans from UI plans prevents wiring errors and enables parallel verification
 5. **Scope UX interactions upfront** — leaving interaction model implicit (clickable? side panel? keyboard nav?) guarantees a post-approval iteration; specify it in the plan success criteria
+6. **Specify icon style and layout in success criteria** — name the icon, colour, and alignment to avoid post-approval feedback rounds
 
 ---
 
@@ -182,4 +184,44 @@
 - Sessions: 4-5 (schema/utilities, share modal, DM exceptions, dashboard redesign, best dates + date picker)
 - Notable: Largest LOC delta of any milestone (+9,558 / -348) — dashboard redesign and DatePickerInput were the biggest contributors
 
+
+
+---
+
+## Milestone: v1.4 — Clarity & Polish
+
+**Shipped:** 2026-03-13
+**Phases:** 3 | **Plans:** 3 | **Timeline:** 1 day (2026-03-13)
+
+### What Was Built
+- DM unavailable legend swatch in Group Availability calendar (conditional on dmExceptionDates.length > 0) with matching exclamation-circle indicator in date side panel and Best Days cards ("DM unavailable" label)
+- "No players available this day." empty state in date panel when freeCount === 0
+- HowItWorksModal — native `<dialog>` with full focus trap, visual numbered step cards, DM/player role toggle, backdrop + Escape dismiss
+- HowItWorksButton wired into all four pages: home (below auth buttons), campaigns (icon-only with logout), join (near heading), availability (near heading)
+
+### What Worked
+- Native `<dialog>` for focus trap — zero dependencies, spec-correct, works across all browsers; the right call vs a JS-managed div overlay
+- Single-plan phases worked well for small-scope additive changes — no wave overhead for three sequential 1-plan phases
+- Icon consistency applied retroactively (Best Days "DM busy" → exclamation-circle "DM unavailable") was a quick win with meaningful UX improvement
+- Committed v1.3 before starting v1.4 gave a clean baseline — stat tracking and tagging stayed accurate
+
+### What Was Inefficient
+- Phase 17 checkpoint required two post-approval polish rounds: (1) amber square → exclamation-circle icon in panel, (2) consistent icon + label in Best Days cards — both should have been in the original plan spec
+- Phase 18 verification revealed the modal wasn't centered and the trigger icon/position needed adjustment — layout details that can be specified upfront with a simple mockup in the plan
+
+### Patterns Established
+- Native `<dialog>` + `showModal()` / `close()` is the correct pattern for modals requiring focus containment — use for any new modals; `ShareModal` is a candidate for future upgrade
+- `defaultRole` prop on `HowItWorksButton` — Server Components pass the correct default; Client Component manages toggle state internally
+- Exclamation-circle SVG as the standard "DM unavailable" icon — matches the visual language of the date panel and Best Days list
+- Post-checkpoint icon audits: whenever a new icon/indicator is added, check all components that represent the same concept for consistency
+
+### Key Lessons
+1. **Specify icon style in plan success criteria** — "show a DM unavailable indicator" is not specific enough; "show an exclamation-circle SVG in amber" avoids a post-approval feedback round
+2. **Layout alignment is part of the acceptance criteria** — "modal appears" should include "modal is horizontally centered and does not overflow viewport"
+3. **Icon consistency audit should be a task in any plan that introduces a new icon** — adding an icon to one component means checking all related components for the same concept
+4. **1-plan phases are appropriate for sub-100-line changes** — no planning overhead needed when the work is a single focused file edit
+
+### Cost Observations
+- Sessions: 1 (all three phases in a single day)
+- Notable: Fastest milestone yet — 3 phases, 1 day, 20 files, +2,217 LOC; purely additive UI work with no data model changes
 

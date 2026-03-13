@@ -1,5 +1,19 @@
 # Milestones
 
+## v1.4 Clarity & Polish (Shipped: 2026-03-13)
+
+**Phases completed:** 3 phases, 3 plans
+**Files modified:** 20 | **LOC:** +2,217 / -80 | **Timeline:** 1 day (2026-03-13)
+
+**Key accomplishments:**
+- DM unavailable legend swatch appears in Group Availability calendar key when DM has marked dates — absent otherwise
+- Clicking a DM-marked date in the calendar shows an exclamation-circle "DM unavailable" indicator in the date panel; consistent icon also added to Best Days cards ("DM unavailable" label replacing "DM busy")
+- Date panel now shows a single clear "No players available this day." message when no players are free, instead of listing each player as "no response"
+- "How it works" modal with visual numbered step cards (DM and player workflows) — native dialog element with full focus trap and Escape/backdrop dismiss
+- How it works trigger wired into all four pages — icon-only ⓘ button grouped with logout on DM campaigns page; contextual link on home, join, and availability pages
+
+---
+
 ## v1.3 DM Experience & Scheduling Flow (Shipped: 2026-03-12)
 
 **Phases completed:** 6 phases, 14 plans
@@ -46,3 +60,4 @@
 - (none recorded)
 
 ---
+

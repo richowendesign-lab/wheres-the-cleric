@@ -57,7 +57,8 @@ The DM can instantly see when everyone is free — without chasing people for re
 - Shipped v1.1 in 4 days (2026-02-27 → 2026-03-02): 3 phases, 8 plans, +3,053 / -241 LOC
 - Shipped v1.2 in 2 days (2026-03-04 → 2026-03-05): 3 phases, 7 plans, +2,540 / -77 LOC
 - Shipped v1.3 in 3 days (2026-03-09 → 2026-03-12): 6 phases, 14 plans, +9,558 / -348 LOC
-- Current codebase: ~16,000 TypeScript LOC (estimated)
+- Shipped v1.4 in 1 day (2026-03-13): 3 phases, 3 plans, +2,217 / -80 LOC
+- Current codebase: ~18,000 TypeScript LOC (estimated)
 - Tech stack: Next.js 16, React 19, TypeScript, Tailwind CSS 4, Prisma 7, bcryptjs, SQLite (local) / Neon PostgreSQL (production)
 - Deployed to Vercel: https://my-portfolio-henna-ten-97.vercel.app
 - Access model: DM has email+password account with httpOnly session cookie; players are still cookie-based (no login required)
