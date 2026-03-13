@@ -1,187 +1,230 @@
-# Technology Stack — v1.4 Additions
+# Technology Stack — v1.5 Additions
 
 **Project:** Where's the Cleric — D&D Session Planner
-**Milestone:** v1.4 UI Clarity (onboarding modal + calendar legend/date modal polish)
-**Researched:** 2026-03-12
-**Scope:** NEW capabilities only — existing stack is validated (Next.js 16 App Router, React 19, Tailwind CSS 4, Prisma 7 + Neon, bcryptjs, CSS-only tooltips, clipboard API, custom date picker with hidden input pattern, optimistic UI).
+**Milestone:** v1.5 Marketing Home Page
+**Researched:** 2026-03-13
+**Scope:** NEW capabilities only — scroll-triggered entrance animations, sticky nav with scroll-opacity transition, and interactive client components (feature step-selector, availability demo embed). Existing stack is validated and not re-researched.
 
 ---
 
 ## Verdict Up Front
 
-**Zero new dependencies.** Both new features — the "How it works" modal and the calendar legend/date modal polish — are fully achievable by extending the patterns already in production in this codebase. Adding a modal library, animation library, or any other package would be gold-plating.
+**One optional dependency, all other capabilities are zero-cost using what already exists.**
+
+The existing stack — Next.js 16 App Router, React 19, Tailwind CSS 4, and the CSS `transition` pattern already proven in `Toast.tsx` and `CampaignTabs.tsx` — is sufficient for every v1.5 animation requirement without adding any library.
+
+The one decision worth making explicitly: **do NOT add Framer Motion** for this landing page. The rationale is below. Vanilla `IntersectionObserver` with CSS transitions and `useEffect`/`useState` is the correct, proportionate choice.
 
 ---
 
-## Context: What Already Exists and Is Directly Reusable
+## The Core Decision: Framer Motion vs Vanilla IntersectionObserver
 
-| Capability | File | Relevance to v1.4 |
-|------------|------|-------------------|
-| Fixed-overlay modal with backdrop dismiss + Escape close | `ShareModal.tsx` | Direct template for "How it works" modal — same `useState(open)` pattern, same overlay `<div>`, same dismiss flow |
-| Slide-in side panel with CSS `translate-x` transition | `CampaignTabs.tsx` lines 116–153 | This IS the date click modal — needs legend row + DM unavailable indicator added in-place |
-| Inline legend swatches (Free, No response) | `CampaignTabs.tsx` lines 256–263 | DM unavailable swatch is a third `<span>` added to the existing flex row |
-| CSS custom properties for theming | `globals.css` | `--dnd-accent`, `--dnd-card-bg`, `--dnd-border-card` etc. — all new modal/card elements inherit these |
-| `useEffect` keyboard listener (Escape key) | `CampaignTabs.tsx` lines 73–79 | Already handles Escape to close the side panel |
-| Numbered visual cards (none yet, but the grid/card pattern) | `CampaignTabs.tsx`, `campaigns/page.tsx` | Existing card structure (`border`, `rounded-lg`, `bg-[var(--dnd-card-bg)]`) is the visual base |
+### What v1.5 Actually Needs
 
----
+| Requirement | Animation complexity |
+|-------------|---------------------|
+| Section entrance on scroll (fade up) | One-shot trigger: invisible → visible |
+| Sticky nav background on scroll | `scrollY > threshold` → class toggle |
+| Interactive step-selector (FeaturesBlock) | `useState` active index, CSS class swap |
+| Availability demo embed | Client component with placeholder state, no animation |
 
-## Feature 1: "How It Works" Modal
+All four are discrete, one-directional state changes — not spring physics, not drag, not layout animations, not shared element transitions. This is the exact profile where Framer Motion's overhead is unjustified.
 
-### What it needs
+### Why Not Framer Motion
 
-A modal with visual numbered step cards. Each card has: a step number (styled circle), heading, one-line description. Two perspectives: DM and Player. Triggered from home page, DM campaigns page, and player-facing pages.
+**Bundle cost is real.** Framer Motion (the `framer-motion` package) is approximately 50–60 KB gzipped. The `motion` package (the newer standalone version) is ~30 KB gzipped. For a marketing page where LCP matters, adding 30–60 KB of JS for fade-in effects is a measurable regression.
 
-### Technology verdict
+**`use client` surface area.** In Next.js App Router, any component using Framer Motion must be a Client Component. The landing page sections (`HeroSection`, `FeaturesBlock`, `EasyForPlayersSection`, `CTASection`) are currently good candidates to be Server Components — they render static markup. Adding Framer Motion forces all of them to `'use client'`, which disables React Server Component streaming for that subtree and increases client JS hydration cost.
 
-**Pattern:** Extend `ShareModal.tsx` directly. The component is small (60 lines), uses `useState(true/false)` for open state, a fixed backdrop `<div>` with `onClick={dismiss}`, and a centred content panel. The "How it works" modal is this pattern with different inner content.
+**Maintenance tax.** Framer Motion's API surface is large and changes between major versions (v10 → v11 → v12 renamed the package). For simple entrance animations that will not change after shipping, a third-party animation library is ongoing dependency maintenance for zero ongoing benefit.
 
-**Numbered cards:** Pure Tailwind. A numbered circle is `w-8 h-8 rounded-full bg-[var(--dnd-accent)] text-black flex items-center justify-center text-sm font-bold shrink-0`. No icon library. No external component.
+**The codebase already has the right pattern.** `Toast.tsx` demonstrates exactly the pattern needed for scroll entrance animations: a conditional CSS class toggles `opacity-0 translate-y-2` → `opacity-100 translate-y-0` with `transition-all duration-300`. The only thing scroll entrance animations add is an `IntersectionObserver` to fire the trigger when the element enters the viewport instead of when a state boolean changes.
 
-**Trigger button:** A plain `<button>` or `<Link>` styled with `text-[var(--dnd-text-muted)] hover:text-white transition-colors` — same pattern as the "Log out" button in `campaigns/page.tsx`.
+### When Framer Motion Would Be Justified
 
-**State management:** `useState(false)` in the trigger component (`'use client'`). Modal is rendered conditionally (`if (!open) return null`). No portal, no `createPortal` — the modal is fixed-positioned so z-index stacking handles visual layering correctly without a DOM portal. This is exactly what `ShareModal.tsx` does and it works in production.
+Framer Motion is the right choice when you need: spring-physics animations, drag interactions, layout animations (animating between DOM positions), shared element transitions, or complex choreographed sequences. None of these are in v1.5.
 
-**No `<dialog>` element needed.** The `<dialog>` element has full browser support (Chrome 37+, Firefox 98+, Safari 15.4+) and native focus-trapping, but this app's existing modals use the fixed-overlay-div pattern and it works. Switching to `<dialog>` would require new CSS patterns (the `::backdrop` pseudo-element, `showModal()` JS API) for no user-visible benefit at this app's scale. Maintain consistency with `ShareModal.tsx`.
+### Verdict
 
-**Accessibility minimum:** `aria-modal="true"` on the panel div, `role="dialog"`, `aria-labelledby` pointing to the heading. `Escape` key close via `useEffect` (same as `CampaignTabs.tsx`). No focus-trap library needed — the modal is simple enough that a `tabIndex` on the close button and logical DOM order are sufficient.
-
-### What NOT to add
-
-| Library | Why Not |
-|---------|---------|
-| `@radix-ui/react-dialog` | Adds ~12 KB gzipped; the ShareModal pattern already handles the same use case in production |
-| `@headlessui/react` Dialog | Requires Tailwind CSS 4 config alignment; unnecessary at this scale |
-| `framer-motion` | Animation overkill — CSS `transition-opacity` on the overlay (already used in CampaignTabs snackbar) is sufficient |
-| `focus-trap-react` | Not needed — modal content is simple (heading + cards + close button); native tab order suffices |
+**Use vanilla IntersectionObserver + CSS transitions. Zero new dependencies.**
 
 ---
 
-## Feature 2: Calendar Legend + Date Click Modal Polish
+## Recommended Stack for v1.5
 
-### What it needs
+### Scroll Entrance Animations
 
-1. A DM unavailable colour swatch added to the Group Availability legend.
-2. The date side panel (slide-in at `right-0`) shows a DM unavailable indicator when the clicked date has a DM exception.
-3. The side panel shows a clear "No players available" message instead of listing everyone as "No response" when zero players are free.
+**Approach:** A single reusable `FadeInSection` client component wraps each landing page section. It uses `useRef` + `useEffect` to attach an `IntersectionObserver` and toggles a `data-visible` attribute (or a `useState` boolean) that activates a Tailwind transition.
 
-### Technology verdict
+**Why this works:**
+- `IntersectionObserver` is a native browser API — zero JS bundle cost
+- The CSS transition pattern (`opacity-0 translate-y-4 → opacity-100 translate-y-0 transition-all duration-500`) is already proven in `Toast.tsx` and `CampaignTabs.tsx` side panel
+- The `FadeInSection` component is small (< 20 lines), completely self-contained, and easy to delete if requirements change
+- `{ once: true }` on the observer means it fires once and disconnects — no ongoing observer overhead
 
-**Legend swatch:** One additional `<span>` element added to the existing flex legend row in `CampaignTabs.tsx` (lines 256–263). No new component. Colour: amber (`bg-amber-400/60` or `bg-amber-400`) — this already appears in `DashboardCalendar.tsx` as `ring-amber-400/60` on DM-blocked dates, so the colour is already established in the visual language.
+**No library needed.**
 
-**Side panel DM indicator:** The `agg` object (`DayAggregation`) is already available in the side panel render at lines 119–153 of `CampaignTabs.tsx`. `dmBlocked` is already a field on `DayAggregation` (used in `DashboardCalendar.tsx` line 143: `agg?.dmBlocked`). Adding a DM unavailable indicator is a conditional `{agg?.dmBlocked && <div>...</div>}` inside the existing panel body. No new data fetch, no schema change.
+### Sticky Nav Scroll Detection
 
-**"No players available" message:** The side panel iterates `playerSlots.map(...)` to render each player. Wrap this with a check: if all statuses are `'no-response'`, render a single message instead of the list. Pure conditional logic in JSX.
+**Approach:** The nav component is a `'use client'` component. `useEffect` attaches a `scroll` event listener on `window`. When `window.scrollY > 20` (threshold), a boolean state flips. The nav's `className` conditionally applies `bg-[var(--dnd-input-bg)]/90 backdrop-blur-sm` vs `bg-transparent`.
 
-### What NOT to add
+**Why this works:**
+- This is exactly the sticky nav pattern used across the Next.js ecosystem without any library
+- `window.scrollY` is synchronous and cheap to read on the scroll event
+- The Tailwind transition on the nav background (`transition-colors duration-200`) is already the pattern in this codebase
+- The existing `globals.css` design tokens (`--dnd-input-bg`, `--dnd-card-bg`) provide the right dark background colours
 
-Nothing. These are surgical inline changes to `CampaignTabs.tsx` and the legend JSX block.
+**Debouncing note:** The scroll listener does NOT need `use-debounce` (already in `package.json` for form inputs). Nav background transition is a direct visual response to scroll position and must not be debounced — debouncing creates a visible lag. A simple `useState` boolean flip on the scroll handler is correct.
+
+**No library needed.**
+
+### Interactive Feature Step-Selector (FeaturesBlock)
+
+**Approach:** A `'use client'` component with `useState<number>(0)` tracking the active step index. Clicking a step calls `setActiveStep(i)`. The active step gets a distinct visual state via a conditional Tailwind class. The image area renders `activeStep`-dependent content.
+
+**Why this works:**
+- This is pure React state management — the same pattern as `CampaignTabs.tsx` tab selection (`activeTab` state)
+- No animation library needed; CSS transitions on the image (`opacity`, `transition-opacity`) handle the swap visual
+- The FeaturesBlock is already planned as a `'use client'` component (it needs interactivity), so there is no `use client` promotion cost
+
+**No library needed.**
+
+### Interactive Availability Demo Embed
+
+**Approach:** A `'use client'` component that renders a read-only, non-navigating version of the player availability UI with hardcoded placeholder data. No auth, no server actions, no real routing. The component owns its own state for which day is "selected" in the demo.
+
+**Reuse opportunity:** `AvailabilityCalendar.tsx` and `WeeklySchedule.tsx` are existing Client Components. They may be directly reusable with placeholder props passed as data rather than fetched from the DB — this depends on whether they accept props or fetch internally. This is an implementation-phase question, not a stack question.
+
+**No library needed.**
 
 ---
 
-## Stack Delta: v1.4 Adds Nothing to `package.json`
+## Full Stack Delta: v1.5 Adds Nothing to `package.json`
 
 | Package | Action | Rationale |
 |---------|--------|-----------|
-| Any modal/dialog library | Do NOT add | `ShareModal.tsx` pattern is already proven in production and handles this case |
-| Any animation library | Do NOT add | CSS `transition-opacity` / `transition-transform` (already in CampaignTabs snackbar and side panel) is sufficient |
-| Any icon library | Do NOT add | Numbered circles and step indicators are pure Tailwind + inline SVG; consistent with existing pattern |
-| Any focus-trap library | Do NOT add | Modal content is simple; `aria-modal` + logical tab order satisfies accessibility at this scale |
-| `@radix-ui/react-popover` | Do NOT add | Not needed — trigger for "How it works" is a simple `useState` toggle |
+| `framer-motion` / `motion` | Do NOT add | 30–60 KB gzipped for effects achievable with CSS transitions; forces unnecessary `'use client'` on section components |
+| `@react-spring/web` | Do NOT add | Same objection as Framer Motion — spring physics not needed for fade-in |
+| `react-intersection-observer` | Do NOT add | Thin wrapper around native `IntersectionObserver`; the wrapper's only benefit is hook-based API, which a 10-line custom hook replicates without the dependency |
+| `react-scroll` | Do NOT add | Anchor-based smooth scroll — not needed; CSS `scroll-behavior: smooth` or `scrollIntoView` is sufficient if needed |
+| `lenis` / smooth-scroll | Do NOT add | Smooth scroll hijacking; adds complexity, can impair accessibility, and is out-of-character for this app's lightweight approach |
+| `@headlessui/react` | Do NOT add | No new modal or popover patterns in v1.5; existing patterns are sufficient |
+| Any animation library | Do NOT add | CSS transitions are the right tool for all v1.5 animation requirements |
 
 ---
 
-## Implementation Patterns for New Components
+## New Components to Create (Not New Dependencies)
 
-### HowItWorksModal Component
+| Component | Type | Purpose |
+|-----------|------|---------|
+| `StickyNav` | `'use client'` | Scroll-aware sticky nav; owns `useEffect` scroll listener and `useState(scrolled)` |
+| `FadeInSection` | `'use client'` | Wraps any section; uses `IntersectionObserver` to trigger entrance animation |
+| `FeaturesBlock` | `'use client'` | Interactive step-selector for the Features section; owns `useState(activeStep)` |
+| `AvailabilityDemo` | `'use client'` | Read-only demo embed with placeholder data; no auth or navigation |
+| `HeroSection` | Server Component | Static hero markup; no interactivity, no animation (or wraps self in `FadeInSection`) |
+| `EasyForPlayersSection` | Server Component | Static card grid; wrapped in `FadeInSection` |
+| `CTASection` | Server Component | Static final CTA; wrapped in `FadeInSection` |
 
-Create `src/components/HowItWorksModal.tsx` as a `'use client'` component. Accept an `open` prop and `onClose` callback, or own its open state internally depending on trigger placement.
+**Pattern:** Static sections are Server Components. They are wrapped by `FadeInSection` (a Client Component), which adds the scroll trigger. The static section content itself does not need to be a Client Component — the wrapper handles the animation boundary.
 
-Skeleton structure mirrors `ShareModal.tsx`:
-
-```tsx
-// Fixed backdrop
-<div className="fixed inset-0 z-50 flex items-center justify-center">
-  <div className="fixed inset-0 bg-black/60" onClick={onClose} />
-  <div
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="how-it-works-title"
-    className="relative bg-[var(--dnd-input-bg)] border border-[#ba7df6]/30 rounded-lg p-6 max-w-lg w-full mx-4"
-  >
-    {/* close button + heading + step cards */}
-  </div>
-</div>
-```
-
-Numbered step card:
-
-```tsx
-<div className="flex items-start gap-4 bg-[var(--dnd-card-bg)] border border-[var(--dnd-border-card)] rounded-lg px-4 py-3">
-  <span className="w-7 h-7 rounded-full bg-[var(--dnd-accent)] text-black flex items-center justify-center text-sm font-bold shrink-0 mt-0.5">
-    {stepNumber}
-  </span>
-  <div>
-    <p className="text-sm font-semibold text-white">{heading}</p>
-    <p className="text-sm text-[var(--dnd-text-muted)] mt-0.5">{description}</p>
-  </div>
-</div>
-```
-
-Escape key handling:
-
-```tsx
-useEffect(() => {
-  if (!open) return
-  function onKey(e: KeyboardEvent) { if (e.key === 'Escape') onClose() }
-  window.addEventListener('keydown', onKey)
-  return () => window.removeEventListener('keydown', onKey)
-}, [open, onClose])
-```
-
-This pattern is taken directly from `CampaignTabs.tsx` lines 73–79. No new patterns introduced.
-
-### Legend DM Unavailable Swatch
-
-Add a third swatch to the existing legend block in `CampaignTabs.tsx`:
-
-```tsx
-<span className="flex items-center gap-1.5">
-  <span className="inline-block w-2.5 h-2.5 rounded-sm bg-amber-400/60 ring-1 ring-amber-400/60" />
-  DM unavailable
-</span>
-```
-
-Uses `rounded-sm` (square-ish) to visually distinguish from the circular player dots, matching the amber ring already used on calendar cells.
-
-### Date Side Panel Enhancements
-
-Both changes go inside the existing `{selectedDate && (() => { ... })()}` IIFE in `CampaignTabs.tsx`:
-
-1. DM unavailable indicator — add before the player list:
-```tsx
-{agg?.dmBlocked && (
-  <div className="flex items-center gap-2 px-1 py-2 border-b border-gray-800 mb-1">
-    <span className="w-3 h-3 rounded-sm bg-amber-400/60 shrink-0" />
-    <span className="text-sm text-amber-300">DM unavailable</span>
-  </div>
-)}
-```
-
-2. "No players available" message — replace the player list when all are non-responsive:
-```tsx
-{playerSlots.every(slot => (agg?.playerStatuses[slot.id] ?? 'no-response') === 'no-response') ? (
-  <p className="text-sm text-[var(--dnd-text-muted)]">No players available on this date.</p>
-) : (
-  playerSlots.map(slot => { /* existing per-player row */ })
-)}
-```
+This preserves the narrow `'use client'` island discipline already established in this codebase.
 
 ---
 
-## Shared Component Extraction Opportunity
+## Integration With Next.js App Router
 
-The "How it works" trigger button will appear on three pages (home, campaigns, player-facing). Create a small `HowItWorksButton.tsx` (`'use client'`) that owns the `useState(open)` and renders both the trigger button and the modal inline. Import this on each page. This avoids prop-drilling the open state upward into Server Components.
+### `'use client'` Boundary Rules (No Changes to Existing Pattern)
+
+The existing pattern — narrow client islands, Server Component pages — must be maintained for the landing page.
+
+| Component | Boundary | Why |
+|-----------|----------|-----|
+| `page.tsx` (home) | Server Component | Reads session, redirects logged-in DMs, renders layout |
+| `StickyNav` | `'use client'` | Needs `useEffect` scroll listener |
+| `FadeInSection` | `'use client'` | Needs `useEffect` + `useRef` for `IntersectionObserver` |
+| `FeaturesBlock` | `'use client'` | Needs `useState` for active step |
+| `AvailabilityDemo` | `'use client'` | Needs `useState` for demo interaction |
+| `HeroSection`, `EasyForPlayersSection`, `CTASection` | Server Components | Static markup; no client state needed |
+
+**Key rule:** `FadeInSection` is a Client Component that accepts `children`. Its `children` can still be Server Component output — React allows Server Component trees to be passed as children to Client Components. This means wrapping a static section in `<FadeInSection>` does NOT force the static section's markup to become a Client Component.
+
+### `useEffect` and SSR Safety
+
+`IntersectionObserver` and `window.scrollY` are browser-only APIs. Both must be accessed inside `useEffect` (not at module top level or in render). This is the existing pattern in `CampaignTabs.tsx` (lines 73–79 use `useEffect` for keyboard listeners). No special handling needed.
+
+### Tailwind CSS 4 Compatibility
+
+All new CSS patterns (scroll-triggered opacity, backdrop-blur for nav background) use standard Tailwind utility classes. No new configuration in `tailwind.config.ts` or `globals.css` is required beyond what is already there.
+
+The existing `bg-[var(--dnd-input-bg)]` token pattern works for the sticky nav background. The nav background transition at scroll threshold is `bg-transparent` → `bg-[#1e0439]/90 backdrop-blur-sm` with `transition-colors duration-200` — all existing utilities.
+
+---
+
+## Implementation Patterns
+
+### FadeInSection Component (10–15 lines)
+
+```tsx
+'use client'
+import { useEffect, useRef, useState } from 'react'
+
+export function FadeInSection({ children, className = '' }: {
+  children: React.ReactNode
+  className?: string
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect() } },
+      { threshold: 0.1 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
+  return (
+    <div
+      ref={ref}
+      className={`transition-all duration-500 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'} ${className}`}
+    >
+      {children}
+    </div>
+  )
+}
+```
+
+This is the exact pattern. The `once: true` equivalent is achieved by calling `obs.disconnect()` after the first intersection.
+
+### StickyNav Scroll Detection (core logic)
+
+```tsx
+'use client'
+import { useEffect, useState } from 'react'
+
+export function StickyNav() {
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    function onScroll() { setScrolled(window.scrollY > 20) }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  return (
+    <nav className={`fixed top-0 inset-x-0 z-40 transition-colors duration-200 ${
+      scrolled ? 'bg-[#1e0439]/90 backdrop-blur-sm' : 'bg-transparent'
+    }`}>
+      {/* logo, badge, CTAs */}
+    </nav>
+  )
+}
+```
+
+`{ passive: true }` on the scroll listener is important — it signals to the browser the handler will not call `preventDefault()`, enabling scroll performance optimisation.
 
 ---
 
@@ -189,12 +232,13 @@ The "How it works" trigger button will appear on three pages (home, campaigns, p
 
 | Area | Level | Basis |
 |------|-------|-------|
-| Modal — no library needed | HIGH | `ShareModal.tsx` is already identical pattern in production; verified by reading source |
-| Legend swatch — inline change | HIGH | Legend JSX read directly from `CampaignTabs.tsx`; one `<span>` addition |
-| Date panel DM indicator | HIGH | `agg.dmBlocked` is already on `DayAggregation`; confirmed in `DashboardCalendar.tsx` line 143 |
-| "No players" message | HIGH | Pure JSX conditional logic on existing data; no new data shape |
-| Accessibility (aria-modal, Escape) | MEDIUM | Patterns used are correct for simple modals; full WCAG audit not performed |
-| Zero new package.json deps | HIGH | All capabilities traced to existing working code in this codebase |
+| Framer Motion bundle cost | MEDIUM | Training data (August 2025 cutoff); npm registry was inaccessible for live version check. Bundle sizes are documented at bundlephobia.com; the ~30-60 KB range is consistent across multiple sources in training data. Exact current size should be verified if Framer Motion is reconsidered. |
+| IntersectionObserver browser support | HIGH | Universal support in all modern browsers; part of the Living Standard; no polyfill needed for 2026 |
+| `{ passive: true }` scroll listener | HIGH | Web platform standard; documented MDN API; no library dependency |
+| CSS transition pattern for scroll animations | HIGH | Verified directly from `Toast.tsx` and `CampaignTabs.tsx` in this codebase — identical pattern already in production |
+| Next.js App Router `'use client'` children pattern | HIGH | Established Next.js App Router behaviour; Server Component children can be passed to Client Component wrappers — this is core to the RSC composition model |
+| Tailwind CSS 4 utility compatibility | HIGH | All classes used (`transition-all`, `opacity-0`, `translate-y-6`, `backdrop-blur-sm`, `bg-[...]/90`) are standard Tailwind 4 utilities confirmed by existing codebase usage |
+| Zero new dependencies conclusion | HIGH | All four animation/interactivity requirements traced to existing browser APIs + existing codebase patterns |
 
 ---
 
@@ -202,19 +246,30 @@ The "How it works" trigger button will appear on three pages (home, campaigns, p
 
 | Library | Why Not |
 |---------|---------|
-| `@radix-ui/react-dialog` | `ShareModal.tsx` already handles modal in production |
-| `@headlessui/react` | Heavyweight; requires Tailwind CSS 4 config compatibility work |
-| `framer-motion` | CSS transitions already handle all animation in the app |
-| `focus-trap-react` | Unnecessary for content this simple |
-| `react-modal` | Old library; fixed-div pattern is more compatible with Next.js App Router |
-| Any icon library | All visual indicators are inline Tailwind `<span>` elements or inline SVG |
-| `clsx` / `classnames` | Template literals already used throughout; no complex class merging in these features |
+| `framer-motion` | 30–60 KB gzipped for effects achievable with 10-line CSS transitions; forces `'use client'` on static sections; version churn (v10→v11→v12 renamed the package) |
+| `motion` (Framer's rebranded standalone) | Same objection — smaller bundle but still unnecessary |
+| `@react-spring/web` | Spring physics not needed; fade-up is linear/ease — no spring |
+| `react-intersection-observer` | Thin wrapper; the underlying `IntersectionObserver` API is native and stable |
+| `lenis` | Smooth scroll hijacking; accessibility concerns; over-engineered for this app |
+| `react-scroll` | Anchor scrolling library; CSS `scroll-behavior: smooth` suffices if needed |
+| `gsap` | Professional animation toolchain; 50+ KB; massive overkill |
+| `aos` (Animate on Scroll) | jQuery-era library; adds CSS and JS overhead; the `FadeInSection` component does the same thing in < 20 lines |
+| `swiper` | Carousel library; no carousel needed in v1.5 |
+| `@headlessui/react` | No new modal/popover patterns in v1.5 |
+| `clsx` / `classnames` | Template literals already used throughout the codebase |
 
 ---
 
 ## Sources
 
-- Codebase analysis (HIGH confidence): `ShareModal.tsx`, `CampaignTabs.tsx`, `DashboardCalendar.tsx`, `globals.css`, `package.json` — all read directly
-- `DayAggregation.dmBlocked` field existence: confirmed in `DashboardCalendar.tsx` line 143 `agg?.dmBlocked` usage
-- `<dialog>` browser support: established Web platform knowledge, Chrome 37+ / Firefox 98+ / Safari 15.4+ (MEDIUM confidence — not verified via MDN in this session due to WebSearch unavailability, but universally documented)
-- Existing amber colour token: confirmed in `DashboardCalendar.tsx` line 143 `ring-amber-400/60` class
+- Codebase inspection (HIGH confidence): `Toast.tsx`, `CampaignTabs.tsx`, `globals.css`, `package.json`, `page.tsx` — all read directly in this research session
+- `IntersectionObserver` API: Web platform standard, Living Standard; universal browser support in 2026 (HIGH confidence — established platform knowledge)
+- `{ passive: true }` event listener flag: MDN documented Web API (HIGH confidence)
+- Next.js App Router RSC composition (Server children in Client wrappers): Core RSC model, documented in Next.js App Router docs (HIGH confidence — training data through August 2025, stable API)
+- Framer Motion bundle size (~30–60 KB gzipped): Training data; bundlephobia.com is the authoritative source for live verification (MEDIUM confidence — live npm registry was inaccessible during this research session)
+- Tailwind CSS 4 `backdrop-blur-sm`, `opacity-0`, `translate-y-*` utilities: Confirmed by existing codebase usage patterns (HIGH confidence)
+
+---
+
+*Research completed: 2026-03-13*
+*Ready for roadmap: yes*

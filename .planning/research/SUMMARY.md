@@ -1,166 +1,191 @@
 # Project Research Summary
 
-**Project:** Where's the Cleric — D&D Session Planner (v1.4 UI Clarity)
-**Domain:** Next.js 16 App Router web app — scheduling tool for small groups
-**Researched:** 2026-03-12
+**Project:** Where's the Cleric — D&D Session Planner
+**Domain:** Marketing landing page integrated into existing Next.js App Router app (v1.5)
+**Researched:** 2026-03-13
 **Confidence:** HIGH
 
 ## Executive Summary
 
-v1.4 is a focused UI clarity milestone adding four features to an already-working app: a "How it works" onboarding modal, a DM unavailable legend entry in the Group Availability calendar, a DM unavailable indicator in the date side panel, and a clearer empty state when no players are available on a selected date. All research converges on a single conclusion: zero new dependencies, zero schema changes, zero new server actions. Every required capability already exists in the codebase and is either directly reusable (the `ShareModal` modal pattern, `CampaignTabs` side panel, `DayAggregation.dmBlocked` field) or a trivial extension of it.
+This milestone adds a full marketing landing page to an existing, live application. The product is a niche scheduling tool for D&D groups; the research task was to determine how to build a persuasive, animated marketing page without disrupting the running app. All four research areas converge on a single, clear finding: everything needed already exists. The stack requires zero new dependencies. The architecture follows the narrow `'use client'` island discipline the codebase has already established. The demo components can be built by wrapping existing `WeeklySchedule` and `AvailabilityCalendar` components in a new stateful shell. No animation library is justified.
 
-The recommended approach is surgical. The three calendar/panel changes are concentrated in `CampaignTabs.tsx` (three small JSX additions), and the modal is a new standalone client component (`HowItWorksModal` + `HowItWorksButton`) that follows the established `ShareModal` and narrow-island patterns already in production. Build order matters: the `CampaignTabs` changes (legend, indicator, empty state) are near-zero-risk and should land first; the modal is self-contained but introduces the most surface area and should be built and tested independently before being wired into four pages.
+The recommended approach is to build the landing page as a set of collocated components in `src/components/landing/`, with `app/page.tsx` remaining a thin Server Component that handles the auth-check-then-redirect pattern before rendering the marketing content. Scroll animations use native `IntersectionObserver` + Tailwind CSS transitions. The interactive demo is a self-contained client component with hardcoded placeholder data and no server action calls. The FeaturesBlock step-selector is pure `useState`. All of this is consistent with patterns already proven in the codebase (`Toast.tsx`, `CampaignTabs.tsx`, `HowItWorksModal`).
 
-The principal risks are architectural discipline risks, not technical ones. The Server Component pages that need the "How it works" trigger button must not be converted to Client Components. The modal must not manipulate the URL or browser history. It should use the native `<dialog>` element (or add `aria-modal`/`aria-labelledby` to the div-overlay) to satisfy focus-trap and accessibility requirements that `ShareModal` currently skips — the dashboard has many interactive targets that a keyboard user can reach if focus is not properly trapped. The amber legend swatch must match the calendar cell's exact opacity so the legend and calendar are visually consistent.
+The key risks are implementation-order risks rather than technology risks: hydration mismatches from browser-only APIs accessed outside `useEffect`, accidentally pulling a Prisma import chain into the demo component, and inadvertently removing the auth redirect by restructuring `page.tsx`. All three are straightforward to prevent with explicit guards and build-order discipline. The PITFALLS.md research provides exact prevention patterns for each.
+
+---
 
 ## Key Findings
 
 ### Recommended Stack
 
-No additions to `package.json`. All four features are achievable with what is already installed and proven in production: Next.js 16 App Router, React 19, Tailwind CSS 4, and the existing fixed-overlay modal pattern from `ShareModal.tsx`. The case against adding modal libraries (`@radix-ui/react-dialog`, `@headlessui/react`), animation libraries (`framer-motion`), or focus-trap libraries is clear: the existing patterns handle all required cases at this app's scale.
+The v1.5 milestone adds **zero new dependencies** to `package.json`. All animation and interactivity requirements are met by the existing stack: Next.js 16 App Router, React 19, Tailwind CSS 4, and native browser APIs (`IntersectionObserver`, `window.scroll`).
 
-The one technology decision worth flagging: the new modal should use the native `<dialog>` element with `ref.current.showModal()` rather than the div-overlay pattern used by `ShareModal`. The `<dialog>` element provides a built-in focus trap, native Escape-key handling, and correct ARIA semantics — benefits that `ShareModal` forgoes because it opens on a relatively simple page. The "How it works" modal opens on the dashboard, which has many interactive targets (calendar cells, tab buttons) that a keyboard user can reach if focus is not properly trapped.
+The explicit decision to not add Framer Motion is load-bearing. Framer Motion costs 30–60 KB gzipped and would require promoting static section components to `'use client'`, undermining RSC streaming benefits. The `FadeInSection`/`ScrollReveal` pattern achieves identical visual effects in under 25 lines using the same CSS transition approach already in production in `Toast.tsx`.
 
-**Core technologies (existing, confirmed):**
-- `CampaignTabs.tsx` — all three calendar/panel features land here; no new component boundary required
-- `ShareModal.tsx` — direct structural template for `HowItWorksModal`; same fixed-overlay, backdrop, dismiss pattern
-- `DayAggregation.dmBlocked` — already computed and in `aggMap`; powers both the legend gate and the panel indicator without new data fetching
-- Native `<dialog>` element (React 19) — recommended for built-in focus trap and ARIA semantics on the new modal
+**Core technologies:**
+- `IntersectionObserver` (native browser API): scroll-triggered entrance animations — zero JS cost, `useEffect`-only, fires once then disconnects
+- `useState` + Tailwind `transition-*` classes: all interactive state (sticky nav scroll, FeaturesBlock step-selector, demo calendar) — already the established codebase pattern
+- `next/image` with `fill` + explicit `aspect-ratio` container: FeaturesBlock image swap without layout shift
+- `{ passive: true }` scroll listener: sticky nav background transition without blocking the compositor thread
 
-**New files (not new dependencies):**
-- `src/components/HowItWorksModal.tsx` — pure display component, static step copy, `onClose` prop only
-- `src/components/HowItWorksButton.tsx` — narrow `'use client'` island, owns `useState(open)`, imports modal
+See `STACK.md` for full rationale and exact component code samples.
 
 ### Expected Features
 
-All four v1.4 features are confirmed table stakes. The research also identified one clear differentiator (role toggle in the modal) and several explicit anti-features.
+The marketing page must do one thing for conversion: collapse the time-to-understanding. Competitive research (Calendly, Doodle, Cal.com) shows all successful scheduling tool pages converge on the same pattern — interactive product preview near the hero, outcome-focused headline, persistent CTA, and a two-perspective explainer (host and guest experience). This app's genuine differentiator is "players don't need an account" — this should appear near the hero CTA as friction-reduction copy.
 
 **Must have (table stakes):**
-- DM unavailable legend entry — the amber ring on calendar cells has no legend explanation; any DM who hasn't read Settings won't know what it means
-- DM unavailable indicator in date panel — when a DM-blocked date is clicked, the panel gives no signal that the DM themselves is unavailable
-- Clear "no players available" state — listing all players as "No response" reads as a failure list, not an informational state
-- "How it works" modal (DM perspective) — no onboarding exists; the workflow is non-obvious for new DMs
-- "How it works" modal (player perspective) — players arrive via a shared link with no context about what to do
+- Sticky nav with logo, Beta badge, Sign Up / Log In — always visible, one click to convert
+- Outcome-focused hero headline — "what does this do for me in 10 words or less"
+- Primary CTA in hero — Sign up free, no competing CTAs at same scroll position
+- Product visual at or near hero — static screenshot is minimum; interactive demo is better
+- FeaturesBlock 4-step explainer — covers "how it works" (Create → Share → See who's free → Pick a day)
+- "Easy for players" section — answers the DM's primary anxiety ("will players actually fill this in?")
+- Final CTA repeat — captures visitors who scroll the full page without clicking the hero CTA
+- Responsive layout — mobile single-column via Tailwind responsive utilities
 
 **Should have (differentiators):**
-- Role toggle inside the modal ("For DMs" / "For Players") — lets a DM understand the player flow when onboarding their group; implementation cost is low once the modal is built; the alternative is a single unified linear narrative covering both roles
+- Interactive `AvailabilityDemoWidget` — player-view demo with pre-seeded mock data, no auth required
+- FeaturesBlock step-selector interactivity — click a step, swap the image (Calendly's proven pattern)
+- Scroll-triggered entrance animations — page feels polished; `FadeInSection`/`ScrollReveal` wrapper
+- "No account needed for players" callout — single line near hero CTAs; genuine UX differentiator
+- Two demo embed placements — FeaturesBlock area and "Easy for players" section
+- `prefers-reduced-motion` support — `motion-reduce:transition-none` on all animated elements
 
-**Defer (v2+):**
-- "No response" vs "not free" distinction in the panel — requires threading a richer player status type through `DayAggregation`; moderate scope change, low gain for small groups where the DM already knows who has not responded
-- Auto-show modal on first visit with localStorage tracking — adds state management complexity for minimal gain; a persistent on-demand link is sufficient
-- Full onboarding tour with tooltips and highlight overlays — over-engineered for a small group tool; static step-card modal is sufficient
+**Defer to v2+:**
+- Testimonials / social proof block — no real user base yet; fabricated quotes destroy trust
+- Pricing section — beta; no plans exist
+- Video explainer embed — interactive demo is more persuasive and cheaper to build
+- Feature comparison table vs competitors — invites scrutiny of gaps; D&D framing does the differentiation
+- Full footer with legal links — minimal copyright footer acceptable for v1.5
 
 ### Architecture Approach
 
-The architecture for v1.4 is strictly additive. The established Server→Client boundary is preserved: Server Component pages remain Server Components, client interactivity is isolated in narrow `'use client'` islands. `CampaignTabs` remains the single Client Component boundary on the dashboard. All new data (`dmBlocked`, `freeCount`, `dmExceptionDates`) is already computed and already flowing through existing props — no new data fetching or prop-threading is required for any of the four features.
+The architecture follows a strict separation: `app/page.tsx` stays a Server Component and handles only auth-check-then-redirect. All marketing content lives in `src/components/landing/`, with a single `LandingPage` client root assembling the sections. Static sections (`HeroSection`, `EasyForPlayersSection`, `FinalCTASection`) are children of the client tree but have no own state. Interactive components (`StickyNav`, `FeaturesBlock`, `AvailabilityDemoWidget`, `ScrollReveal`) are explicitly `'use client'`. The demo bypasses `AvailabilityForm` entirely and reuses only the pure leaf components (`WeeklySchedule`, `AvailabilityCalendar`) with hardcoded mock data — no server actions, no Prisma, no routing.
 
 **Major components:**
-1. `HowItWorksButton` (new, Client) — narrow island that owns `useState(open)` and renders both trigger and modal; imported by four Server Component pages with zero props passed from the server
-2. `HowItWorksModal` (new, Client) — pure display component, static step cards for DM and player perspectives, `onClose` prop only, no business logic
-3. `CampaignTabs` (existing, modified) — three small additions: DM unavailable legend entry (conditional on `dmExceptionDates.length > 0`), DM unavailable indicator in side panel (conditional on `agg?.dmBlocked`), and empty-state message in side panel (conditional on `freeCount === 0`)
+1. `app/page.tsx` (Server Component, unchanged role) — auth check + redirect; returns `<LandingPage />`
+2. `LandingPage` (`'use client'`) — root marketing wrapper; assembles and sequences all sections
+3. `StickyNav` (`'use client'`) — scroll event listener, `useState(false)` → dark background on scroll
+4. `ScrollReveal` (`'use client'`) — `IntersectionObserver` wrapper; wraps each section for entrance animation
+5. `FeaturesBlock` (`'use client'`) — `useState(activeStep)` step-selector; image swap per step
+6. `AvailabilityDemoWidget` (`'use client'`) — self-contained mock; reuses `WeeklySchedule` + `AvailabilityCalendar` with hardcoded state; no server actions
+7. `HeroSection`, `EasyForPlayersSection`, `FinalCTASection` — static JSX children of client tree
 
-**Key patterns to follow:**
-- Narrow client component islands — do not promote Server Component pages to Client Components for a single interactive button
-- `useState` for modal open state — no URL params, no browser history manipulation (contrast with `ShareModal` which is URL-triggered for redirect reasons that do not apply here)
-- `<dialog>` element with `.showModal()` for the new modal — provides focus trap and ARIA semantics that the div-overlay pattern does not
-- Conditional legend rendering — only show the DM unavailable swatch when `dmExceptionDates.length > 0` to avoid confusing legend entries for states the DM has not used
+Build order: `ScrollReveal` first (needed by all sections), then `AvailabilityDemoWidget` (validates demo isolation early), then sections in dependency order, then `LandingPage`, then the one-line swap in `page.tsx` last.
 
 ### Critical Pitfalls
 
-1. **Converting Server Component pages to Client Components to support the modal trigger** — keep pages as Server Components; the `HowItWorksButton` island owns all client state and pages only render `<HowItWorksButton />` with zero props
+1. **Hydration mismatch from browser-only APIs (`window`, `IntersectionObserver`) accessed outside `useEffect`** — Always initialise animation and scroll state as `useState(false)`. All browser API access must be inside `useEffect`. Server always renders the "hidden" state; client reveals on mount. Pattern is identical to `CampaignTabs.tsx` keyboard listener setup.
 
-2. **Missing focus trap on the "How it works" modal** — the dashboard has many interactive targets; use native `<dialog>` with `.showModal()` for built-in focus trap and Escape handling rather than relying on the div-overlay pattern from `ShareModal`
+2. **Demo component accidentally importing Prisma through `@/lib/` chain** — `AvailabilityDemoWidget` must import only `WeeklySchedule` and `AvailabilityCalendar`. Verify `@/lib/calendarUtils` has no server-only dependency chain before importing. All demo data is module-level constants — no `@/lib/` utility imports for data computation. Run `next build` to catch PrismaClient-in-browser errors early.
 
-3. **URL manipulation in the modal dismiss handler** — do not cargo-cult `router.replace` from `ShareModal`; the "How it works" modal is pure UI state and must not touch browser history (would cause Back button to navigate away rather than close the modal)
+3. **`page.tsx` gaining `'use client'` and silently losing the auth redirect** — `page.tsx` must never have `'use client'`. The `getSessionDM()` + `redirect('/campaigns')` guard must remain the first lines of the default export. Document with a comment. This risk is present in every phase that touches `page.tsx`.
 
-4. **Legend swatch colour mismatch** — the calendar cell uses `ring-amber-400/60` (desaturated amber); a full-opacity `bg-amber-400` legend swatch will look visually distinct; match opacity exactly, or deliberately upgrade the ring to full opacity in both places
+4. **FeaturesBlock image swap causing layout shift** — Fix the image container with `aspect-ratio` (e.g., `aspect-video`) and `overflow-hidden`. Use `next/image` with `fill` + `object-cover`. All step screenshots must share the same aspect ratio. Pre-load the first image with `priority`.
 
-5. **DM unavailable legend entry shown when no exception dates exist** — conditionally render the swatch only when `dmExceptionDates.length > 0`; a legend entry for a colour the DM has never seen in the calendar creates confusion rather than clarity
+5. **`AvailabilityDemoWidget` using `new Date()` for planning window, causing SSR/client mismatch** — Use static hardcoded placeholder dates (e.g., `2026-04-01` to `2026-05-31`). The demo is illustrative, not real-time; fixed dates are more predictable and communicate "example" clearly.
+
+See `PITFALLS.md` for the full set of 15 pitfalls including: `prefers-reduced-motion` support (Pitfall 9), `StickyNav` z-index collision with `HowItWorksModal` at `z-50` (Pitfall 2), `backdrop-blur` Safari artefacts with the fixed overlay image (Pitfall 12), and demo state resetting on animated wrapper re-renders (Pitfall 11).
+
+---
 
 ## Implications for Roadmap
 
-The four features map to three phases ordered by risk and dependency. All phases are additive with no blocking dependencies between them — they can be done in any order, but this sequence minimises review surface and catches issues early.
+The FEATURES.md MVP recommendation provides a validated build order. Each phase is isolated by dependency, meaning each can be verified independently before the next is built. The full landing page can be delivered in 5 logical phases.
 
-### Phase 1: Calendar and Panel Clarity
+### Phase 1: Static Page Shell
+**Rationale:** Validates layout, copy, and section structure before any complex component is added. All content visible immediately; no interactive pieces to debug. Establishes the `src/components/landing/` folder structure and the `page.tsx` one-line swap.
+**Delivers:** Fully readable landing page — sticky nav (static, no scroll behaviour yet), hero with CTAs, FeaturesBlock as a static list, "Easy for players" card grid, final CTA section. Logged-in redirect confirmed working.
+**Addresses:** All table-stakes features except interactivity.
+**Avoids:** Pitfall 3 (auth redirect lost) — establishing `page.tsx` structure correctly from the start.
 
-**Rationale:** All three changes land in a single file (`CampaignTabs.tsx`), use data already in scope, and carry near-zero risk. They are the highest-value, lowest-effort changes in the milestone and should not be blocked on the more complex modal work.
+### Phase 2: Scroll-Triggered Entrance Animations
+**Rationale:** Low complexity, high visual impact. Validates the `ScrollReveal`/`FadeInSection` pattern before wrapping more complex components. Easiest phase to verify — visual feedback is immediate.
+**Delivers:** All sections animate in on scroll. `ScrollReveal` wrapper component. `prefers-reduced-motion` support baked in from day one.
+**Addresses:** Scroll animation differentiator from FEATURES.md.
+**Avoids:** Pitfall 1 (hydration mismatch), Pitfall 9 (`prefers-reduced-motion`), Pitfall 8 (multiple observer instances — observe section containers, not individual cards).
 
-**Delivers:** A complete calendar legend (including DM unavailable state), a DM unavailable indicator in the date side panel, and a clear empty-state message when no players are free on a selected date.
+### Phase 3: FeaturesBlock Step-Selector
+**Rationale:** Interactive but self-contained — depends only on local `useState` and screenshot assets. No server interaction. Can be built and verified in isolation.
+**Delivers:** Clickable 4-step feature explainer with image swap. Step content: Create campaign → Share with players → See who's free → Pick the best day.
+**Addresses:** FeaturesBlock differentiator from FEATURES.md.
+**Avoids:** Pitfall 6 (image container layout shift — fix `aspect-ratio` from the start).
+**Dependency:** Screenshot assets for all 4 steps must be captured from the live app before implementation begins. Flag as a prerequisite task.
 
-**Addresses:** DM unavailable legend entry, DM unavailable indicator in panel, "no players available" empty state (all table stakes).
+### Phase 4: Interactive Demo Embed (AvailabilityDemoWidget)
+**Rationale:** Most technically complex component. Built once, placed in two locations. Building after the simpler phases means any SSR/hydration patterns are already proven before the most sensitive component is added.
+**Delivers:** Self-contained interactive player availability demo with pre-seeded mock data. Reuses `WeeklySchedule` + `AvailabilityCalendar` unchanged. Two placements (FeaturesBlock area and "Easy for players" section).
+**Addresses:** Interactive demo differentiator — the single most persuasive element for DM conversion.
+**Avoids:** Pitfall 4 (Prisma import chain), Pitfall 7 (dynamic `new Date()` SSR mismatch), Pitfall 11 (state reset on animated wrapper re-render — use class-switching not conditional render in `ScrollReveal`).
 
-**Avoids:** Pitfall 5 (dmBlocked not surfaced in panel), Pitfall 6 (legend swatch colour mismatch), Pitfall 7 (all-no-response reads as failure list), Pitfall 11 (DM swatch shown with zero exception dates).
-
-### Phase 2: HowItWorksModal Component
-
-**Rationale:** The modal component is self-contained with no dependencies on Phase 1. Build `HowItWorksModal` and `HowItWorksButton` first and verify them in isolation before wiring into pages. This keeps review surface contained and means page-level failures are not caused by component-level issues.
-
-**Delivers:** A working "How it works" modal with DM and player step content (with role toggle), keyboard and focus-trap behaviour via `<dialog>`, correct ARIA semantics, and Escape key close. No page is wired yet.
-
-**Uses:** Native `<dialog>` element (React 19), Tailwind CSS 4 custom properties (`--dnd-input-bg`, `--dnd-accent`, `--dnd-card-bg`), `useEffect` + `useRef` pattern established in `CampaignTabs.tsx`.
-
-**Avoids:** Pitfall 1 (JSX duplication across pages), Pitfall 3 (incorrect client boundary), Pitfall 4 (missing focus trap), Pitfall 8 (broken back button from URL manipulation), Pitfall 9 (CSS counter flash for step numbers), Pitfall 10 (missing aria-labelledby), Pitfall 12 (branching content complexity).
-
-### Phase 3: HowItWorksButton Page Integration
-
-**Rationale:** Wire the completed and reviewed `HowItWorksButton` into all four pages once the component is known-good. Page-level changes are isolated (`import` + one JSX element each) and carry no risk to data fetching, routing, or existing UI.
-
-**Delivers:** The "How it works" trigger accessible on the home page (`/`), DM campaigns page (`/campaigns`), player join page (`/join/[joinToken]`), and player availability page (`/join/[joinToken]/availability`).
-
-**Avoids:** Pitfall 3 (Server Component pages must not gain `'use client'`).
+### Phase 5: Sticky Nav Scroll Behaviour
+**Rationale:** Purely cosmetic refinement. Saved for last because it has the most cross-browser risk (`backdrop-blur` on Safari) and zero impact on functional correctness. All other phases work fine with the static nav from Phase 1.
+**Delivers:** Nav background transitions from transparent to dark on scroll. `{ passive: true }` scroll listener. `onScroll()` called on mount to sync state immediately after hydration.
+**Addresses:** Sticky nav scroll-opacity differentiator from FEATURES.md.
+**Avoids:** Pitfall 2 (hydration mismatch from `scrollY` in initial render), Pitfall 2 (z-index at `z-40` below modals at `z-50`), Pitfall 12 (`backdrop-blur` artefacts — test early, prefer solid `bg-[var(--dnd-input-bg)]/90` if blur looks wrong on Safari).
 
 ### Phase Ordering Rationale
 
-- Phase 1 before Phases 2/3: calendar and panel changes are independent of the modal and are zero-risk; they should not be blocked on modal work
-- Phase 2 before Phase 3: build and verify the modal component in isolation before integrating into four pages; catches component issues without requiring page-level rollback
-- All three phases are data-independent — no phase depends on a previous phase to have the right data in scope; the ordering is about review surface management, not data dependency
+- **Shell first** because it establishes the component structure that all later phases populate. Any layout problems surface without the complexity of interactive components.
+- **Animations second** because `ScrollReveal` is a dependency for all sections; building it early means wrapping each section is a one-line addition, not a retrofit.
+- **FeaturesBlock third** because it depends on screenshot assets (an external dependency) — getting the component shape right early validates the image swap logic before assets exist, and assets can be added once captured.
+- **Demo fourth** because it is the highest-risk component (Prisma chain risk, SSR mismatch risk, state reset risk). Building it after simpler components means all SSR patterns are already verified in the codebase.
+- **Nav behaviour last** because it is cosmetic and has the most browser-specific risk. It can be added, adjusted, or simplified without touching any other phase's work.
 
 ### Research Flags
 
-Phases with standard patterns (research-phase not needed):
-- **Phase 1 (Calendar and Panel Clarity):** All data already in scope, all patterns already in production. Three small JSX additions to an existing component. No unknowns.
-- **Phase 3 (Page Integration):** Simple `import` + JSX addition per page. Established pattern from `CopyLinkButton`, `DeleteCampaignButton`, `ShareModal`.
+Phases with standard, well-documented patterns (skip `/gsd:research-phase`):
+- **Phase 1 (Static shell):** HTML/JSX structure with Tailwind CSS — fully established
+- **Phase 2 (Animations):** `IntersectionObserver` + Tailwind transitions — pattern is codebase-proven
+- **Phase 3 (FeaturesBlock):** `useState` tab/step-selector pattern identical to `CampaignTabs.tsx`
+- **Phase 4 (Demo):** Wrapping existing controlled components — no novel patterns
+- **Phase 5 (Sticky nav):** `scroll` event + `useState` + Tailwind `transition-colors` — fully standard
 
-Phases needing care during implementation (not a full research spike, but one new pattern to verify):
-- **Phase 2 (Modal Component):** The `<dialog>` element + `.showModal()` pattern is new to this codebase (existing modals use div-overlay). Verify that `<dialog>` styling integrates cleanly with Tailwind CSS 4 custom properties. The `::backdrop` pseudo-element requires a `globals.css` rule rather than a Tailwind class — this is a minor new pattern. Low risk but worth a quick check before committing the approach.
+No phase requires deeper external research. All implementation patterns are documented in the research files with exact code samples.
+
+---
 
 ## Confidence Assessment
 
 | Area | Confidence | Notes |
 |------|------------|-------|
-| Stack | HIGH | All conclusions derived from direct codebase inspection; zero new packages means zero library API uncertainty |
-| Features | HIGH | Table stakes and anti-features derived from direct user journey analysis in the codebase plus stable scheduling-tool UX conventions (Calendly, Doodle, Cal.com, Notion) |
-| Architecture | HIGH | All architectural decisions are extensions of existing production patterns; no new data flows introduced |
-| Pitfalls | HIGH (critical), MEDIUM (accessibility specifics) | Critical pitfalls from codebase inspection; accessibility specifics (VoiceOver behaviour, ARIA spec) from established W3C guidance, not verified via live tool |
+| Stack | HIGH | All decisions grounded in direct codebase inspection; zero new dependencies removes all version/compatibility unknowns |
+| Features | HIGH | Table stakes from established SaaS landing page conventions; differentiators derived directly from codebase reading and project requirements |
+| Architecture | HIGH | Component boundaries derived from direct inspection of `AvailabilityCalendar`, `WeeklySchedule`, `AvailabilityForm`, and `page.tsx`; patterns match existing codebase discipline |
+| Pitfalls | HIGH (most) / MEDIUM (2) | Hydration, Prisma chain, auth redirect, image layout shift — all HIGH from direct codebase grounding. `backdrop-blur` Safari artefact and Framer Motion bundle sizes are MEDIUM (knowledge cutoff August 2025, not live-verified) |
 
 **Overall confidence:** HIGH
 
 ### Gaps to Address
 
-- **Modal trigger placement on `/campaigns`:** The exact visual slot for the "How it works" button in the campaigns page header needs a design decision (inline with heading, right-aligned, or near the logout button). Research established the right pattern (low visual weight, near page heading) but not the exact placement.
+- **Screenshot assets for FeaturesBlock:** 4 step images do not exist yet. These must be captured from the running app before Phase 3 implementation begins. Flag as a prerequisite task in the roadmap.
 
-- **Player page explainer placement:** The player availability page has no existing page-level header controls. Adding the trigger needs a placement decision — above or below the `AvailabilityForm`, or inside the campaign info card.
+- **`AvailabilityCalendar` planning window prop format:** ARCHITECTURE.md specifies `planningWindowStart` / `planningWindowEnd` as string props, and recommends hardcoded placeholder dates. Confirm the exact date string format expected (ISO `YYYY-MM-DD` assumed) against the component source before writing `AvailabilityDemoWidget`.
 
-- **Public home page scope:** Whether the modal should appear on the unauthenticated home page (`/`) for prospective users, or only on post-auth pages, is a product decision not resolved by research. The technical implementation is identical either way.
+- **`backdrop-blur` on Safari with fixed overlay:** PITFALLS.md flags this as MEDIUM confidence (not verified against this specific background stack). Test the scroll nav background in Safari early in Phase 5; have the fallback (`bg-[var(--dnd-input-bg)]/90` solid) ready to drop in if the blur effect looks wrong.
 
-- **`<dialog>` `::backdrop` styling:** The existing `ShareModal` backdrop is a sibling `<div className="fixed inset-0 bg-black/60">`. The `<dialog>` element's `::backdrop` pseudo-element is styled via CSS, not Tailwind classes. A `globals.css` rule (`dialog::backdrop { background: rgb(0 0 0 / 0.6); }`) is straightforward but is a new pattern in this codebase. Confirm during Phase 2 implementation before committing to `<dialog>` vs div-overlay.
+- **Page meta description:** The current `layout.tsx` has generic metadata. A landing-page-specific `export const metadata` in `page.tsx` improves SEO and sharing previews. Low complexity; worth flagging for Phase 1 scope.
+
+- **Demo reset behaviour:** FEATURES.md recommends a "Reset" / "Try it yourself" button in `AvailabilityDemoWidget`. Confirm whether the demo starts pre-seeded (populated, then resettable) or starts empty (visitor fills in from scratch). Pre-seeded is more persuasive — it shows what a filled calendar looks like before the visitor does anything.
+
+---
 
 ## Sources
 
 ### Primary (HIGH confidence)
-- Codebase inspection (direct read): `CampaignTabs.tsx`, `DashboardCalendar.tsx`, `ShareModal.tsx`, `DmExceptionCalendar.tsx`, `BestDaysList.tsx`, `AvailabilityCalendar.tsx`, `lib/availability.ts`, `campaigns/page.tsx`, `page.tsx`, `layout.tsx`, `package.json`, `globals.css`
-- `.planning/PROJECT.md` — active v1.4 requirements and architectural constraints
-- `DayAggregation.dmBlocked` field existence confirmed via `DashboardCalendar.tsx` line 143
+- Direct codebase inspection: `src/app/page.tsx`, `src/components/AvailabilityCalendar.tsx`, `src/components/WeeklySchedule.tsx`, `src/components/AvailabilityForm.tsx`, `src/components/CampaignTabs.tsx`, `src/components/Toast.tsx`, `src/app/layout.tsx`, `src/app/globals.css`, `package.json`, `.planning/PROJECT.md`
+- `IntersectionObserver` Web API — Living Standard, universal browser support 2026
+- React 19 `useState` / `useEffect` SSR contract — stable core behaviour
+- Next.js App Router `redirect()` + `cookies()` server-only constraint — stable, knowledge cutoff August 2025
+- Tailwind CSS 4 `motion-reduce:` variant, `transition-*`, `backdrop-blur-sm` — confirmed by codebase usage
 
-### Secondary (MEDIUM-HIGH confidence)
-- Scheduling tool UX conventions (Calendly, Doodle, Cal.com, Notion, Linear, Google Calendar) — training data; patterns stable for 3+ years
-- Empty-state and legend UX patterns — training data; well-documented across product design references
-- W3C ARIA Authoring Practices Guide — `role="dialog"`, `aria-modal`, `aria-labelledby`, focus trap requirements; stable spec
-
-### Tertiary (MEDIUM confidence)
-- `<dialog>` element browser support and `.showModal()` API — established platform knowledge (Chrome 37+, Firefox 98+, Safari 15.4+); not verified via live MDN in this research session
-- Tailwind CSS 4 opacity modifier behaviour (`/60`) — confirmed from Tailwind docs; knowledge cutoff August 2025
+### Secondary (MEDIUM confidence)
+- Calendly, Doodle, Cal.com, Linear marketing page patterns — training data through late 2024/early 2025; stable conventions unlikely to have reversed
+- Framer Motion bundle sizes (~30–60 KB gzipped for `motion` package) — training data; bundlephobia.com is live verification source if Framer Motion is reconsidered
+- `backdrop-filter: blur()` Safari compositing with fixed-position overlays — known browser behaviour, not verified against this specific background stack
 
 ---
-*Research completed: 2026-03-12*
+*Research completed: 2026-03-13*
 *Ready for roadmap: yes*

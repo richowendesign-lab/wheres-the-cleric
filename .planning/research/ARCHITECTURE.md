@@ -1,411 +1,370 @@
 # Architecture Patterns
 
-**Domain:** D&D session scheduler — v1.4 UI clarity features
-**Researched:** 2026-03-12
-**Confidence:** HIGH — based on direct codebase inspection
+**Domain:** Marketing landing page + interactive demo — integrated into existing Next.js App Router app
+**Researched:** 2026-03-13
+**Confidence:** HIGH — based on direct codebase inspection of all relevant files
 
 ---
 
-## Context: Established Architecture (v1.3 Baseline)
+## Context
 
-These constraints are load-bearing. Every integration decision below works within them.
+This is a subsequent milestone on a live app. The existing `app/page.tsx` is a server component that already handles the logged-in/logged-out split via `getSessionDM()`. The task is to replace the sparse logged-out view with a full marketing page while leaving the logged-in redirect and the rest of the app (campaigns, join, auth) entirely untouched.
 
-- Server Components own all data fetching. No client-side fetching exists anywhere.
-- `CampaignTabs` is the single Client Component boundary on the campaign detail page. It
-  receives all data as serialized props from the Server Component and owns tab state, the
-  date side-panel (`selectedDate`), and the planning-window inline editor.
-- `DashboardCalendar` is a Client Component nested inside `CampaignTabs`. It receives
-  `dayAggregations`, `playerSlots`, `windowStart`, `windowEnd`, `selectedDate`, and
-  `onSelectDate` as props. It does not own the `selectedDate` state — `CampaignTabs` does.
-- The date side-panel (slide-in drawer, `fixed inset-y-0 right-0 w-80`) is rendered in
-  `CampaignTabs`, not in `DashboardCalendar`. `DashboardCalendar` calls `onSelectDate` and
-  `CampaignTabs` responds by opening the panel.
-- `DayAggregation.dmBlocked` already exists (added in v1.3). It is already computed,
-  already passed through to `CampaignTabs` via `dayAggregations`, and already used in
-  `DashboardCalendar` to apply the amber ring visual.
-- Modal pattern established by `ShareModal`: `'use client'`, `useState(open)`, fixed overlay
-  div with backdrop, `router.replace` to clean URL params on dismiss (when modal is
-  URL-triggered). No portal, no context, no global modal system.
-- CSS-only hover tooltips via Tailwind `group-hover` — no JS state for tooltips.
-- Layout: `src/app/layout.tsx` is a minimal Server Component — no navigation bar, no global
-  context providers. Pages are fully standalone.
+Existing tech: Next.js 16, React 19, Tailwind CSS 4, App Router. No animation library is currently installed. `WeeklySchedule` and `AvailabilityCalendar` are already pure controlled client components — they accept all state via props and fire callbacks, with no server action coupling.
 
 ---
 
-## Feature 1: HowItWorksModal — Global "How it works" explainer
+## Recommended Architecture
 
-### Where it lives
+### Component Boundaries Overview
 
-`src/components/HowItWorksModal.tsx` — standalone Client Component, not wired into any
-existing component. Each page that needs it renders the modal and its trigger independently.
+```
+app/page.tsx                              ← Server Component (auth check only — unchanged role)
+  └─ getSessionDM() → if DM: redirect('/campaigns')
+  └─ <LandingPage />                      ← new "use client" root for all marketing UI
 
-### Trigger pattern
+src/components/landing/
+  ├─ LandingPage.tsx                      ← "use client" — assembles all sections
+  ├─ StickyNav.tsx                        ← "use client" — scroll detection, background transition
+  ├─ HeroSection.tsx                      ← static JSX (child of client tree, no own state)
+  ├─ FeaturesBlock.tsx                    ← "use client" — step-selector useState
+  ├─ AvailabilityDemoWidget.tsx           ← "use client" — self-contained mock, no server actions
+  ├─ EasyForPlayersSection.tsx            ← static JSX + embeds AvailabilityDemoWidget
+  ├─ FinalCTASection.tsx                  ← static JSX
+  └─ ScrollReveal.tsx                     ← "use client" — IntersectionObserver entrance wrapper
+```
 
-Each page adds a `HowItWorksButton` — a small `'use client'` component (or inline in a
-page-level Client Component) that holds `useState(false)` for open/closed and renders the
-modal when open.
+---
 
-Because the home page, campaigns page, join page, and availability page are all Server
-Components, none of them can call `useState` directly. The trigger must be extracted into a
-Client Component. The minimum-change approach is a single `HowItWorksButton` Client Component
-that owns the open state and renders both the trigger and the modal:
+## Question 1: Logged-Out Home Page Coexisting with Logged-In Redirect
 
-```typescript
-// src/components/HowItWorksButton.tsx
-'use client'
-import { useState } from 'react'
-import { HowItWorksModal } from './HowItWorksModal'
+**Pattern: Keep `app/page.tsx` as a thin server component. Replace the inline JSX with a single import.**
 
-export function HowItWorksButton() {
-  const [open, setOpen] = useState(false)
-  return (
-    <>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        aria-label="How it works"
-        className="..."
-      >
-        ?
-      </button>
-      {open && <HowItWorksModal onClose={() => setOpen(false)} />}
-    </>
-  )
+The current `app/page.tsx` already has the correct structure:
+
+```tsx
+// app/page.tsx — minimal change: replace inline JSX with LandingPage import
+export default async function HomePage() {
+  const dm = await getSessionDM()
+  if (dm) redirect('/campaigns')
+  return <LandingPage />
 }
 ```
 
-`HowItWorksModal` receives only `onClose` as a prop. It contains no business logic — it is a
-pure display component:
+The server component is responsible for exactly one thing: check session, redirect if authenticated, otherwise render the landing page. `LandingPage` is a `"use client"` component. The redirect fires server-side before any HTML ships, so logged-in DMs see zero flash of the marketing page.
 
-```typescript
-// src/components/HowItWorksModal.tsx
+**Why not a separate route like `/marketing`?** The home route is the marketing page for logged-out users — a separate URL gives no UX benefit and confuses direct links. The server-side redirect-before-render pattern is the established Next.js pattern and matches what the existing code already does.
+
+**Why `"use client"` for LandingPage?** The entire landing page requires:
+- Scroll detection in `StickyNav`
+- Step-selector `useState` in `FeaturesBlock`
+- `IntersectionObserver` in `ScrollReveal`
+- Demo interactivity in `AvailabilityDemoWidget`
+
+Rather than scattering `"use client"` across every section individually, a single client boundary at `LandingPage` is cleaner. Server component performance benefits on a marketing page with no dynamic data are negligible — there is nothing to fetch server-side on this page.
+
+---
+
+## Question 2: Self-Contained Interactive Demo Component
+
+**Pattern: `AvailabilityDemoWidget` — a new component that reuses the leaf UI components (`WeeklySchedule`, `AvailabilityCalendar`) with hardcoded mock data and no server action calls.**
+
+The existing `AvailabilityForm` is tightly coupled to `saveWeeklyPattern` and `toggleDateOverride` server actions, and expects a real `playerSlotId`. It cannot be safely reused as a demo without modification. The correct approach is a new component that shares only the visual leaf components.
+
+### Why This Works Without Changes to Leaf Components
+
+`WeeklySchedule` and `AvailabilityCalendar` are already pure controlled components:
+
+- `WeeklySchedule` accepts `selection: Set<string>` and `onChange: (s: Set<string>) => void` — it has no knowledge of server actions
+- `AvailabilityCalendar` accepts `planningWindowStart`, `planningWindowEnd`, `weeklySelection`, `overrides`, and `onDateClick` — it has no knowledge of server actions
+
+Both are already isolated from I/O at the component level. `AvailabilityForm` is the layer that connects them to server actions — the demo bypasses that layer entirely.
+
+### Isolation Strategy
+
+```
+src/components/landing/AvailabilityDemoWidget.tsx
+```
+
+This component:
+- Is `"use client"` (needs `useState` for interactive selection)
+- Has **no props** — all data is module-level constants defined in the file
+- Has **no server actions** — click handlers update local state only, no debounced saves, no `setSaveStatus`
+- Reuses `WeeklySchedule` and `AvailabilityCalendar` unchanged
+- Displays a "Demo — changes not saved" label to set expectations
+
+### Mock Data Shape
+
+```tsx
+// Constants inside AvailabilityDemoWidget.tsx — no imports from lib/actions
+const MOCK_WINDOW_START = '2026-04-01'
+const MOCK_WINDOW_END   = '2026-05-31'
+
+// Matches WeeklySchedule's expected format: Set of day-of-week number strings
+const INITIAL_WEEKLY = new Set(['5', '6'])  // Fri + Sat pre-selected
+
+// Matches AvailabilityCalendar's expected overrides format
+const INITIAL_OVERRIDES = new Map<string, 'free' | 'busy'>([
+  ['2026-04-12', 'busy'],   // one example override
+])
+```
+
+The component maintains `weeklySelection` and `overrides` state with `useState`, and the click handlers call `setWeeklySelection` / `setOverrides` directly — the same local logic as `AvailabilityForm` but without the network calls. Clicking days and dates works visually exactly as in the real form.
+
+### What Does Not Change
+
+| Component | Used by demo | Change needed |
+|-----------|-------------|---------------|
+| `WeeklySchedule.tsx` | Yes — rendered in demo | None |
+| `AvailabilityCalendar.tsx` | Yes — rendered in demo | None |
+| `lib/calendarUtils.ts` | Yes — used by AvailabilityCalendar | None |
+| `AvailabilityForm.tsx` | Not used by demo | None |
+
+---
+
+## Question 3: Scroll-Triggered Animations in App Router
+
+**Pattern: `IntersectionObserver` in a reusable `ScrollReveal` client wrapper component. No animation library needed.**
+
+### Why No Library
+
+No animation library is installed. The milestone requirement is "sections animate in smoothly on scroll" — standard fade-up entrance animations. This does not require Framer Motion or GSAP. The `IntersectionObserver` API is baseline-supported (all modern browsers since 2018) and can be wrapped in ~25 lines.
+
+### ScrollReveal Component
+
+```tsx
+// src/components/landing/ScrollReveal.tsx
 'use client'
+import { useRef, useEffect, useState } from 'react'
 
-export function HowItWorksModal({ onClose }: { onClose: () => void }) {
+export function ScrollReveal({
+  children,
+  className,
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true)
+          observer.disconnect()  // fire once — sections do not re-animate on scroll-up
+        }
+      },
+      { threshold: 0.1 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="fixed inset-0 bg-black/60" onClick={onClose} />
-      <div className="relative bg-[var(--dnd-input-bg)] border border-[#ba7df6]/30 rounded-lg p-6 max-w-lg w-full mx-4">
-        {/* numbered step cards */}
-      </div>
+    <div
+      ref={ref}
+      className={`transition-all duration-700 ease-out ${
+        visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+      } ${className ?? ''}`}
+    >
+      {children}
     </div>
   )
 }
 ```
 
-The `HowItWorksModal` can be a `'use client'` file even if it has no internal state, because
-it is imported by `HowItWorksButton` which is already `'use client'`. Alternatively it can
-be a pure server-renderable component (no browser APIs) that gets rendered inside the client
-boundary. Either works — the cleanest split keeps modal content in a separate file from the
-button so the step copy can be edited in isolation.
+Each marketing section is wrapped in `<ScrollReveal>`. The observer disconnects after first trigger — this prevents re-animation on scroll-up and also frees the observer from watching elements that are already visible.
 
-### Why not URL params (like ShareModal)?
+### Server vs Client Component Split for Animations
 
-`ShareModal` is URL-triggered because it must survive a server-side redirect. The "How it
-works" modal is user-initiated on demand — no redirect involved. `useState` in
-`HowItWorksButton` is the right tool. URL params would add unnecessary complexity and mean
-the modal state appears in browser history.
-
-### Why not a global modal context in layout.tsx?
-
-The layout has no Client Component boundary. Adding one just for this modal would pull the
-entire layout into the client bundle. The narrow `HowItWorksButton` island is cheaper and
-consistent with how the project handles all other client interactivity.
-
-### Pages that get the button
-
-Each Server Component page adds `<HowItWorksButton />` in the appropriate position in its JSX:
-
-| Page | File | Placement |
-|------|------|-----------|
-| Home (unauthenticated) | `src/app/page.tsx` | Near the Log In / Sign Up buttons |
-| DM campaigns list | `src/app/campaigns/page.tsx` | Header row alongside logout |
-| Player join/register | `src/app/join/[joinToken]/page.tsx` | Near the name entry form |
-| Player availability | `src/app/join/[joinToken]/availability/page.tsx` | Page header |
-
-The campaign detail page (`/campaigns/[id]`) can optionally include it within `CampaignTabs`
-(already a Client Component) — see Component Boundaries table below.
-
-### Data requirements
-
-None. The modal content is static step copy — no props beyond `onClose`. No Server Action, no
-DB query, no new data flow.
+`LandingPage` is `"use client"`, so all components in the landing subtree can freely use client features. `ScrollReveal` must be `"use client"` because it uses `useRef`, `useState`, and `useEffect`. Section components like `HeroSection` and `FinalCTASection` do not need their own `"use client"` boundary unless they have state — as children of a client component, React renders them in the client bundle automatically. Where a section has its own interactivity (e.g. `FeaturesBlock` step-selector), mark it `"use client"` explicitly for clarity.
 
 ---
 
-## Feature 2: DM Unavailability Legend Entry in DashboardCalendar
+## Question 4: Sticky Nav with Scroll Detection
 
-### Where it lives
-
-The legend sits in `CampaignTabs`, not in `DashboardCalendar`. Looking at the existing code
-(lines 256–263 of `CampaignTabs.tsx`):
+**Pattern: `useEffect` scroll listener inside `StickyNav` component. No library needed.**
 
 ```tsx
-<div className="flex flex-wrap gap-4 text-xs text-gray-500 mb-4">
-  <span className="flex items-center gap-1.5">
-    <span className="inline-block w-2.5 h-2.5 rounded-full bg-green-400" />Free
-  </span>
-  <span className="flex items-center gap-1.5">
-    <span className="inline-block w-2.5 h-2.5 rounded-full bg-gray-600" />No response
-  </span>
-</div>
+// src/components/landing/StickyNav.tsx
+'use client'
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+
+export function StickyNav() {
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const handler = () => setScrolled(window.scrollY > 48)
+    window.addEventListener('scroll', handler, { passive: true })
+    return () => window.removeEventListener('scroll', handler)
+  }, [])
+
+  return (
+    <nav
+      className={`fixed top-0 inset-x-0 z-50 transition-colors duration-300 ${
+        scrolled
+          ? 'bg-[#140326]/90 backdrop-blur-sm border-b border-[var(--dnd-border-muted)]'
+          : 'bg-transparent'
+      }`}
+    >
+      {/* logo, Beta badge, Sign up / Log in links */}
+    </nav>
+  )
+}
 ```
 
-This is the exact location to add the DM unavailable entry. It is conditionally rendered only
-when `windowStartStr && windowEndStr` (which gates the calendar display), so the condition is
-already in place.
+`{ passive: true }` is required on the scroll listener — it tells the browser the handler will not call `preventDefault()`, enabling scroll optimisations on mobile. The background transition is CSS `transition-colors` on the nav element; the class swap drives the visual change with no JS animation loop.
 
-### What to add
-
-A third legend entry using the existing amber ring visual language. The calendar already shows
-`ring-1 ring-amber-400/60` on DM-blocked dates (line 143 of `DashboardCalendar.tsx`). The
-legend entry should match:
-
-```tsx
-<span className="flex items-center gap-1.5">
-  <span className="inline-block w-2.5 h-2.5 rounded border border-amber-400/60" />DM unavailable
-</span>
-```
-
-Using a bordered square (not a filled dot) differentiates it visually from the player-status
-dots, matching the ring visual used on calendar cells.
-
-### Condition gate
-
-Only show this legend entry when the campaign has at least one DM exception. `CampaignTabs`
-already receives `dmExceptionDates: string[]` as a prop. The condition is:
-
-```tsx
-{dmExceptionDates.length > 0 && (
-  <span className="flex items-center gap-1.5">
-    <span className="inline-block w-2.5 h-2.5 rounded border border-amber-400/60" />DM unavailable
-  </span>
-)}
-```
-
-This avoids confusing players/DM with a legend entry for a feature they have not used yet.
-
-### Data requirements
-
-No change. `dmExceptionDates` is already a prop on `CampaignTabs`. `DayAggregation.dmBlocked`
-is already computed. No new prop threading needed.
+The `StickyNav` is rendered inside `LandingPage` only — it does not live in `app/layout.tsx` and therefore does not appear on campaigns, auth, or player pages.
 
 ---
 
-## Feature 3: DM Unavailable Indicator in the Date Side-Panel
+## Component Inventory
 
-### Where it lives
+### New Components (create)
 
-The date side-panel is rendered entirely within `CampaignTabs` (lines 109–153). It already
-builds `const agg = aggMap.get(selectedDate)` which gives access to `agg.dmBlocked`.
+| Component | Location | Type | Purpose |
+|-----------|----------|------|---------|
+| `LandingPage` | `src/components/landing/LandingPage.tsx` | `"use client"` | Root marketing page wrapper — assembles all sections |
+| `StickyNav` | `src/components/landing/StickyNav.tsx` | `"use client"` | Scroll-aware navigation bar |
+| `HeroSection` | `src/components/landing/HeroSection.tsx` | (child of client tree) | Hero heading, subtitle, CTA buttons |
+| `FeaturesBlock` | `src/components/landing/FeaturesBlock.tsx` | `"use client"` | Step-selector with expanding descriptions and image swap |
+| `AvailabilityDemoWidget` | `src/components/landing/AvailabilityDemoWidget.tsx` | `"use client"` | Self-contained mock availability form, no server actions |
+| `EasyForPlayersSection` | `src/components/landing/EasyForPlayersSection.tsx` | (child of client tree) | 3-card player onboarding grid + second demo embed |
+| `FinalCTASection` | `src/components/landing/FinalCTASection.tsx` | (child of client tree) | Final CTA heading and Sign up / Log in buttons |
+| `ScrollReveal` | `src/components/landing/ScrollReveal.tsx` | `"use client"` | Reusable viewport entrance animation wrapper |
 
-### What to add
+### Modified Components
 
-A single conditional block inside the panel body, before the player list:
+| Component | Change | Risk |
+|-----------|--------|------|
+| `app/page.tsx` | Replace inline JSX with `<LandingPage />` after the auth check | Very low — one-line swap, auth logic untouched |
 
-```tsx
-<div className="p-4 space-y-3 overflow-y-auto flex-1">
-  {/* DM indicator — only when this date is DM-blocked */}
-  {agg?.dmBlocked && (
-    <div className="flex items-center gap-3 pb-3 border-b border-gray-800">
-      <span className="w-3 h-3 rounded shrink-0 border border-amber-400/60" />
-      <span className="text-amber-300/80 text-sm font-medium">DM unavailable</span>
-    </div>
-  )}
-  {/* existing player list */}
-  {playerSlots.map(slot => { ... })}
-</div>
-```
+### Unchanged Components (reused by demo)
 
-### Data requirements
+| Component | Used by | Notes |
+|-----------|---------|-------|
+| `WeeklySchedule.tsx` | `AvailabilityDemoWidget` | Zero changes — already a pure controlled component |
+| `AvailabilityCalendar.tsx` | `AvailabilityDemoWidget` | Zero changes — already a pure controlled component |
+| `lib/calendarUtils.ts` | `AvailabilityCalendar` | Zero changes |
 
-No change. `agg.dmBlocked` is already in the `aggMap` that `CampaignTabs` builds from
-`dayAggregations`. No new prop or data fetch.
-
----
-
-## Feature 4: Empty State in the Date Side-Panel
-
-### Where it lives
-
-Same location — the player list inside `CampaignTabs`'s side-panel (lines 133–149).
-
-### Current behaviour
-
-When no players are available, all players render as "No response" (gray dot, gray text). This
-is accurate but not helpful — it looks like a list of non-responses rather than a clear signal.
-
-### What to add
-
-Two separate improvements:
-
-**A. No-players-free summary line** (when `freeCount === 0`):
-
-```tsx
-{agg && agg.freeCount === 0 && (
-  <p className="text-sm text-gray-500 italic mb-2">No players available this day.</p>
-)}
-```
-
-Placed above the player list so the DM sees the summary first.
-
-**B. Distinguish "busy" from "no response"** (optional but useful):
-
-The current `playerStatuses` type only has `'free' | 'no-response'`. The existing tooltip and
-panel both display "No response" for both truly-busy and simply-unresponded players. This
-distinction exists in the data (`AvailabilityEntry.status === 'busy'` is stored) but is
-collapsed before reaching the panel. Changing this would require threading a richer status
-type through `DayAggregation` — that is a moderate schema/data-flow change.
-
-For this milestone, the simpler fix is B.1 only: show the clear empty-state message when
-`freeCount === 0`. Do not attempt to distinguish busy vs no-response — that is a separate
-concern and out of scope per the requirements.
-
-### Data requirements
-
-No change. `agg.freeCount` is already in `DayAggregation` and already in `aggMap`.
+All other existing components (`CampaignTabs`, `AvailabilityForm`, `DashboardCalendar`, auth pages, etc.) are completely untouched by this milestone.
 
 ---
 
-## Component Boundaries
+## Data Flow
 
-| Component | Type | Change | Notes |
-|-----------|------|--------|-------|
-| `HowItWorksModal` | Client (new) | Create | Static step cards, `onClose` prop only |
-| `HowItWorksButton` | Client (new) | Create | Owns `useState(open)`, renders modal |
-| `src/app/page.tsx` | Server | Modify | Add `<HowItWorksButton />` |
-| `src/app/campaigns/page.tsx` | Server | Modify | Add `<HowItWorksButton />` to header row |
-| `src/app/join/[joinToken]/page.tsx` | Server | Modify | Add `<HowItWorksButton />` |
-| `src/app/join/[joinToken]/availability/page.tsx` | Server | Modify | Add `<HowItWorksButton />` |
-| `CampaignTabs` | Client | Modify | (1) Add legend entry, (2) add DM indicator in panel, (3) add empty-state message in panel |
-| `DashboardCalendar` | Client | No change | `dmBlocked` visual already exists |
-
-No new data fetching. No new Server Actions. No schema changes. No new props on any existing
-component (all required data is already threaded).
-
----
-
-## Data Flow: What Changes vs What Stays
-
-### What stays identical
-
-- Server Component fetches campaign data and serializes to props — unchanged.
-- `CampaignTabs` receives `dayAggregations` (with `dmBlocked` already set) — unchanged.
-- `DashboardCalendar` receives `dayAggregations` — unchanged.
-- The side-panel `aggMap` lookup — unchanged.
-
-### What changes
-
-- `CampaignTabs` JSX: three small additions (legend entry, DM indicator block, empty-state
-  paragraph). All read from data already in scope.
-- Four Server Component pages: each adds one `<HowItWorksButton />` import and render.
-- Two new files created: `HowItWorksModal.tsx`, `HowItWorksButton.tsx`.
-
-### No new data flows introduced
+### Landing Page (no data)
 
 ```
-Server Component (unchanged)
-  → CampaignTabs props (unchanged)
-     → aggMap (unchanged) — dmBlocked already present
-     → dmExceptionDates (unchanged) — length check for legend gate
-     → DashboardCalendar (unchanged)
+HTTP GET /
+  → Server Component: getSessionDM() [reads httpOnly cookie, queries DB]
+    → Authenticated DM: redirect('/campaigns') — no HTML rendered
+    → Logged-out visitor: return <LandingPage />
+      → LandingPage: static JSX + local component state only
+        → No DB calls, no API calls, no props drilled from server
+```
+
+### Demo Component (pure local state, no network)
+
+```
+AvailabilityDemoWidget (client)
+  ├─ MOCK_WINDOW_START / MOCK_WINDOW_END  ← module-level constants
+  ├─ useState(INITIAL_WEEKLY)             → weeklySelection
+  ├─ useState(INITIAL_OVERRIDES)          → overrides
+  ├─ <WeeklySchedule>                     ← receives weeklySelection, calls setWeeklySelection
+  └─ <AvailabilityCalendar>               ← receives all four props, calls setOverrides
+       No network I/O at any point in the tree
 ```
 
 ---
 
 ## Build Order
 
-Dependencies between the four features are minimal. Build order:
+Build order follows component dependency: leaf components before sections, sections before the page root.
 
-**Step 1: HowItWorksModal and HowItWorksButton (no deps)**
-
-Write `HowItWorksModal.tsx` with static step content first. Then wrap in `HowItWorksButton.tsx`.
-Wire into all four pages. This is purely additive — no existing file changes except adding one
-import and one JSX element per page.
-
-**Step 2: DM legend entry in CampaignTabs (no deps)**
-
-Single JSX addition in `CampaignTabs.tsx` inside the existing legend block. Gate on
-`dmExceptionDates.length > 0`. No other changes needed.
-
-**Step 3: DM indicator in date side-panel (depends on Step 2 visual language)**
-
-Adds one conditional block inside the panel `<div className="p-4 ...">`. Uses same amber
-color tokens as the legend entry from Step 2. Logically independent but should share visual
-language — do after Step 2.
-
-**Step 4: Empty state in date side-panel (no deps)**
-
-One paragraph element added inside the same panel `<div>`. Can be done alongside Step 3 in
-the same edit.
-
-Steps 2, 3, and 4 are all edits to `CampaignTabs.tsx` and can be done in one sitting.
+| Step | Component | Dependency | Notes |
+|------|-----------|------------|-------|
+| 1 | `ScrollReveal` | None | Needed by all sections — build first |
+| 2 | `AvailabilityDemoWidget` | `WeeklySchedule`, `AvailabilityCalendar` (exist) | Build early to confirm demo isolation before surrounding content |
+| 3 | `StickyNav` | None | Standalone, no section deps |
+| 4 | `HeroSection` | `ScrollReveal` | Static content — straightforward |
+| 5 | `FeaturesBlock` | `ScrollReveal` | Step-selector state, placeholder images |
+| 6 | `EasyForPlayersSection` | `AvailabilityDemoWidget`, `ScrollReveal` | Depends on demo being done |
+| 7 | `FinalCTASection` | `ScrollReveal` | Static content — straightforward |
+| 8 | `LandingPage` | All sections above | Assembles and sequences all sections |
+| 9 | `app/page.tsx` | `LandingPage` | One-line swap — do last |
 
 ---
 
-## Patterns to Follow
+## Scalability Considerations
 
-### Pattern: Narrow Client Component Island for Modal Trigger
-
-`HowItWorksButton` follows the same pattern as `CopyLinkButton`, `DeleteCampaignButton`, and
-`ShareModal` — a small `'use client'` island embedded in a Server Component page. The Server
-Component page does not need to become a Client Component; it just renders the island.
-
-### Pattern: Static Modal with onClose Callback
-
-`HowItWorksModal` follows `ShareModal`'s structure exactly: `fixed inset-0 z-50` overlay,
-`fixed inset-0 bg-black/60` backdrop (click to close), panel div. The only difference from
-`ShareModal` is that the modal is closed via the `onClose` callback (state in the parent
-`HowItWorksButton`) rather than via `router.replace` — because no URL cleanup is needed.
-
-### Pattern: Data Already in Scope, No New Props
-
-All three `CampaignTabs` changes (legend, indicator, empty state) read from props and local
-derived state (`aggMap`) that already exist. This is the minimum-change approach — no prop
-drilling required, no new data fetching, no changes to the Server Component page.
+| Concern | Now | If page grows |
+|---------|-----|---------------|
+| Bundle size | All landing components in one client subtree — appropriate for a single marketing page | If multiple marketing pages added, extract to a `(marketing)` route group with its own layout |
+| Demo complexity | Hardcoded mock data is correct | If an animated walkthrough is needed, add a `step` state to `AvailabilityDemoWidget` only — does not affect other components |
+| Animations | CSS transitions via `ScrollReveal` | If spring physics or stagger effects are needed later, add Framer Motion at that point — it is additive |
+| Nav scope | `StickyNav` is inside `LandingPage` only | No leakage to other pages — correct isolation |
 
 ---
 
 ## Anti-Patterns to Avoid
 
-### Anti-Pattern: Adding a Global Modal Context to layout.tsx
+### Anti-Pattern 1: Adding `StickyNav` to `app/layout.tsx`
 
-The layout is a Server Component. Wrapping it in a Client Component to host modal state would
-pull the entire application into the client bundle. The `HowItWorksButton` island avoids this.
+**What:** Placing the marketing nav in the root layout so it appears globally.
 
-### Anti-Pattern: URL-Triggering the HowItWorks Modal
+**Why bad:** The campaigns page, auth pages, and player availability pages have their own standalone layouts. A marketing nav on those pages is wrong UX. The root layout in this app is intentionally minimal — it has no nav, no providers, and should stay that way.
 
-URL params are the right tool for modals that must survive a server-side redirect (like
-`ShareModal`). For a user-initiated modal triggered by a button click, `useState` in a narrow
-Client Component is simpler, cleaner, and does not pollute browser history.
+**Instead:** `StickyNav` lives inside `LandingPage`, which renders only for logged-out visitors on the `/` route.
 
-### Anti-Pattern: Adding the DM Indicator Inside DashboardCalendar
+### Anti-Pattern 2: Modifying `AvailabilityForm` with a `demoMode` Prop
 
-`DashboardCalendar` does not own the side-panel. The side-panel is in `CampaignTabs`. Adding
-an indicator inside `DashboardCalendar` would require lifting more state or adding new props.
-The indicator belongs in the panel where it is already rendered.
+**What:** Adding `demoMode?: boolean` to `AvailabilityForm` and short-circuiting server action calls inside it.
 
-### Anti-Pattern: Threading New Props Through DashboardCalendar for the Legend
+**Why bad:** Pollutes a working production component with demo concerns. Introduces risk of accidentally shipping a form that silently skips saves. Adds conditional logic that is hard to audit.
 
-The legend sits in `CampaignTabs` above `<DashboardCalendar />`. `DashboardCalendar` does
-not need to know about the legend — it already has `dmBlocked` on each `DayAggregation`.
-Adding a `showDmLegend` prop to `DashboardCalendar` would be unnecessary indirection.
+**Instead:** `AvailabilityDemoWidget` is a separate component that reuses the pure leaf components (`WeeklySchedule`, `AvailabilityCalendar`) without touching `AvailabilityForm`.
 
-### Anti-Pattern: Distinguishing 'busy' vs 'no-response' in This Milestone
+### Anti-Pattern 3: Scroll Event Without `{ passive: true }`
 
-`PlayerDayStatus` currently collapses both states to `'no-response'`. Separating them would
-require changes to `DayAggregation`, `computeDayStatuses`, and every component that reads
-player statuses. That is a meaningful refactor — out of scope for a polish milestone that
-targets the empty-state message specifically.
+**What:** `window.addEventListener('scroll', handler)` without the passive option.
+
+**Why bad:** Without `passive: true`, the browser must wait to see if the handler calls `preventDefault()` before processing scroll events. This blocks the browser's compositor thread and causes jank on mobile.
+
+**Instead:** Always pass `{ passive: true }` for scroll listeners that do not prevent default.
+
+### Anti-Pattern 4: Directly Mutating DOM Classes in `useEffect` for Animations
+
+**What:** Using `element.classList.add('visible')` inside `useEffect` instead of React state.
+
+**Why bad:** Bypasses React's reconciler, can cause hydration mismatches (server renders without the class, client adds it directly), and makes the animation state invisible to React DevTools.
+
+**Instead:** `ScrollReveal` uses `useState(false)` → `setVisible(true)` and Tailwind classes derived from that state. React owns the DOM.
+
+### Anti-Pattern 5: Putting Demo in the Actual Join Route
+
+**What:** Rendering the demo by visiting `/join/demo-token` with a seeded placeholder campaign.
+
+**Why bad:** Requires a real DB record, a real join token, a real cookie, and real server actions that must be no-ops in demo mode. Complex to implement, complex to maintain, creates fake data in production.
+
+**Instead:** `AvailabilityDemoWidget` is a completely self-contained React component with no routing, no cookies, and no DB involvement.
 
 ---
 
 ## Sources
 
-- Direct inspection of `/Users/richardowen/Desktop/wheres-the-cleric/src/components/CampaignTabs.tsx`
-- Direct inspection of `/Users/richardowen/Desktop/wheres-the-cleric/src/components/DashboardCalendar.tsx`
-- Direct inspection of `/Users/richardowen/Desktop/wheres-the-cleric/src/components/ShareModal.tsx`
-- Direct inspection of `/Users/richardowen/Desktop/wheres-the-cleric/src/lib/availability.ts`
-- Direct inspection of all four Server Component pages that need the "?" button
-- Direct inspection of `/Users/richardowen/Desktop/wheres-the-cleric/src/app/layout.tsx`
-- All findings derived from codebase state. No training-data assumptions.
+- Direct inspection of `src/app/page.tsx` — confirmed current auth check + redirect pattern
+- Direct inspection of `src/app/layout.tsx` — confirmed minimal server component, no nav, no providers
+- Direct inspection of `src/components/AvailabilityForm.tsx` — confirmed server action coupling and `playerSlotId` dependency
+- Direct inspection of `src/components/WeeklySchedule.tsx` — confirmed pure controlled component with zero server coupling
+- Direct inspection of `src/components/AvailabilityCalendar.tsx` — confirmed pure controlled component with zero server coupling
+- Direct inspection of `src/app/join/[joinToken]/availability/page.tsx` — confirmed data serialisation pattern and prop shape passed to `AvailabilityForm`
+- Direct inspection of `src/app/globals.css` — confirmed design tokens for landing page styling
+- `package.json` reviewed — confirmed no animation library installed; `use-debounce` is the only non-framework dependency
+- `IntersectionObserver` API: HIGH confidence, baseline browser API, MDN documented, no library dependency required
+- Scroll `{ passive: true }`: established web platform best practice, MDN documented
