@@ -134,7 +134,11 @@ export function CampaignTabs({
                 {/* CLAR-02: DM unavailable indicator */}
                 {agg?.dmBlocked && (
                   <div className="flex items-center gap-3 pb-3 border-b border-gray-800">
-                    <span className="w-3 h-3 rounded shrink-0 border border-amber-400/60" />
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="text-amber-400/80 shrink-0">
+                      <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5"/>
+                      <line x1="8" y1="4.5" x2="8" y2="9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                      <circle cx="8" cy="11.5" r="0.75" fill="currentColor"/>
+                    </svg>
                     <span className="text-amber-300/80 text-sm font-medium">DM unavailable</span>
                   </div>
                 )}
