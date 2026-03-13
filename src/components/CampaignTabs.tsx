@@ -131,6 +131,17 @@ export function CampaignTabs({
                 </button>
               </div>
               <div className="p-4 space-y-3 overflow-y-auto flex-1">
+                {/* CLAR-02: DM unavailable indicator */}
+                {agg?.dmBlocked && (
+                  <div className="flex items-center gap-3 pb-3 border-b border-gray-800">
+                    <span className="w-3 h-3 rounded shrink-0 border border-amber-400/60" />
+                    <span className="text-amber-300/80 text-sm font-medium">DM unavailable</span>
+                  </div>
+                )}
+                {/* CLAR-03: Empty state when no players are free */}
+                {agg && agg.freeCount === 0 && agg.totalPlayers > 0 && (
+                  <p className="text-sm text-gray-500 italic">No players available this day.</p>
+                )}
                 {playerSlots.map(slot => {
                   const status = agg?.playerStatuses[slot.id] ?? 'no-response'
                   return (
@@ -260,6 +271,11 @@ export function CampaignTabs({
                   <span className="flex items-center gap-1.5">
                     <span className="inline-block w-2.5 h-2.5 rounded-full bg-gray-600" />No response
                   </span>
+                  {dmExceptionDates.length > 0 && (
+                    <span className="flex items-center gap-1.5">
+                      <span className="inline-block w-2.5 h-2.5 rounded border border-amber-400/60" />DM unavailable
+                    </span>
+                  )}
                 </div>
                 <DashboardCalendar
                   dayAggregations={dayAggregations}
