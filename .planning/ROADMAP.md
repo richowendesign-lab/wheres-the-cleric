@@ -92,7 +92,10 @@ Full phase details: `.planning/milestones/v1.4-ROADMAP.md`
   3. Visitor sees a "Simple scheduling for your next game" features section with Step 1 active by default
   4. Visitor sees an "Easy for players" section with a 3-card onboarding grid
   5. Visitor sees a final CTA section and footer; logged-in DM visiting / is redirected to /campaigns
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 20-01-PLAN.md — Save static assets + build LandingPage client component with all sections
+- [ ] 20-02-PLAN.md — Rewire page.tsx: auth guard + LandingPage render + human verify
 
 ### Phase 21: Scroll Animations
 **Goal**: Every major section animates smoothly into view as the visitor scrolls, with no motion for users who have requested it
@@ -156,7 +159,7 @@ Full phase details: `.planning/milestones/v1.4-ROADMAP.md`
 | 17. Calendar & Panel Clarity | v1.4 | 1/1 | Complete | 2026-03-13 |
 | 18. How It Works Modal | v1.4 | 1/1 | Complete | 2026-03-13 |
 | 19. How It Works Page Integration | v1.4 | 1/1 | Complete | 2026-03-13 |
-| 20. Static Page Shell | v1.5 | 0/? | Not started | - |
+| 20. Static Page Shell | v1.5 | 0/2 | Planned | - |
 | 21. Scroll Animations | v1.5 | 0/? | Not started | - |
 | 22. Features Step-Selector | v1.5 | 0/? | Not started | - |
 | 23. Availability Demo | v1.5 | 0/? | Not started | - |
