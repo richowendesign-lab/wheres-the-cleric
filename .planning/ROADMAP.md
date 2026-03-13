@@ -75,7 +75,7 @@ Full phase details: `.planning/milestones/v1.4-ROADMAP.md`
 **Milestone Goal:** Redesign the logged-out home page into a marketing landing page that converts first-time visitors into DM sign-ups.
 
 - [x] **Phase 20: Static Page Shell** - Full-page layout with sticky nav, hero, features section, player section, CTA, and footer; auth redirect preserved (completed 2026-03-13)
-- [ ] **Phase 21: Scroll Animations** - All sections fade and slide up on viewport entry; reduced-motion respected
+- [x] **Phase 21: Scroll Animations** - All sections fade and slide up on viewport entry; reduced-motion respected (completed 2026-03-13)
 - [ ] **Phase 22: Features Step-Selector** - Interactive 4-step FeaturesBlock with click-to-highlight and image swap
 - [ ] **Phase 23: Availability Demo** - Self-contained interactive player availability demo embedded in hero and player sections
 - [ ] **Phase 24: Sticky Nav Scroll Behaviour** - Nav background transitions from transparent to dark opaque on scroll
@@ -172,7 +172,7 @@ Plans:
 | 18. How It Works Modal | v1.4 | 1/1 | Complete | 2026-03-13 |
 | 19. How It Works Page Integration | v1.4 | 1/1 | Complete | 2026-03-13 |
 | 20. Static Page Shell | 2/2 | Complete   | 2026-03-13 | - |
-| 21. Scroll Animations | 1/2 | In Progress|  | - |
+| 21. Scroll Animations | 2/2 | Complete   | 2026-03-13 | - |
 | 22. Features Step-Selector | v1.5 | 0/? | Not started | - |
 | 23. Availability Demo | v1.5 | 0/? | Not started | - |
 | 24. Sticky Nav Scroll Behaviour | v1.5 | 0/? | Not started | - |

@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: Marketing Home Page
 status: in_progress
-last_updated: "2026-03-13T00:08:00Z"
+last_updated: "2026-03-13T00:10:00Z"
 progress:
   total_phases: 5
   completed_phases: 0
@@ -18,16 +18,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-13)
 
 **Core value:** The DM can instantly see when everyone is free — without chasing people for responses or guessing which dates to offer.
-**Current focus:** Phase 21 — Scroll Animations
+**Current focus:** Phase 22 — Features Step-Selector
 
 ## Current Position
 
-Phase: 21 of 24 (Scroll Animations)
-Plan: 1 of 1 in current phase (21-01 complete — phase 21 done)
+Phase: 22 of 24 (Features Step-Selector)
+Plan: 0 of 0 in current phase (phase 22 not yet started)
 Status: In progress
-Last activity: 2026-03-13 — Completed 21-01 (useInView hook + scroll-triggered fade/slide-up on all four landing sections)
+Last activity: 2026-03-13 — Completed phase 21 (scroll animations verified by human — ANIM-01 + ANIM-02 satisfied)
 
-Progress: [████████████░░░░░░░░] 0/5 v1.5 phases complete (Phase 21 complete — 1/1 plans done)
+Progress: [████████████░░░░░░░░] 0/5 v1.5 phases complete (Phase 21 complete — 2/2 plans done)
 
 ## Pending Todos
 
