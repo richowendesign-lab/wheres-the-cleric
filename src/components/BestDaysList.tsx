@@ -62,10 +62,15 @@ export function BestDaysList({ days, playerSlots, dmExceptionMode, selectedDate,
                 {/* Date */}
                 <span className="font-medium text-gray-100 shrink-0">{dateLabel}</span>
 
-                {/* DM busy badge */}
+                {/* DM unavailable badge */}
                 {day.dmBlocked && dmExceptionMode === 'flag' && (
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-amber-900/40 text-amber-400 border border-amber-700/40 shrink-0">
-                    DM busy
+                  <span className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-amber-900/40 text-amber-400 border border-amber-700/40 shrink-0">
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5"/>
+                      <line x1="8" y1="4.5" x2="8" y2="9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                      <circle cx="8" cy="11.5" r="0.75" fill="currentColor"/>
+                    </svg>
+                    DM unavailable
                   </span>
                 )}
 
