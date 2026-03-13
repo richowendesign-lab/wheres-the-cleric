@@ -65,26 +65,26 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| NAV-01 | — | Pending |
-| NAV-02 | — | Pending |
-| HERO-01 | — | Pending |
-| HERO-02 | — | Pending |
-| FEAT-01 | — | Pending |
-| FEAT-02 | — | Pending |
-| FEAT-03 | — | Pending |
-| PLAY-01 | — | Pending |
-| PLAY-02 | — | Pending |
-| CTA-01 | — | Pending |
-| CTA-02 | — | Pending |
-| ANIM-01 | — | Pending |
-| ANIM-02 | — | Pending |
-| INT-01 | — | Pending |
+| NAV-01 | Phase 20 | Pending |
+| NAV-02 | Phase 24 | Pending |
+| HERO-01 | Phase 20 | Pending |
+| HERO-02 | Phase 23 | Pending |
+| FEAT-01 | Phase 20 | Pending |
+| FEAT-02 | Phase 22 | Pending |
+| FEAT-03 | Phase 20 | Pending |
+| PLAY-01 | Phase 20 | Pending |
+| PLAY-02 | Phase 23 | Pending |
+| CTA-01 | Phase 20 | Pending |
+| CTA-02 | Phase 20 | Pending |
+| ANIM-01 | Phase 21 | Pending |
+| ANIM-02 | Phase 21 | Pending |
+| INT-01 | Phase 20 | Pending |
 
 **Coverage:**
 - v1.5 requirements: 14 total
-- Mapped to phases: 0
-- Unmapped: 14 ⚠️
+- Mapped to phases: 14
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-03-13*
-*Last updated: 2026-03-13 after initial definition*
+*Last updated: 2026-03-13 after roadmap creation*
