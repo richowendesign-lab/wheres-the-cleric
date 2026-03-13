@@ -132,8 +132,8 @@ Plans:
   3. Both demo embeds function without requiring login, creating a session, or making any server requests
 **Plans**: 2 plans
 Plans:
-- [ ] 21-01-PLAN.md — Create useInView hook + wire fade/slide-up animations into all four sections
-- [ ] 21-02-PLAN.md — Start dev server + human verify animations and reduced-motion behaviour
+- [ ] 23-01-PLAN.md — Create useScrollInView hook + HeroDemoWidget + PlayerDemoWidget (new files only)
+- [ ] 23-02-PLAN.md — Wire both widgets into HeroSection and PlayersSection + human verify
 
 ### Phase 24: Sticky Nav Scroll Behaviour
 **Goal**: The nav feels polished and always legible — transparent over the hero image, then solidly dark once the visitor scrolls into content
@@ -174,5 +174,5 @@ Plans:
 | 20. Static Page Shell | 2/2 | Complete   | 2026-03-13 | - |
 | 21. Scroll Animations | 2/2 | Complete   | 2026-03-13 | - |
 | 22. Features Step-Selector | 2/2 | Complete   | 2026-03-13 | - |
-| 23. Availability Demo | v1.5 | 0/? | Not started | - |
+| 23. Availability Demo | v1.5 | 0/2 | Not started | - |
 | 24. Sticky Nav Scroll Behaviour | v1.5 | 0/? | Not started | - |
