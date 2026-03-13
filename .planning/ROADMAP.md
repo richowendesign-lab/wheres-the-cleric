@@ -91,10 +91,10 @@ Plans:
   3. Clicking the backdrop closes the modal
   4. Focus is trapped inside the modal while open — tabbing does not reach elements behind it
   5. Opening and closing the modal does not change the URL or browser history
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 18-01: TBD
+- [ ] 18-01-PLAN.md — Create HowItWorksModal.tsx (native dialog, role toggle, step cards) and HowItWorksButton.tsx (client island); add dialog::backdrop rule to globals.css
 
 ### Phase 19: How It Works Page Integration
 **Goal**: Every user — whether a prospective DM on the home page, an active DM on the campaigns page, or a player on the join or availability page — can open the "How it works" explainer from the page they are currently on.
@@ -132,5 +132,5 @@ Plans:
 | 15. Shareable Best Dates | v1.3 | 2/2 | Complete | 2026-03-11 |
 | 16. Custom Date Picker | v1.3 | 2/2 | Complete | 2026-03-11 |
 | 17. Calendar & Panel Clarity | 1/1 | Complete   | 2026-03-13 | - |
-| 18. How It Works Modal | v1.4 | 0/TBD | Not started | - |
+| 18. How It Works Modal | v1.4 | 0/1 | Not started | - |
 | 19. How It Works Page Integration | v1.4 | 0/TBD | Not started | - |
