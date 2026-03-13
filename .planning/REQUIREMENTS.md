@@ -9,29 +9,29 @@ Requirements for the Marketing Home Page milestone. Each maps to roadmap phases.
 
 ### Navigation
 
-- [ ] **NAV-01**: Visitor sees a sticky nav with the app logo, "Beta" badge, and Sign up / Log in buttons on every page scroll position
+- [x] **NAV-01**: Visitor sees a sticky nav with the app logo, "Beta" badge, and Sign up / Log in buttons on every page scroll position
 - [ ] **NAV-02**: Nav background transitions from transparent to dark opaque when visitor scrolls past the hero
 
 ### Hero
 
-- [ ] **HERO-01**: Visitor sees a hero section with the app icon, large heading, subtitle copy, and Sign up / Log in CTA buttons
+- [x] **HERO-01**: Visitor sees a hero section with the app icon, large heading, subtitle copy, and Sign up / Log in CTA buttons
 - [ ] **HERO-02**: Visitor can interact with an embedded DM dashboard demo showing a mock campaign with placeholder player data and best-day recommendations
 
 ### Features Section
 
-- [ ] **FEAT-01**: Visitor sees a "Simple scheduling for your next game" section with descriptive copy
+- [x] **FEAT-01**: Visitor sees a "Simple scheduling for your next game" section with descriptive copy
 - [ ] **FEAT-02**: Visitor can click any of the 4 step cards; the selected step is highlighted, its description text expands, and a paired illustration image is shown
-- [ ] **FEAT-03**: Step 1 is active by default on page load
+- [x] **FEAT-03**: Step 1 is active by default on page load
 
 ### Easy for Players Section
 
-- [ ] **PLAY-01**: Visitor sees an "Easy for players" section with a 3-card grid explaining the player onboarding flow
+- [x] **PLAY-01**: Visitor sees an "Easy for players" section with a 3-card grid explaining the player onboarding flow
 - [ ] **PLAY-02**: Visitor can interact with an embedded player availability demo using placeholder data, with a planning window computed from the current date
 
 ### CTA & Footer
 
-- [ ] **CTA-01**: Visitor sees a final "Ready to plan your next adventure?" section with Sign up / Log in buttons
-- [ ] **CTA-02**: Visitor sees a footer with copyright text
+- [x] **CTA-01**: Visitor sees a final "Ready to plan your next adventure?" section with Sign up / Log in buttons
+- [x] **CTA-02**: Visitor sees a footer with copyright text
 
 ### Animations
 
@@ -65,17 +65,17 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| NAV-01 | Phase 20 | Pending |
+| NAV-01 | Phase 20 | Complete |
 | NAV-02 | Phase 24 | Pending |
-| HERO-01 | Phase 20 | Pending |
+| HERO-01 | Phase 20 | Complete |
 | HERO-02 | Phase 23 | Pending |
-| FEAT-01 | Phase 20 | Pending |
+| FEAT-01 | Phase 20 | Complete |
 | FEAT-02 | Phase 22 | Pending |
-| FEAT-03 | Phase 20 | Pending |
-| PLAY-01 | Phase 20 | Pending |
+| FEAT-03 | Phase 20 | Complete |
+| PLAY-01 | Phase 20 | Complete |
 | PLAY-02 | Phase 23 | Pending |
-| CTA-01 | Phase 20 | Pending |
-| CTA-02 | Phase 20 | Pending |
+| CTA-01 | Phase 20 | Complete |
+| CTA-02 | Phase 20 | Complete |
 | ANIM-01 | Phase 21 | Pending |
 | ANIM-02 | Phase 21 | Pending |
 | INT-01 | Phase 20 | Pending |

@@ -159,7 +159,7 @@ Plans:
 | 17. Calendar & Panel Clarity | v1.4 | 1/1 | Complete | 2026-03-13 |
 | 18. How It Works Modal | v1.4 | 1/1 | Complete | 2026-03-13 |
 | 19. How It Works Page Integration | v1.4 | 1/1 | Complete | 2026-03-13 |
-| 20. Static Page Shell | v1.5 | 0/2 | Planned | - |
+| 20. Static Page Shell | 1/2 | In Progress|  | - |
 | 21. Scroll Animations | v1.5 | 0/? | Not started | - |
 | 22. Features Step-Selector | v1.5 | 0/? | Not started | - |
 | 23. Availability Demo | v1.5 | 0/? | Not started | - |

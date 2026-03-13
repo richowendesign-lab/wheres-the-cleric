@@ -23,11 +23,11 @@ See: .planning/PROJECT.md (updated 2026-03-13)
 ## Current Position
 
 Phase: 20 of 24 (Static Page Shell)
-Plan: 0 of ? in current phase
-Status: Ready to plan
-Last activity: 2026-03-13 — v1.5 roadmap created (phases 20-24)
+Plan: 1 of 2 in current phase (20-01 complete)
+Status: In progress
+Last activity: 2026-03-13 — Completed 20-01 (LandingPage static shell)
 
-Progress: [████████████░░░░░░░░] 0/5 v1.5 phases started
+Progress: [████████████░░░░░░░░] 0/5 v1.5 phases complete (Phase 20 in progress — 1/2 plans done)
 
 ## Pending Todos
 
@@ -44,3 +44,7 @@ None.
 - Zero new dependencies for v1.5 — animations via IntersectionObserver + Tailwind CSS transitions only
 - AvailabilityDemoWidget must use hardcoded placeholder dates, not new Date(), to avoid SSR hydration mismatch
 - page.tsx must never gain 'use client' — auth redirect guard stays as first lines of default export
+- Logo asset is Logo.svg (capital L) in /public — reference as /Logo.svg in src
+- Nav CTA buttons present in DOM but hidden via opacity-0 pointer-events-none — Phase 24 reveals on scroll
+- FeaturesBlock step 1 active state is hard-coded HTML/CSS (no useState) — Phase 22 adds interactivity
+- Landing sub-components split into src/components/landing/ directory (one file per section)
