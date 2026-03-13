@@ -1,30 +1,31 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.4
-milestone_name: Clarity & Polish
-status: complete
+milestone: v1.5
+milestone_name: Marketing Home Page
+status: in_progress
 last_updated: "2026-03-13"
 progress:
-  total_phases: 19
-  completed_phases: 19
-  total_plans: 31
-  completed_plans: 31
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-03-13 after v1.4 milestone)
+See: .planning/PROJECT.md (updated 2026-03-13 after v1.5 milestone start)
 
 **Core value:** The DM can instantly see when everyone is free — without chasing people for responses or guessing which dates to offer.
-**Current focus:** v1.4 shipped — planning v1.5 next
+**Current focus:** Defining requirements for v1.5 Marketing Home Page
 
 ## Current Position
 
-Milestone v1.4 archived 2026-03-13. All 19 phases, 31 plans complete.
-
-Next step: `/gsd:new-milestone` to define v1.5
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-03-13 — Milestone v1.5 started
 
 ## Pending Todos
 
@@ -34,8 +35,7 @@ None.
 
 None.
 
-## Session Continuity
+## Accumulated Context
 
-Last session: 2026-03-13
-Stopped at: v1.4 milestone archived — commit, tag, push next
-Resume file: None
+- Phases 1–19 completed across v1.0–v1.4 milestones
+- New phases for v1.5 will start at phase 20

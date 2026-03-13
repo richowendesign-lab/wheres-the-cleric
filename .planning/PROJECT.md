@@ -32,14 +32,23 @@ The DM can instantly see when everyone is free — without chasing people for re
 - ✓ Dashboard shows adaptive paginated calendar and ranked best-day list; campaign controls in Settings tab — v1.3
 - ✓ DM can copy a formatted top-3 best-dates message from the dashboard to paste into group chat — v1.3
 - ✓ Planning window date fields use a custom themed date picker matching the app's visual style — v1.3
+- ✓ DM and player can access a "How it works" explainer from all four pages — v1.4
+- ✓ Group Availability calendar legend includes a DM unavailable colour swatch — v1.4
+- ✓ Clicking a DM-marked date shows a DM unavailable indicator in the date panel — v1.4
+- ✓ Date panel shows a clear "No players available" message when no one is free — v1.4
 
 ### Active
 
-- [ ] DM and player can access a "How it works" explainer from the home page, DM campaigns page, and player-facing pages
-- [ ] Explainer displays as a modal with visual numbered cards (step number + heading + 1-line description) covering both DM and player perspectives
-- [ ] Group Availability calendar legend includes a DM unavailable colour swatch
-- [ ] Clicking a DM-marked date in the Group Availability calendar shows a DM unavailable indicator in the info modal
-- [ ] Date modal shows a clear single message when no players are available (instead of listing players as "no response")
+<!-- Current Milestone: v1.5 Marketing Home Page -->
+
+- [ ] Logged-out home page has a sticky nav with logo, "Beta" badge, and Sign up / Log in buttons; nav background transitions to dark opacity on scroll
+- [ ] Hero section with large heading, subtitle, and primary Sign up / Log in CTAs
+- [ ] An interactive demo component embedded in the page shows the player availability experience with placeholder data — no real auth or navigation required
+- [ ] Features section ("Simple scheduling for your next game") contains an interactive step-selector: clicking a step highlights it, expands its description, and swaps the accompanying image
+- [ ] "Easy for players" section shows a 3-card grid with player onboarding steps and a second demo embed showing the player availability view
+- [ ] Final CTA section ("Ready to plan your next adventure?") with Sign up / Log in buttons
+- [ ] Each page section animates in smoothly as it enters the viewport on scroll
+- [ ] Existing logged-in home page (campaigns list) is unaffected
 
 ### Out of Scope
 
@@ -100,6 +109,18 @@ The DM can instantly see when everyone is free — without chasing people for re
 | Calendar pagination steps by exactly 2 with canGoNext gate (v1.3) | Avoids month repetition on odd-count windows; last page may show 1 month — consistent with no-overlap expectation | ✓ Good — user confirmed this is cleaner |
 | revalidatePath in updatePlanningWindow server action (v1.3) | Dashboard must re-render after window change; same fix pattern as toggleDmException | ✓ Good — consistent revalidation approach |
 
+## Current Milestone: v1.5 Marketing Home Page
+
+**Goal:** Redesign the logged-out home page into a marketing landing page with a sticky nav, interactive feature demo, animated sections, and a live availability demo embed.
+
+**Target features:**
+- Sticky nav with scroll-triggered dark background
+- Interactive FeaturesBlock (4 selectable steps with images)
+- Embedded interactive availability demo component (player-side, placeholder data)
+- Scroll-triggered section entrance animations
+- "Easy for players" card grid + second demo embed
+- Final CTA section + footer
+
 ---
-*Last updated: 2026-03-12 after v1.4 milestone start*
+*Last updated: 2026-03-13 after v1.5 milestone start*
 
