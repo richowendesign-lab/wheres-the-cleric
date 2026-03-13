@@ -106,10 +106,10 @@ Plans:
   3. A "How it works" trigger is present on the player join page (/join/[joinToken]) and opens the modal
   4. A "How it works" trigger is present on the player availability page (/join/[joinToken]/availability) and opens the modal
   5. None of the four pages gain a "use client" directive as a result of adding the trigger
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 19-01: TBD
+- [ ] 19-01-PLAN.md — Add defaultRole prop to HowItWorksButton and wire into all four pages (home, campaigns, join, availability)
 
 ## Progress
 
