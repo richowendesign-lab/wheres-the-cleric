@@ -16,9 +16,9 @@ Requirements for Milestone v1.4: Clarity & Polish.
 
 ### Calendar & Panel Clarity
 
-- [ ] **CLAR-01**: Group Availability calendar legend includes a DM unavailable colour swatch — only shown when the DM has marked at least one date
-- [ ] **CLAR-02**: Clicking a DM-marked date in the Group Availability calendar shows a DM unavailable indicator in the date panel alongside normal player availability
-- [ ] **CLAR-03**: Date panel shows a clear single message when no players are available, instead of listing each player as "no response"
+- [x] **CLAR-01**: Group Availability calendar legend includes a DM unavailable colour swatch — only shown when the DM has marked at least one date
+- [x] **CLAR-02**: Clicking a DM-marked date in the Group Availability calendar shows a DM unavailable indicator in the date panel alongside normal player availability
+- [x] **CLAR-03**: Date panel shows a clear single message when no players are available, instead of listing each player as "no response"
 
 ## Future Requirements
 
@@ -56,9 +56,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | HOW-02 | Phase 19 | Pending |
 | HOW-03 | Phase 18 | Pending |
 | HOW-04 | Phase 18 | Pending |
-| CLAR-01 | Phase 17 | Pending |
-| CLAR-02 | Phase 17 | Pending |
-| CLAR-03 | Phase 17 | Pending |
+| CLAR-01 | Phase 17 | Complete |
+| CLAR-02 | Phase 17 | Complete |
+| CLAR-03 | Phase 17 | Complete |
 
 **Coverage:**
 - v1.4 requirements: 7 total

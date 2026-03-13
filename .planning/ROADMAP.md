@@ -62,7 +62,7 @@ Full phase details: `.planning/milestones/v1.3-ROADMAP.md`
 
 **Milestone Goal:** Surface information the calendar already has (DM unavailability, empty date states) and give every user a way to understand the app without reading documentation.
 
-- [ ] **Phase 17: Calendar & Panel Clarity** — Legend shows DM unavailable swatch; date panel shows DM blocked indicator and a clear empty state when no players are free
+- [x] **Phase 17: Calendar & Panel Clarity** — Legend shows DM unavailable swatch; date panel shows DM blocked indicator and a clear empty state when no players are free (completed 2026-03-13)
 - [ ] **Phase 18: How It Works Modal** — Standalone HowItWorksModal and HowItWorksButton components built and verified in isolation; native dialog with focus trap
 - [ ] **Phase 19: How It Works Page Integration** — HowItWorksButton wired into all four pages (home, campaigns, join, availability)
 
@@ -131,6 +131,6 @@ Plans:
 | 14. Dashboard Redesign | v1.3 | 4/4 | Complete | 2026-03-11 |
 | 15. Shareable Best Dates | v1.3 | 2/2 | Complete | 2026-03-11 |
 | 16. Custom Date Picker | v1.3 | 2/2 | Complete | 2026-03-11 |
-| 17. Calendar & Panel Clarity | v1.4 | 0/1 | Not started | - |
+| 17. Calendar & Panel Clarity | 1/1 | Complete   | 2026-03-13 | - |
 | 18. How It Works Modal | v1.4 | 0/TBD | Not started | - |
 | 19. How It Works Page Integration | v1.4 | 0/TBD | Not started | - |
