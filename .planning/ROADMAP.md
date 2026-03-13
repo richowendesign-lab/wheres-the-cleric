@@ -119,8 +119,8 @@ Plans:
   3. Only one step is active at a time; switching to a new step deactivates the previous one
 **Plans**: 2 plans
 Plans:
-- [ ] 21-01-PLAN.md — Create useInView hook + wire fade/slide-up animations into all four sections
-- [ ] 21-02-PLAN.md — Start dev server + human verify animations and reduced-motion behaviour
+- [ ] 22-01-PLAN.md — Rewrite FeaturesBlock.tsx with useState step-selector (data-driven map, conditional classes, dynamic image src)
+- [ ] 22-02-PLAN.md — Start dev server + human verify step-selector interaction
 
 ### Phase 23: Availability Demo
 **Goal**: Visitors can interact with a live-feeling player availability demo that shows what filling in availability looks like — with no auth, no DB, and no navigation required
@@ -173,6 +173,6 @@ Plans:
 | 19. How It Works Page Integration | v1.4 | 1/1 | Complete | 2026-03-13 |
 | 20. Static Page Shell | 2/2 | Complete   | 2026-03-13 | - |
 | 21. Scroll Animations | 2/2 | Complete   | 2026-03-13 | - |
-| 22. Features Step-Selector | v1.5 | 0/? | Not started | - |
+| 22. Features Step-Selector | v1.5 | 0/2 | Not started | - |
 | 23. Availability Demo | v1.5 | 0/? | Not started | - |
 | 24. Sticky Nav Scroll Behaviour | v1.5 | 0/? | Not started | - |
