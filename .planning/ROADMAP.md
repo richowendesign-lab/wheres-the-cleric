@@ -6,7 +6,7 @@
 - ✅ **v1.1 Simplified Onboarding** — Phases 5-7 (shipped 2026-03-02)
 - ✅ **v1.2 Multi-Campaign DM** — Phases 8-10 (shipped 2026-03-05)
 - ✅ **v1.3 DM Experience & Scheduling Flow** — Phases 11-16 (shipped 2026-03-12)
-- 🚧 **v1.4 Clarity & Polish** — Phases 17-19 (in progress)
+- ✅ **v1.4 Clarity & Polish** — Phases 17-19 (shipped 2026-03-13)
 
 ## Phases
 
@@ -58,13 +58,13 @@ Full phase details: `.planning/milestones/v1.3-ROADMAP.md`
 
 </details>
 
-### 🚧 v1.4 Clarity & Polish (In Progress)
+### ✅ v1.4 Clarity & Polish (Complete — 2026-03-13)
 
 **Milestone Goal:** Surface information the calendar already has (DM unavailability, empty date states) and give every user a way to understand the app without reading documentation.
 
 - [x] **Phase 17: Calendar & Panel Clarity** — Legend shows DM unavailable swatch; date panel shows DM blocked indicator and a clear empty state when no players are free (completed 2026-03-13)
 - [x] **Phase 18: How It Works Modal** — Standalone HowItWorksModal and HowItWorksButton components built and verified in isolation; native dialog with focus trap (completed 2026-03-13)
-- [ ] **Phase 19: How It Works Page Integration** — HowItWorksButton wired into all four pages (home, campaigns, join, availability)
+- [x] **Phase 19: How It Works Page Integration** — HowItWorksButton wired into all four pages (home, campaigns, join, availability) (completed 2026-03-13)
 
 ## Phase Details
 
@@ -79,7 +79,7 @@ Full phase details: `.planning/milestones/v1.3-ROADMAP.md`
 **Plans**: 1 plan
 
 Plans:
-- [ ] 17-01-PLAN.md — Add DM unavailable legend swatch, panel indicator, and empty-state message to CampaignTabs.tsx
+- [x] 17-01-PLAN.md — Add DM unavailable legend swatch, panel indicator, and empty-state message to CampaignTabs.tsx
 
 ### Phase 18: How It Works Modal
 **Goal**: A self-contained, accessible "How it works" modal component exists and works correctly in isolation — with proper focus trap, keyboard dismiss, and step-card content for both DM and player perspectives — before being added to any page.
@@ -94,7 +94,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 18-01-PLAN.md — Create HowItWorksModal.tsx (native dialog, role toggle, step cards) and HowItWorksButton.tsx (client island); add dialog::backdrop rule to globals.css
+- [x] 18-01-PLAN.md — Create HowItWorksModal.tsx (native dialog, role toggle, step cards) and HowItWorksButton.tsx (client island); add dialog::backdrop rule to globals.css
 
 ### Phase 19: How It Works Page Integration
 **Goal**: Every user — whether a prospective DM on the home page, an active DM on the campaigns page, or a player on the join or availability page — can open the "How it works" explainer from the page they are currently on.
@@ -109,7 +109,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 19-01-PLAN.md — Add defaultRole prop to HowItWorksButton and wire into all four pages (home, campaigns, join, availability)
+- [x] 19-01-PLAN.md — Add defaultRole prop to HowItWorksButton and wire into all four pages (home, campaigns, join, availability)
 
 ## Progress
 
@@ -131,6 +131,6 @@ Plans:
 | 14. Dashboard Redesign | v1.3 | 4/4 | Complete | 2026-03-11 |
 | 15. Shareable Best Dates | v1.3 | 2/2 | Complete | 2026-03-11 |
 | 16. Custom Date Picker | v1.3 | 2/2 | Complete | 2026-03-11 |
-| 17. Calendar & Panel Clarity | 1/1 | Complete   | 2026-03-13 | - |
-| 18. How It Works Modal | 1/1 | Complete   | 2026-03-13 | - |
-| 19. How It Works Page Integration | v1.4 | 0/TBD | Not started | - |
+| 17. Calendar & Panel Clarity | v1.4 | 1/1 | Complete | 2026-03-13 |
+| 18. How It Works Modal | v1.4 | 1/1 | Complete | 2026-03-13 |
+| 19. How It Works Page Integration | v1.4 | 1/1 | Complete | 2026-03-13 |
