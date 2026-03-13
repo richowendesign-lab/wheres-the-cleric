@@ -34,20 +34,22 @@ export function FeaturesBlock() {
               <div
                 key={step.id}
                 onClick={() => setActiveStep(step.id)}
-                className={[
-                  'flex items-start gap-4 bg-[var(--dnd-card-bg)] border border-[var(--dnd-border-card)] rounded-lg px-4 py-3 cursor-pointer',
-                  isActive ? '' : 'opacity-60',
-                ].join(' ')}
+                className="relative flex items-start gap-4 rounded-lg px-4 py-3 cursor-pointer overflow-hidden border border-[var(--dnd-border-card)]"
               >
+                {/* Background dims on inactive, content stays full opacity */}
+                <div className={[
+                  'absolute inset-0 bg-[var(--dnd-card-bg)] transition-opacity duration-200',
+                  isActive ? 'opacity-100' : 'opacity-60',
+                ].join(' ')} />
                 <span
                   className={[
-                    'w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold shrink-0',
+                    'relative w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold shrink-0',
                     isActive ? 'bg-[#572182] text-white' : 'bg-[#ba7df6] text-black',
                   ].join(' ')}
                 >
                   {step.id}
                 </span>
-                <div>
+                <div className="relative">
                   <p className="font-semibold text-white">{step.title}</p>
                   {isActive && <p className="text-[var(--dnd-text-muted)] mt-1 text-sm">{step.description}</p>}
                 </div>
