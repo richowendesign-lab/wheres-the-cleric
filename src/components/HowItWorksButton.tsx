@@ -3,7 +3,11 @@
 import { useState } from 'react'
 import { HowItWorksModal } from './HowItWorksModal'
 
-export function HowItWorksButton() {
+interface HowItWorksButtonProps {
+  defaultRole?: 'dm' | 'player'
+}
+
+export function HowItWorksButton({ defaultRole }: HowItWorksButtonProps = {}) {
   const [open, setOpen] = useState(false)
   return (
     <>
@@ -21,7 +25,7 @@ export function HowItWorksButton() {
           ?
         </span>
       </button>
-      {open && <HowItWorksModal onClose={() => setOpen(false)} />}
+      {open && <HowItWorksModal onClose={() => setOpen(false)} defaultRole={defaultRole} />}
     </>
   )
 }

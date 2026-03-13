@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { getSessionDM } from '@/lib/auth'
 import Link from 'next/link'
 import Image from 'next/image'
+import { HowItWorksButton } from '@/components/HowItWorksButton'
 
 export default async function HomePage() {
   const dm = await getSessionDM()
@@ -32,6 +33,9 @@ export default async function HomePage() {
         >
           Sign Up
         </Link>
+      </div>
+      <div className="mt-6">
+        <HowItWorksButton />
       </div>
     </main>
   )

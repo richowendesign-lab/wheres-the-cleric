@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 import { registerPlayer } from '@/lib/actions/player'
 import JoinForm from './JoinForm'
 import Image from 'next/image'
+import { HowItWorksButton } from '@/components/HowItWorksButton'
 
 export default async function JoinPage({
   params,
@@ -63,6 +64,9 @@ export default async function JoinPage({
           campaignId={campaign.id}
           joinToken={joinToken}
         />
+        <div className="mt-4">
+          <HowItWorksButton defaultRole="player" />
+        </div>
       </div>
     </main>
   )

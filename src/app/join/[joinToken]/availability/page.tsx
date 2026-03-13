@@ -2,6 +2,7 @@ import { notFound, redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 import { prisma } from '@/lib/prisma'
 import { AvailabilityForm } from '@/components/AvailabilityForm'
+import { HowItWorksButton } from '@/components/HowItWorksButton'
 
 export default async function AvailabilityPage({
   params,
@@ -86,6 +87,9 @@ export default async function AvailabilityPage({
           planningWindowEnd={windowEnd}
           initialEntries={serializedEntries}
         />
+        <div className="mt-6">
+          <HowItWorksButton defaultRole="player" />
+        </div>
       </div>
     </main>
   )
