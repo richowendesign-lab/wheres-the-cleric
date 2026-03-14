@@ -50,7 +50,7 @@ export function ShowcaseSection() {
       <p className="text-white text-base text-center max-w-2xl mx-auto mb-10">Everything you need to keep your groups organised and your sessions on track.</p>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Card 1: Multiple campaigns */}
-        <div className="bg-[rgba(20,3,38,0.6)] border border-[var(--dnd-border-card)] rounded-xl p-8 flex flex-col">
+        <div className="bg-[rgba(20,3,38,0.6)] border border-[var(--dnd-border-card)] rounded-xl p-8 flex flex-col transition-all duration-300 hover:scale-[1.03] hover:border-[var(--dnd-accent)] hover:shadow-lg hover:shadow-[#ba7df6]/10">
           <h3 className="font-fantasy text-xl text-white mb-2">Run multiple campaigns</h3>
           <p className="text-[var(--dnd-text-muted)] text-sm mb-6">
             Whether you run one group or five, your dashboard keeps every campaign organised in one place. Switch between groups and track availability across all of them.
@@ -63,7 +63,7 @@ export function ShowcaseSection() {
         </div>
 
         {/* Card 2: Real-time updates */}
-        <div className="bg-[rgba(20,3,38,0.6)] border border-[var(--dnd-border-card)] rounded-xl p-8 flex flex-col">
+        <div className="bg-[rgba(20,3,38,0.6)] border border-[var(--dnd-border-card)] rounded-xl p-8 flex flex-col transition-all duration-300 hover:scale-[1.03] hover:border-[var(--dnd-accent)] hover:shadow-lg hover:shadow-[#ba7df6]/10">
           <h3 className="font-fantasy text-xl text-white mb-2">Instant updates</h3>
           <p className="text-[var(--dnd-text-muted)] text-sm mb-6">
             The moment a player submits their availability, your dashboard updates. No refreshing, no chasing responses. Just share the link and watch the calendar fill in.

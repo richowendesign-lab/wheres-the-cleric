@@ -40,7 +40,7 @@ export function FeaturesBlock() {
               <div
                 key={step.id}
                 onClick={() => handleStepChange(step.id)}
-                className="relative flex items-start gap-4 rounded-lg px-4 py-3 cursor-pointer overflow-hidden border border-[var(--dnd-border-card)]"
+                className="relative flex items-start gap-4 rounded-lg px-4 py-3 cursor-pointer overflow-hidden border border-[var(--dnd-border-card)] transition-all duration-300 hover:scale-[1.03] hover:border-[var(--dnd-accent)] hover:shadow-lg hover:shadow-[#ba7df6]/10"
               >
                 {/* Background dims on inactive, content stays full opacity */}
                 <div className={[

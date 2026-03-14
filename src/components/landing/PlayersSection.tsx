@@ -49,21 +49,21 @@ export function PlayersSection() {
     <section className="px-8 py-10 max-w-[900px] mx-auto w-full">
       <h2 className="font-fantasy text-3xl text-white text-center mb-10">Easy for players</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-        <div className="group bg-[var(--dnd-card-bg)] border border-[var(--dnd-border-card)] rounded-lg p-4">
+        <div className="group bg-[var(--dnd-card-bg)] border border-[var(--dnd-border-card)] rounded-lg p-4 transition-all duration-300 hover:scale-[1.03] hover:border-[var(--dnd-accent)] hover:shadow-lg hover:shadow-[#ba7df6]/10">
           <div className="text-[var(--dnd-accent)] mb-3 transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-12 w-fit">
             <ShareIcon />
           </div>
           <h3 className="font-semibold text-white mb-2">Your DM will share a link with you</h3>
           <p className="text-[var(--dnd-text-muted)] text-sm">Fill in your name and you&apos;re ready to go.</p>
         </div>
-        <div className="group bg-[var(--dnd-card-bg)] border border-[var(--dnd-border-card)] rounded-lg p-4">
+        <div className="group bg-[var(--dnd-card-bg)] border border-[var(--dnd-border-card)] rounded-lg p-4 transition-all duration-300 hover:scale-[1.03] hover:border-[var(--dnd-accent)] hover:shadow-lg hover:shadow-[#ba7df6]/10">
           <div className="text-[var(--dnd-accent)] mb-3 transition-transform duration-200 group-hover:scale-110 group-hover:-translate-y-1 w-fit">
             <CalendarIcon />
           </div>
           <h3 className="font-semibold text-white mb-2">Mark which days you&apos;re free to play</h3>
           <p className="text-[var(--dnd-text-muted)] text-sm">Select any day within the planning window.</p>
         </div>
-        <div className="group bg-[var(--dnd-card-bg)] border border-[var(--dnd-border-card)] rounded-lg p-4">
+        <div className="group bg-[var(--dnd-card-bg)] border border-[var(--dnd-border-card)] rounded-lg p-4 transition-all duration-300 hover:scale-[1.03] hover:border-[var(--dnd-accent)] hover:shadow-lg hover:shadow-[#ba7df6]/10">
           <div className="text-[var(--dnd-accent)] mb-3 transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12 w-fit">
             <PartyIcon />
           </div>

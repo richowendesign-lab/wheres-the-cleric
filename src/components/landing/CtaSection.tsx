@@ -1,12 +1,11 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 
 export function CtaSection() {
   return (
     <section className="flex flex-col items-center justify-center text-center px-8 py-16 gap-6">
-      <Image src="/dnd-icon.png" alt="" width={100} height={100} />
+      <img src="/dnd-icon.png" alt="" width={100} height={100} />
       <h2 className="font-fantasy text-4xl text-white">Ready to plan your next adventure?</h2>
       <div className="flex gap-4">
         <Link
