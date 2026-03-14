@@ -3,8 +3,7 @@ import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import { getSessionDM } from '@/lib/auth'
-import { logOut } from '@/lib/actions/auth'
-import { HowItWorksButton } from '@/components/HowItWorksButton'
+import { AppNav } from '@/components/AppNav'
 
 export default async function CampaignsPage() {
   const dm = await getSessionDM()
@@ -23,32 +22,16 @@ export default async function CampaignsPage() {
   })
 
   return (
-    <main className="min-h-screen text-gray-100 px-4 py-12">
-      <div className="max-w-2xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <div>
+    <>
+      <AppNav />
+      <main className="min-h-screen text-gray-100 px-4 py-12">
+        <div className="max-w-2xl mx-auto">
+          <div className="mb-8">
             <p className="text-xs uppercase tracking-[0.12em] text-[var(--dnd-text-muted)] mb-2">
               Dungeon Master Portal
             </p>
             <h1 className="font-fantasy text-3xl text-white">Your Campaigns</h1>
           </div>
-          <div className="flex items-center gap-4">
-            <HowItWorksButton iconOnly />
-            <form action={logOut}>
-              <button
-                type="submit"
-                aria-label="Log out"
-                className="w-8 h-8 rounded-full border border-[var(--dnd-border-muted)] flex items-center justify-center text-[var(--dnd-text-muted)] hover:text-white hover:border-[var(--dnd-accent)] transition-colors"
-              >
-                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path d="M6 2H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                  <path d="M11 11l3-3-3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M14 8H6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                </svg>
-              </button>
-            </form>
-          </div>
-        </div>
 
         <div className="flex flex-col gap-4">
           {campaigns.map(campaign => {
@@ -119,7 +102,8 @@ export default async function CampaignsPage() {
           </Link>
         </div>
 
-      </div>
-    </main>
+        </div>
+      </main>
+    </>
   )
 }
