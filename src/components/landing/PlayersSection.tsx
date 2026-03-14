@@ -1,6 +1,8 @@
 'use client'
 
 import { useInView } from '@/hooks/useInView'
+import { useScrollInView } from '@/hooks/useScrollInView'
+import { PlayerDemoWidget } from '@/components/landing/PlayerDemoWidget'
 
 function ShareIcon() {
   return (
@@ -43,6 +45,7 @@ function PartyIcon() {
 
 export function PlayersSection() {
   const { ref, inView } = useInView({ threshold: 0.1 })
+  const { ref: zoomRef, inView: demoInView } = useScrollInView<HTMLDivElement>({ threshold: 0.2 })
 
   return (
     <section
@@ -77,8 +80,14 @@ export function PlayersSection() {
           <p className="text-[var(--dnd-text-muted)] text-sm">Your availability will show on your DM&apos;s dashboard</p>
         </div>
       </div>
-      <div className="rounded-xl overflow-hidden shadow-[0px_3px_12px_1px_rgba(253,253,253,0.25)] w-full">
-        <img src="/players-screenshot.png" alt="Player availability view" className="w-full h-auto" />
+      <div
+        ref={zoomRef}
+        className={[
+          'transition-transform duration-500 ease-out motion-reduce:transition-none',
+          demoInView ? 'scale-105' : 'scale-100',
+        ].join(' ')}
+      >
+        <PlayerDemoWidget />
       </div>
     </section>
   )
