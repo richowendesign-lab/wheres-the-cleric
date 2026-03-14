@@ -77,7 +77,7 @@ Full phase details: `.planning/milestones/v1.4-ROADMAP.md`
 - [x] **Phase 20: Static Page Shell** - Full-page layout with sticky nav, hero, features section, player section, CTA, and footer; auth redirect preserved (completed 2026-03-13)
 - [x] **Phase 21: Scroll Animations** - All sections fade and slide up on viewport entry; reduced-motion respected (completed 2026-03-13)
 - [x] **Phase 22: Features Step-Selector** - Interactive 4-step FeaturesBlock with click-to-highlight and image swap (completed 2026-03-13)
-- [ ] **Phase 23: Availability Demo** - Self-contained interactive player availability demo embedded in hero and player sections
+- [x] **Phase 23: Availability Demo** - Self-contained interactive player availability demo embedded in hero and player sections (completed 2026-03-14)
 - [ ] **Phase 24: Sticky Nav Scroll Behaviour** - Nav background transitions from transparent to dark opaque on scroll
 
 ## Phase Details
@@ -174,5 +174,5 @@ Plans:
 | 20. Static Page Shell | 2/2 | Complete   | 2026-03-13 | - |
 | 21. Scroll Animations | 2/2 | Complete   | 2026-03-13 | - |
 | 22. Features Step-Selector | 2/2 | Complete   | 2026-03-13 | - |
-| 23. Availability Demo | 1/2 | In Progress|  | - |
+| 23. Availability Demo | 2/2 | Complete   | 2026-03-14 | - |
 | 24. Sticky Nav Scroll Behaviour | v1.5 | 0/? | Not started | - |

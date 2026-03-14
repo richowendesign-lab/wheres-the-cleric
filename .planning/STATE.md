@@ -18,14 +18,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-13)
 
 **Core value:** The DM can instantly see when everyone is free — without chasing people for responses or guessing which dates to offer.
-**Current focus:** Phase 23 — Availability Demo
+**Current focus:** Phase 24 — Sticky Nav Scroll Behaviour
 
 ## Current Position
 
-Phase: 23 of 24 (Availability Demo)
-Plan: 1 of 2 in current phase
+Phase: 24 of 24 (Sticky Nav Scroll Behaviour)
+Plan: 0 of 2 in current phase
 Status: In progress
-Last activity: 2026-03-13 — Completed Phase 23 Plan 01 (useScrollInView hook + HeroDemoWidget + PlayerDemoWidget — HERO-02 and PLAY-02 building blocks ready)
+Last activity: 2026-03-14 — Completed Phase 23 (Availability Demo — HERO-02 and PLAY-02 satisfied, human verified interactive demos and scroll zoom)
 
 Progress: [████████████░░░░░░░░] 0/5 v1.5 phases complete (Phase 21 complete — 2/2 plans done)
 
@@ -53,3 +53,4 @@ None.
 - Decisions: threshold 0 for HeroSection (fires on mount); observer.disconnect() for one-shot animation; no animation library added
 - Phase 22: useState(1) (1-indexed to match image filenames); steps array at module scope; plain <img> kept (not Next.js Image); opacity-60 on inactive cards without pointer-events-none
 - Phase 23-01: useScrollInView hook created — continuous bidirectional IntersectionObserver, no disconnect() in callback; HeroDemoWidget + PlayerDemoWidget self-contained with hardcoded mock data; DAY_AGGREGATIONS at module scope; PlayerDemoWidget Fri+Sat pre-selected
+- Phase 23-02: HeroDemoWidget wired into HeroSection and PlayerDemoWidget into PlayersSection (replaced static screenshots); useScrollInView returns 0-1 progress value; demos scale 1.0→1.5 and fade 0.5→1.0 on scroll; human verified calendar clicks, day toggles, scroll zoom, bidirectional reversal — HERO-02 and PLAY-02 complete
