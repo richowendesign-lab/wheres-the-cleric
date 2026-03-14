@@ -59,7 +59,7 @@ export function FaqSection() {
   }
 
   return (
-    <section className="px-8 py-16 max-w-[800px] mx-auto w-full">
+    <section className="px-8 py-10 max-w-[900px] mx-auto w-full">
       <h2 className="font-fantasy text-3xl text-white text-center mb-10">Frequently asked questions</h2>
       <div className="flex flex-col gap-2">
         {faqs.map((faq, i) => (

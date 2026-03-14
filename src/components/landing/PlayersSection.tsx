@@ -46,7 +46,7 @@ export function PlayersSection() {
   const { ref: zoomRef, progress, maxScale } = useScrollInView<HTMLDivElement>()
 
   return (
-    <section className="px-8 py-16 max-w-[800px] mx-auto w-full">
+    <section className="px-8 py-10 max-w-[900px] mx-auto w-full">
       <h2 className="font-fantasy text-3xl text-white text-center mb-10">Easy for players</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
         <div className="group bg-[var(--dnd-card-bg)] border border-[var(--dnd-border-card)] rounded-lg p-4">

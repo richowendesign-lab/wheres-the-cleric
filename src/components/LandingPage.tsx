@@ -2,6 +2,7 @@
 import { StickyNav } from './landing/StickyNav'
 import { HeroSection } from './landing/HeroSection'
 import { FeaturesBlock } from './landing/FeaturesBlock'
+import { ShowcaseSection } from './landing/ShowcaseSection'
 import { PlayersSection } from './landing/PlayersSection'
 import { FaqSection } from './landing/FaqSection'
 import { CtaSection } from './landing/CtaSection'
@@ -13,6 +14,7 @@ export function LandingPage() {
       <StickyNav />
       <HeroSection />
       <FeaturesBlock />
+      <ShowcaseSection />
       <PlayersSection />
       <FaqSection />
       <CtaSection />

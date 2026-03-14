@@ -38,7 +38,7 @@ export function HeroSection() {
       </div>
       <div
         ref={zoomRef}
-        className="mt-24 w-full max-w-[800px] beam-border motion-reduce:!transform-none"
+        className="mt-24 w-full max-w-[900px] beam-border motion-reduce:!transform-none"
         style={{
           transform: `scale(${1 + progress * (maxScale - 1)})`,
           opacity: 0.5 + progress * 0.5,

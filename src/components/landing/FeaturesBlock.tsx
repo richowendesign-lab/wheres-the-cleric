@@ -28,7 +28,7 @@ export function FeaturesBlock() {
   }, [])
 
   return (
-    <section className="px-8 py-16 max-w-[800px] mx-auto w-full">
+    <section className="px-8 py-10 max-w-[900px] mx-auto w-full">
       <h2 className="font-fantasy text-3xl text-white text-center mb-4">Simple scheduling for your next game</h2>
       <p className="text-white text-base text-center max-w-2xl mx-auto mb-10">No more manually creating polls. No more back and forth. Create a campaign, share the link and let your players tell you when they&apos;re free, so you can focus on practising your accents for that new NPC.</p>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
