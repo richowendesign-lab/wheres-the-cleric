@@ -19,9 +19,9 @@ export function HeroSection() {
         inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
       ].join(' ')}
     >
-      <Image src="/dnd-icon.png" alt="" width={82} height={82} />
+      <Image src="/dnd-icon.png" alt="" width={100} height={100} />
       <h1 className="font-fantasy text-5xl text-white max-w-2xl">schedule your next <span className="whitespace-nowrap">D&D Session</span></h1>
-      <p className="text-white text-base max-w-lg">Beat the final boss - scheduling - and coordinate your group&apos;s availability without the back-and-forth.</p>
+      <p className="text-white text-base max-w-lg">Beat the final boss (scheduling) and coordinate your group&apos;s availability without the back and forth.</p>
       <div className="flex gap-4">
         <Link
           href="/auth/signup"

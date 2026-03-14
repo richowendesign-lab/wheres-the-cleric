@@ -60,20 +60,20 @@ export function PlayersSection() {
           <div className="text-[var(--dnd-accent)] mb-3 transition-transform duration-200 group-hover:scale-110 group-hover:-translate-y-1 w-fit">
             <CalendarIcon />
           </div>
-          <h3 className="font-semibold text-white mb-2">Input what days you are free to play</h3>
-          <p className="text-[var(--dnd-text-muted)] text-sm">You&apos;ll be able to select any day in the planning window</p>
+          <h3 className="font-semibold text-white mb-2">Mark which days you&apos;re free to play</h3>
+          <p className="text-[var(--dnd-text-muted)] text-sm">Select any day within the planning window.</p>
         </div>
         <div className="group bg-[var(--dnd-card-bg)] border border-[var(--dnd-border-card)] rounded-lg p-4">
           <div className="text-[var(--dnd-accent)] mb-3 transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12 w-fit">
             <PartyIcon />
           </div>
-          <h3 className="font-semibold text-white mb-2">That&apos;s literally it - you don&apos;t even need to save</h3>
-          <p className="text-[var(--dnd-text-muted)] text-sm">Your availability will show on your DM&apos;s dashboard</p>
+          <h3 className="font-semibold text-white mb-2">That&apos;s it. You don&apos;t even need to save.</h3>
+          <p className="text-[var(--dnd-text-muted)] text-sm">Your availability shows on your DM&apos;s dashboard automatically.</p>
         </div>
       </div>
       <div
         ref={zoomRef}
-        className="mt-32 beam-border motion-reduce:!transform-none"
+        className="mt-24 beam-border motion-reduce:!transform-none"
         style={{
           transform: `scale(${1 + progress * (maxScale - 1)})`,
           opacity: 0.5 + progress * 0.5,

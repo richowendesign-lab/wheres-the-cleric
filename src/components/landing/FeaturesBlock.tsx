@@ -3,10 +3,10 @@
 import { useState, useEffect, useRef } from 'react'
 
 const steps = [
-  { id: 1, title: 'Create and share your campaign', description: 'Fill in basic details, set a planning window and share the link with players' },
-  { id: 2, title: 'Players mark their availability', description: 'Everyone sets their free days — you see it live on the calendar.' },
-  { id: 3, title: 'Add your unavailable dates', description: 'Block dates when you cannot run a session in the Settings tab.' },
-  { id: 4, title: 'Pick the best day', description: 'The ranked list shows which days work for everyone - copy it to your group chat.' },
+  { id: 1, title: 'Create and share your campaign', description: 'Fill in basic details, set a planning window and share the link with your players.' },
+  { id: 2, title: 'Players mark their availability', description: 'Everyone picks their free days and you see it update live on the calendar.' },
+  { id: 3, title: 'Add your unavailable dates', description: 'Block out dates when you can\'t run a session from the Settings tab.' },
+  { id: 4, title: 'Pick the best day', description: 'The ranked list shows which days work for everyone. Copy it straight to your group chat.' },
 ]
 
 export function FeaturesBlock() {
@@ -30,7 +30,7 @@ export function FeaturesBlock() {
   return (
     <section className="px-8 py-16 max-w-[800px] mx-auto w-full">
       <h2 className="font-fantasy text-3xl text-white text-center mb-4">Simple scheduling for your next game</h2>
-      <p className="text-white text-base text-center max-w-2xl mx-auto mb-10">No more manually creating polls. No more back and forth. Simply create a campaign, share the link, and let your players tell you when they&apos;re free, leaving you to focus on practicing your accents for that new NPC.</p>
+      <p className="text-white text-base text-center max-w-2xl mx-auto mb-10">No more manually creating polls. No more back and forth. Create a campaign, share the link and let your players tell you when they&apos;re free, so you can focus on practising your accents for that new NPC.</p>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
         {/* Left column: step cards */}
         <div className="flex flex-col gap-4">

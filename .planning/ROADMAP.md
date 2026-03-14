@@ -78,7 +78,7 @@ Full phase details: `.planning/milestones/v1.4-ROADMAP.md`
 - [x] **Phase 21: Scroll Animations** - All sections fade and slide up on viewport entry; reduced-motion respected (completed 2026-03-13)
 - [x] **Phase 22: Features Step-Selector** - Interactive 4-step FeaturesBlock with click-to-highlight and image swap (completed 2026-03-13)
 - [x] **Phase 23: Availability Demo** - Self-contained interactive player availability demo embedded in hero and player sections (completed 2026-03-14)
-- [ ] **Phase 24: Sticky Nav Scroll Behaviour** - Nav background transitions from transparent to dark opaque on scroll
+- [x] **Phase 24: Sticky Nav Scroll Behaviour** - Nav background transitions from transparent to dark opaque on scroll (completed 2026-03-14)
 
 ## Phase Details
 
@@ -175,4 +175,4 @@ Plans:
 | 21. Scroll Animations | 2/2 | Complete   | 2026-03-13 | - |
 | 22. Features Step-Selector | 2/2 | Complete   | 2026-03-13 | - |
 | 23. Availability Demo | 2/2 | Complete   | 2026-03-14 | - |
-| 24. Sticky Nav Scroll Behaviour | v1.5 | 0/? | Not started | - |
+| 24. Sticky Nav Scroll Behaviour | v1.5 | 1/1 | Complete | 2026-03-14 |
