@@ -36,19 +36,18 @@ The DM can instantly see when everyone is free — without chasing people for re
 - ✓ Group Availability calendar legend includes a DM unavailable colour swatch — v1.4
 - ✓ Clicking a DM-marked date shows a DM unavailable indicator in the date panel — v1.4
 - ✓ Date panel shows a clear "No players available" message when no one is free — v1.4
+- ✓ Sticky nav with logo, "Beta" badge, and Sign up / Log in buttons; background transitions on scroll — v1.5
+- ✓ Hero section with heading, subtitle, CTAs, and interactive DM dashboard demo — v1.5
+- ✓ Features step-selector with 4 clickable steps, expanded descriptions, and paired images — v1.5
+- ✓ "Easy for players" 3-card grid with interactive player availability demo — v1.5
+- ✓ Scroll-triggered fade + slide-up animations on all sections (respects prefers-reduced-motion) — v1.5
+- ✓ "Built for Dungeon Masters" showcase section with multi-campaign and instant-updates cards — v1.5
+- ✓ FAQ accordion section with 6 expandable questions — v1.5
+- ✓ Shared AppNav component for authenticated pages with breadcrumb navigation — v1.5
 
 ### Active
 
-<!-- Current Milestone: v1.5 Marketing Home Page -->
-
-- [ ] Logged-out home page has a sticky nav with logo, "Beta" badge, and Sign up / Log in buttons; nav background transitions to dark opacity on scroll
-- [ ] Hero section with large heading, subtitle, and primary Sign up / Log in CTAs
-- [ ] An interactive demo component embedded in the page shows the player availability experience with placeholder data — no real auth or navigation required
-- [ ] Features section ("Simple scheduling for your next game") contains an interactive step-selector: clicking a step highlights it, expands its description, and swaps the accompanying image
-- [ ] "Easy for players" section shows a 3-card grid with player onboarding steps and a second demo embed showing the player availability view
-- [ ] Final CTA section ("Ready to plan your next adventure?") with Sign up / Log in buttons
-- [ ] Each page section animates in smoothly as it enters the viewport on scroll
-- [ ] Existing logged-in home page (campaigns list) is unaffected
+None — between milestones.
 
 ### Out of Scope
 
@@ -67,7 +66,8 @@ The DM can instantly see when everyone is free — without chasing people for re
 - Shipped v1.2 in 2 days (2026-03-04 → 2026-03-05): 3 phases, 7 plans, +2,540 / -77 LOC
 - Shipped v1.3 in 3 days (2026-03-09 → 2026-03-12): 6 phases, 14 plans, +9,558 / -348 LOC
 - Shipped v1.4 in 1 day (2026-03-13): 3 phases, 3 plans, +2,217 / -80 LOC
-- Current codebase: ~18,000 TypeScript LOC (estimated)
+- Shipped v1.5 in 2 days (2026-03-13 → 2026-03-14): 5 phases, 9 plans, +5,865 / -996 LOC
+- Current codebase: ~23,000 TypeScript LOC (estimated)
 - Tech stack: Next.js 16, React 19, TypeScript, Tailwind CSS 4, Prisma 7, bcryptjs, SQLite (local) / Neon PostgreSQL (production)
 - Deployed to Vercel: https://my-portfolio-henna-ten-97.vercel.app
 - Access model: DM has email+password account with httpOnly session cookie; players are still cookie-based (no login required)
@@ -108,19 +108,11 @@ The DM can instantly see when everyone is free — without chasing people for re
 | DatePickerInput uses hidden input for FormData (v1.3) | Zero changes to Server Actions; existing validation paths unaffected | ✓ Good — clean form data bridge |
 | Calendar pagination steps by exactly 2 with canGoNext gate (v1.3) | Avoids month repetition on odd-count windows; last page may show 1 month — consistent with no-overlap expectation | ✓ Good — user confirmed this is cleaner |
 | revalidatePath in updatePlanningWindow server action (v1.3) | Dashboard must re-render after window change; same fix pattern as toggleDmException | ✓ Good — consistent revalidation approach |
-
-## Current Milestone: v1.5 Marketing Home Page
-
-**Goal:** Redesign the logged-out home page into a marketing landing page with a sticky nav, interactive feature demo, animated sections, and a live availability demo embed.
-
-**Target features:**
-- Sticky nav with scroll-triggered dark background
-- Interactive FeaturesBlock (4 selectable steps with images)
-- Embedded interactive availability demo component (player-side, placeholder data)
-- Scroll-triggered section entrance animations
-- "Easy for players" card grid + second demo embed
-- Final CTA section + footer
+| Plain `<img>` over next/image for landing icons (v1.5) | Next.js Image caches aggressively and query-string cache-busting causes config errors; plain img avoids all caching issues | ✓ Good — simpler, no stale assets |
+| IntersectionObserver + CSS transitions for scroll animations (v1.5) | Zero dependency; useInView hook with one-shot disconnect(); prefers-reduced-motion respected | ✓ Good — lightweight, accessible |
+| Shared AppNav server component for authenticated pages (v1.5) | Eliminates duplicate nav markup across campaigns and campaign detail pages; uses logOut server action | ✓ Good — single source of truth |
+| Grid-row animation for FAQ accordion (v1.5) | CSS-only expand/collapse with `grid-rows-[1fr]` / `grid-rows-[0fr]`; no JS height calculation needed | ✓ Good — smooth, zero layout shift |
 
 ---
-*Last updated: 2026-03-13 after v1.5 milestone start*
+*Last updated: 2026-03-14 after v1.5 milestone completion*
 

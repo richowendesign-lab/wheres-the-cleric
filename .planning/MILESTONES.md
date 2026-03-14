@@ -1,5 +1,20 @@
 # Milestones
 
+## v1.5 Marketing Home Page (Shipped: 2026-03-14)
+
+**Phases completed:** 5 phases, 9 plans
+**Files modified:** 46 | **LOC:** +5,865 / -996 | **Timeline:** 2 days (2026-03-13 → 2026-03-14)
+
+**Key accomplishments:**
+- Full marketing landing page with sticky nav, hero, features step-selector, showcase, players section, FAQ accordion, CTA, and footer
+- Interactive availability demos (DM dashboard + player view) with mock data, no auth required
+- Progressive scroll-zoom animations with CSS @property beam border effect tied to viewport center
+- "Built for Dungeon Masters" showcase section highlighting multi-campaign management and instant updates
+- Shared AppNav component for authenticated pages with breadcrumb eyebrow on campaign detail
+- FAQ accordion with 6 expandable questions and smooth grid-row animation
+
+---
+
 ## v1.4 Clarity & Polish (Shipped: 2026-03-13)
 
 **Phases completed:** 3 phases, 3 plans
