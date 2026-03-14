@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useInView } from '@/hooks/useInView'
+import { HeroDemoWidget } from '@/components/landing/HeroDemoWidget'
 
 export function HeroSection() {
   const { ref, inView } = useInView({ threshold: 0 })
@@ -33,8 +34,8 @@ export function HeroSection() {
           Log in
         </Link>
       </div>
-      <div className="mt-6 rounded-xl overflow-hidden shadow-[0px_3px_12px_1px_rgba(253,253,253,0.25)] w-full max-w-[800px]">
-        <img src="/hero-screenshot.png" alt="DM dashboard preview" className="w-full h-auto" />
+      <div className="mt-6 w-full max-w-[800px]">
+        <HeroDemoWidget />
       </div>
     </section>
   )
