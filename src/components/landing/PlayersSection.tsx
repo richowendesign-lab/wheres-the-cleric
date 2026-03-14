@@ -45,7 +45,7 @@ function PartyIcon() {
 
 export function PlayersSection() {
   const { ref, inView } = useInView({ threshold: 0.1 })
-  const { ref: zoomRef, inView: demoInView } = useScrollInView<HTMLDivElement>({ threshold: 0.2 })
+  const { ref: zoomRef, progress } = useScrollInView<HTMLDivElement>()
 
   return (
     <section
@@ -82,10 +82,11 @@ export function PlayersSection() {
       </div>
       <div
         ref={zoomRef}
-        className={[
-          'transition-transform duration-500 ease-out motion-reduce:transition-none',
-          demoInView ? 'scale-105' : 'scale-100',
-        ].join(' ')}
+        className="mt-32 relative z-10 motion-reduce:!transform-none"
+        style={{
+          transform: `scale(${1 + progress * 0.5})`,
+          opacity: 0.5 + progress * 0.5,
+        }}
       >
         <PlayerDemoWidget />
       </div>

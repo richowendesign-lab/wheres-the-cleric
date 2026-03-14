@@ -3,10 +3,12 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useInView } from '@/hooks/useInView'
+import { useScrollInView } from '@/hooks/useScrollInView'
 import { HeroDemoWidget } from '@/components/landing/HeroDemoWidget'
 
 export function HeroSection() {
   const { ref, inView } = useInView({ threshold: 0 })
+  const { ref: zoomRef, progress } = useScrollInView<HTMLDivElement>()
 
   return (
     <section
@@ -34,7 +36,14 @@ export function HeroSection() {
           Log in
         </Link>
       </div>
-      <div className="mt-6 w-full max-w-[800px]">
+      <div
+        ref={zoomRef}
+        className="mt-24 w-full max-w-[800px] relative z-10 motion-reduce:!transform-none"
+        style={{
+          transform: `scale(${1 + progress * 0.5})`,
+          opacity: 0.5 + progress * 0.5,
+        }}
+      >
         <HeroDemoWidget />
       </div>
     </section>
