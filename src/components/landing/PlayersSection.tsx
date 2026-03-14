@@ -1,6 +1,5 @@
 'use client'
 
-import { useInView } from '@/hooks/useInView'
 import { useScrollInView } from '@/hooks/useScrollInView'
 import { PlayerDemoWidget } from '@/components/landing/PlayerDemoWidget'
 
@@ -44,18 +43,10 @@ function PartyIcon() {
 }
 
 export function PlayersSection() {
-  const { ref, inView } = useInView({ threshold: 0.1 })
-  const { ref: zoomRef, progress } = useScrollInView<HTMLDivElement>()
+  const { ref: zoomRef, progress, maxScale } = useScrollInView<HTMLDivElement>()
 
   return (
-    <section
-      ref={ref as React.RefObject<HTMLElement>}
-      className={[
-        'px-8 py-16 max-w-[800px] mx-auto w-full',
-        'transition-all duration-700 ease-out motion-reduce:transition-none',
-        inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
-      ].join(' ')}
-    >
+    <section className="px-8 py-16 max-w-[800px] mx-auto w-full">
       <h2 className="font-fantasy text-3xl text-white text-center mb-10">Easy for players</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
         <div className="group bg-[var(--dnd-card-bg)] border border-[var(--dnd-border-card)] rounded-lg p-4">
@@ -82,11 +73,12 @@ export function PlayersSection() {
       </div>
       <div
         ref={zoomRef}
-        className="mt-32 relative z-10 motion-reduce:!transform-none"
+        className="mt-32 beam-border motion-reduce:!transform-none"
         style={{
-          transform: `scale(${1 + progress * 0.5})`,
+          transform: `scale(${1 + progress * (maxScale - 1)})`,
           opacity: 0.5 + progress * 0.5,
-        }}
+          '--beam-opacity': progress,
+        } as React.CSSProperties}
       >
         <PlayerDemoWidget />
       </div>

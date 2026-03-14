@@ -29,6 +29,58 @@ html, body {
   min-height: 100vh;
 }
 
+/* ── Rotating beam border ─────────────────────────────────── */
+@property --beam-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes beam-rotate {
+  to { --beam-angle: 360deg; }
+}
+
+.beam-border {
+  --beam-opacity: 0;
+  position: relative;
+  border-radius: 0.75rem;
+}
+
+.beam-border::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 2px;
+  background: conic-gradient(
+    from var(--beam-angle),
+    transparent 0%,
+    transparent 25%,
+    rgba(186, 125, 246, var(--beam-opacity)) 35%,
+    rgba(255, 255, 255, calc(var(--beam-opacity) * 0.8)) 40%,
+    rgba(186, 125, 246, var(--beam-opacity)) 45%,
+    transparent 55%,
+    transparent 100%
+  );
+  animation: beam-rotate 3s linear infinite;
+  pointer-events: none;
+  /* Mask out interior — only the 2px border ring is visible */
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .beam-border::before {
+    animation: none;
+  }
+}
+
 /* Pointer cursor on all interactive elements */
 button, [role="button"], label[for], summary {
   cursor: pointer;

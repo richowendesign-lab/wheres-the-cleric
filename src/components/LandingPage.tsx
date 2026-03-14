@@ -8,13 +8,13 @@ import { Footer } from './landing/Footer'
 
 export function LandingPage() {
   return (
-    <>
+    <div className="overflow-x-hidden">
       <StickyNav />
       <HeroSection />
       <FeaturesBlock />
       <PlayersSection />
       <CtaSection />
       <Footer />
-    </>
+    </div>
   )
 }

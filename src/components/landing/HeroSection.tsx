@@ -8,7 +8,7 @@ import { HeroDemoWidget } from '@/components/landing/HeroDemoWidget'
 
 export function HeroSection() {
   const { ref, inView } = useInView({ threshold: 0 })
-  const { ref: zoomRef, progress } = useScrollInView<HTMLDivElement>()
+  const { ref: zoomRef, progress, maxScale } = useScrollInView<HTMLDivElement>()
 
   return (
     <section
@@ -20,7 +20,7 @@ export function HeroSection() {
       ].join(' ')}
     >
       <Image src="/dnd-icon.png" alt="" width={82} height={82} />
-      <h1 className="font-fantasy text-5xl text-white max-w-2xl">schedule your next D&D Session</h1>
+      <h1 className="font-fantasy text-5xl text-white max-w-2xl">schedule your next <span className="whitespace-nowrap">D&D Session</span></h1>
       <p className="text-white text-base max-w-lg">Beat the final boss - scheduling - and coordinate your group&apos;s availability without the back-and-forth.</p>
       <div className="flex gap-4">
         <Link
@@ -38,11 +38,12 @@ export function HeroSection() {
       </div>
       <div
         ref={zoomRef}
-        className="mt-24 w-full max-w-[800px] relative z-10 motion-reduce:!transform-none"
+        className="mt-24 w-full max-w-[800px] beam-border motion-reduce:!transform-none"
         style={{
-          transform: `scale(${1 + progress * 0.5})`,
+          transform: `scale(${1 + progress * (maxScale - 1)})`,
           opacity: 0.5 + progress * 0.5,
-        }}
+          '--beam-opacity': progress,
+        } as React.CSSProperties}
       >
         <HeroDemoWidget />
       </div>
