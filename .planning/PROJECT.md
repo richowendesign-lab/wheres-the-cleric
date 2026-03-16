@@ -47,7 +47,11 @@ The DM can instantly see when everyone is free — without chasing people for re
 
 ### Active
 
-None — between milestones.
+- [ ] DM sees a two-column campaign detail layout: large calendar left, persistent sidebar (Best Days + join link) right
+- [ ] Date detail slide-in overlays the sidebar when a date is selected
+- [ ] Campaign Settings tab uses a flat, grouped layout with minimal scrolling (no stacked accordions)
+- [ ] DM availability exceptions sync across campaigns by default, with a per-campaign opt-out toggle
+- [ ] Exception mode (block/flag) remains independent per campaign; only dates sync
 
 ### Out of Scope
 
@@ -113,6 +117,15 @@ None — between milestones.
 | Shared AppNav server component for authenticated pages (v1.5) | Eliminates duplicate nav markup across campaigns and campaign detail pages; uses logOut server action | ✓ Good — single source of truth |
 | Grid-row animation for FAQ accordion (v1.5) | CSS-only expand/collapse with `grid-rows-[1fr]` / `grid-rows-[0fr]`; no JS height calculation needed | ✓ Good — smooth, zero layout shift |
 
+## Current Milestone: v1.6 Campaign Detail Rework
+
+**Goal:** Improve the campaign detail page with a better layout, cleaner settings, and synced DM availability.
+
+**Target features:**
+- Two-column campaign detail layout (large calendar + persistent sidebar)
+- Flat, scannable Settings tab
+- DM availability auto-sync across campaigns with per-campaign opt-out
+
 ---
-*Last updated: 2026-03-14 after v1.5 milestone completion*
+*Last updated: 2026-03-16 after v1.6 milestone started*
 

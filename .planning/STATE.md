@@ -1,29 +1,31 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.5
-milestone_name: Marketing Home Page
-status: complete
-last_updated: "2026-03-14T00:00:00Z"
+milestone: v1.6
+milestone_name: Campaign Detail Rework
+status: defining_requirements
+last_updated: "2026-03-16T00:00:00Z"
 progress:
-  total_phases: 5
-  completed_phases: 5
-  total_plans: 9
-  completed_plans: 9
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-03-14)
+See: .planning/PROJECT.md (updated 2026-03-16)
 
 **Core value:** The DM can instantly see when everyone is free — without chasing people for responses or guessing which dates to offer.
-**Current focus:** Between milestones — v1.5 shipped
+**Current focus:** Defining requirements for v1.6
 
 ## Current Position
 
-Milestone: v1.5 Marketing Home Page — COMPLETE
-All 5 phases (20-24) shipped. 9 plans executed. +5,865 / -996 LOC.
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-03-16 — Milestone v1.6 started
 
 ## Pending Todos
 
@@ -39,5 +41,7 @@ None.
 - v1.5 added: marketing landing page, scroll animations, interactive demos, FAQ, showcase section, shared AppNav
 - Landing sub-components in src/components/landing/ (one file per section)
 - AppNav server component shared across authenticated pages (campaigns list + campaign detail)
-- Breadcrumb eyebrow on campaign detail page (Dashboard / Campaign Name)
-- No active milestone — ready for /gsd:new-milestone
+- Campaign detail has two tabs: Availability (calendar + best days) and Settings
+- CampaignTabs is a client component owning all tab + date selection state
+- DmAvailabilityException stored per-campaign; toggleDmException server action handles persistence
+- No existing REQUIREMENTS.md — v1.6 will be the first
