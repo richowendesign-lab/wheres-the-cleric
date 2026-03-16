@@ -8,6 +8,7 @@
 - ✅ **v1.3 DM Experience & Scheduling Flow** — Phases 11-16 (shipped 2026-03-12)
 - ✅ **v1.4 Clarity & Polish** — Phases 17-19 (shipped 2026-03-13)
 - ✅ **v1.5 Marketing Home Page** — Phases 20-24 (shipped 2026-03-14)
+- 🚧 **v1.6 Campaign Detail Rework** — Phases 25-27 (in progress)
 
 ## Phases
 
@@ -83,6 +84,50 @@ Full phase details: `.planning/milestones/v1.5-ROADMAP.md`
 
 </details>
 
+### 🚧 v1.6 Campaign Detail Rework (In Progress)
+
+**Milestone Goal:** Improve the campaign detail page with a better layout, cleaner settings, and synced DM availability.
+
+- [ ] **Phase 25: Sync Schema and Server Layer** — Add dmSyncEnabled to Campaign schema; extend toggleDmException to propagate to sync-enabled sibling campaigns
+- [ ] **Phase 26: Two-Column Layout Restructure** — Restructure CampaignTabs to own a two-column availability layout; sidebar shows Best Days and join link; date panel becomes a sidebar content swap
+- [ ] **Phase 27: Flat Settings and Sync Toggle** — Remove accordion wrappers from Settings; add DmSyncToggle component to Settings tab
+
+## Phase Details
+
+### Phase 25: Sync Schema and Server Layer
+**Goal**: DM availability exceptions automatically propagate to all their sync-enabled campaigns when they mark or unmark a date
+**Depends on**: Phase 24
+**Requirements**: SYNC-01, SYNC-02, SYNC-04
+**Success Criteria** (what must be TRUE):
+  1. Marking a date unavailable in one campaign causes that date to appear as DM-unavailable in all other campaigns with sync enabled
+  2. Removing an unavailable date in one campaign removes it from all other sync-enabled campaigns
+  3. Sync respects each sibling campaign's own planning window — dates outside a sibling's window are not written
+  4. Re-enabling sync after opting out does not retroactively populate past exceptions — only future toggles propagate
+**Plans**: TBD
+
+### Phase 26: Two-Column Layout Restructure
+**Goal**: The Availability tab presents a large calendar alongside a persistent sidebar so DM has constant access to Best Days and the join link without scrolling or tab-switching
+**Depends on**: Phase 25
+**Requirements**: LAYOUT-01, LAYOUT-02, LAYOUT-03, SET-02
+**Success Criteria** (what must be TRUE):
+  1. On the Availability tab, the calendar fills the left column and a sidebar is always visible on the right without scrolling
+  2. The sidebar shows the Best Days list and a one-click copy join link at all times while the Availability tab is active
+  3. Clicking a calendar date swaps the sidebar content to show player breakdown for that date; the calendar remains fully visible (no full-screen overlay)
+  4. Closing the date detail returns the sidebar to showing Best Days and the join link
+  5. The join link no longer appears in the Settings tab
+**Plans**: TBD
+
+### Phase 27: Flat Settings and Sync Toggle
+**Goal**: Settings tab is fully scannable in one pass and exposes a per-campaign sync opt-out toggle
+**Depends on**: Phase 26
+**Requirements**: SET-01, SYNC-03
+**Success Criteria** (what must be TRUE):
+  1. All Settings sections are visible immediately without expanding any accordions or clicking to reveal content
+  2. A "Sync DM availability" toggle is visible in Settings, on by default, and can be turned off per campaign
+  3. Turning sync off for a campaign makes its DM exceptions independent — subsequent toggles in other campaigns do not affect it
+  4. The toggle label communicates that re-enabling sync applies to future exceptions only
+**Plans**: TBD
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -111,3 +156,6 @@ Full phase details: `.planning/milestones/v1.5-ROADMAP.md`
 | 22. Features Step-Selector | v1.5 | 2/2 | Complete | 2026-03-13 |
 | 23. Availability Demo | v1.5 | 2/2 | Complete | 2026-03-14 |
 | 24. Sticky Nav Scroll Behaviour | v1.5 | 1/1 | Complete | 2026-03-14 |
+| 25. Sync Schema and Server Layer | v1.6 | 0/? | Not started | - |
+| 26. Two-Column Layout Restructure | v1.6 | 0/? | Not started | - |
+| 27. Flat Settings and Sync Toggle | v1.6 | 0/? | Not started | - |

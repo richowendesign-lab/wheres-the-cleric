@@ -44,21 +44,21 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SYNC-01 | — | Pending |
-| SYNC-02 | — | Pending |
-| SYNC-03 | — | Pending |
-| SYNC-04 | — | Pending |
-| LAYOUT-01 | — | Pending |
-| LAYOUT-02 | — | Pending |
-| LAYOUT-03 | — | Pending |
-| SET-01 | — | Pending |
-| SET-02 | — | Pending |
+| SYNC-01 | Phase 25 | Pending |
+| SYNC-02 | Phase 25 | Pending |
+| SYNC-04 | Phase 25 | Pending |
+| LAYOUT-01 | Phase 26 | Pending |
+| LAYOUT-02 | Phase 26 | Pending |
+| LAYOUT-03 | Phase 26 | Pending |
+| SET-02 | Phase 26 | Pending |
+| SET-01 | Phase 27 | Pending |
+| SYNC-03 | Phase 27 | Pending |
 
 **Coverage:**
 - v1.6 requirements: 9 total
-- Mapped to phases: 0
-- Unmapped: 9 ⚠️
+- Mapped to phases: 9
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-03-16*
-*Last updated: 2026-03-16 after initial definition*
+*Last updated: 2026-03-16 — traceability filled after roadmap creation*
