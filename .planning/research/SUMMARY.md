@@ -1,191 +1,176 @@
 # Project Research Summary
 
 **Project:** Where's the Cleric — D&D Session Planner
-**Domain:** Marketing landing page integrated into existing Next.js App Router app (v1.5)
-**Researched:** 2026-03-13
+**Milestone:** v1.6 Campaign Detail Rework
+**Domain:** Campaign detail UX — two-column layout, settings cleanup, DM availability sync
+**Researched:** 2026-03-16
 **Confidence:** HIGH
 
 ## Executive Summary
 
-This milestone adds a full marketing landing page to an existing, live application. The product is a niche scheduling tool for D&D groups; the research task was to determine how to build a persuasive, animated marketing page without disrupting the running app. All four research areas converge on a single, clear finding: everything needed already exists. The stack requires zero new dependencies. The architecture follows the narrow `'use client'` island discipline the codebase has already established. The demo components can be built by wrapping existing `WeeklySchedule` and `AvailabilityCalendar` components in a new stateful shell. No animation library is justified.
+v1.6 makes three focused improvements to the campaign detail page: a two-column availability layout (large calendar left, persistent sidebar right), a flat settings UI replacing `<details>` accordions, and cross-campaign DM availability sync with per-campaign opt-out. All three are achievable with zero new dependencies — the existing stack (Next.js 16, React 19, Tailwind CSS 4, Prisma 7, server actions) handles everything. The only material data model change is one additive boolean field (`dmSyncEnabled Boolean @default(true)`) on the Campaign model. Everything else is CSS restructuring, markup cleanup, and server action extension.
 
-The recommended approach is to build the landing page as a set of collocated components in `src/components/landing/`, with `app/page.tsx` remaining a thin Server Component that handles the auth-check-then-redirect pattern before rendering the marketing content. Scroll animations use native `IntersectionObserver` + Tailwind CSS transitions. The interactive demo is a self-contained client component with hardcoded placeholder data and no server action calls. The FeaturesBlock step-selector is pure `useState`. All of this is consistent with patterns already proven in the codebase (`Toast.tsx`, `CampaignTabs.tsx`, `HowItWorksModal`).
+The recommended build order is schema first, then server actions, then UI — because the sync server action must exist before the toggle component, and the `CampaignTabs` structural refactor must happen before the two-column layout work can be verified. The most important architectural decision: `CampaignTabs` must be refactored, not patched, to own the conditional two-column vs single-column layout. Both the calendar and sidebar must be children of the same `'use client'` boundary, which is the only component that can hold `selectedDate` state shared between them. Attempting to place the sidebar outside this boundary creates an unsolvable state-sharing problem that cannot be fixed incrementally.
 
-The key risks are implementation-order risks rather than technology risks: hydration mismatches from browser-only APIs accessed outside `useEffect`, accidentally pulling a Prisma import chain into the demo component, and inadvertently removing the auth redirect by restructuring `page.tsx`. All three are straightforward to prevent with explicit guards and build-order discipline. The PITFALLS.md research provides exact prevention patterns for each.
-
----
+The biggest technical risk is the date slide-in panel's `position: fixed` and full-viewport backdrop colliding with the new persistent sidebar. The correct fix is to convert the panel to a sidebar content swap: when a date is selected, the sidebar transitions from showing Best Days to showing date detail, then back on close. This removes the backdrop/z-index problem entirely and produces better UX in a two-column context because the calendar remains fully visible. The second risk is the sync re-enable backfill edge case — there is no safe canonical source for "which campaign's exceptions are correct" when a campaign re-enables sync after being opted out. The recommended approach is forward-only sync (no retroactive backfill), which is safe and easy to communicate in the UI.
 
 ## Key Findings
 
 ### Recommended Stack
 
-The v1.5 milestone adds **zero new dependencies** to `package.json`. All animation and interactivity requirements are met by the existing stack: Next.js 16 App Router, React 19, Tailwind CSS 4, and native browser APIs (`IntersectionObserver`, `window.scroll`).
-
-The explicit decision to not add Framer Motion is load-bearing. Framer Motion costs 30–60 KB gzipped and would require promoting static section components to `'use client'`, undermining RSC streaming benefits. The `FadeInSection`/`ScrollReveal` pattern achieves identical visual effects in under 25 lines using the same CSS transition approach already in production in `Toast.tsx`.
+Zero new dependencies. The existing stack is fully sufficient for all three v1.6 features. The two-column layout is two Tailwind grid utility classes. The flat settings UI is a markup change (delete `<details>` wrappers, replace with `<section>` elements). The sync propagation is a Prisma `findMany` + `createMany`/`deleteMany` pattern inside the existing server action. Adding any UI library (Radix, Headless UI), state library (Zustand, Jotai), or data-fetching library (React Query, SWR) for these features would be over-engineering with no payoff.
 
 **Core technologies:**
-- `IntersectionObserver` (native browser API): scroll-triggered entrance animations — zero JS cost, `useEffect`-only, fires once then disconnects
-- `useState` + Tailwind `transition-*` classes: all interactive state (sticky nav scroll, FeaturesBlock step-selector, demo calendar) — already the established codebase pattern
-- `next/image` with `fill` + explicit `aspect-ratio` container: FeaturesBlock image swap without layout shift
-- `{ passive: true }` scroll listener: sticky nav background transition without blocking the compositor thread
+- **Tailwind CSS 4** — responsive two-column grid (`grid-cols-1 lg:grid-cols-[1fr_320px]`); arbitrary value syntax is already used in the codebase and valid in Tailwind 4
+- **Prisma 7** — `findMany` + `createMany`/`deleteMany` for bulk sync writes; the `DM → Campaign[]` relation already exists in the schema; non-breaking additive migration with `@default(true)`
+- **Next.js server actions + `revalidatePath`** — all sync logic stays server-side; no client-side data fetching needed; `revalidatePath` invalidates campaign page caches after sync writes
 
-See `STACK.md` for full rationale and exact component code samples.
+See `.planning/research/STACK.md` for full rationale, code samples for the toggle switch, and the explicit anti-list of libraries not to add.
 
 ### Expected Features
 
-The marketing page must do one thing for conversion: collapse the time-to-understanding. Competitive research (Calendly, Doodle, Cal.com) shows all successful scheduling tool pages converge on the same pattern — interactive product preview near the hero, outcome-focused headline, persistent CTA, and a two-perspective explainer (host and guest experience). This app's genuine differentiator is "players don't need an account" — this should appear near the hero CTA as friction-reduction copy.
-
 **Must have (table stakes):**
-- Sticky nav with logo, Beta badge, Sign Up / Log In — always visible, one click to convert
-- Outcome-focused hero headline — "what does this do for me in 10 words or less"
-- Primary CTA in hero — Sign up free, no competing CTAs at same scroll position
-- Product visual at or near hero — static screenshot is minimum; interactive demo is better
-- FeaturesBlock 4-step explainer — covers "how it works" (Create → Share → See who's free → Pick a day)
-- "Easy for players" section — answers the DM's primary anxiety ("will players actually fill this in?")
-- Final CTA repeat — captures visitors who scroll the full page without clicking the hero CTA
-- Responsive layout — mobile single-column via Tailwind responsive utilities
+- Calendar fills the main content area and dominates the page — a small calendar in a two-column layout feels like a downgrade
+- Sidebar always visible while calendar is shown — persistent, not hidden behind a tab or scroll barrier
+- Date detail panel scoped to the sidebar column only — not a full-viewport overlay; calendar must remain fully visible when panel is open
+- Sidebar join link one-click copy accessible without tab-switching
+- Settings sections always visible without accordion interaction — flat, scannable in one pass
+- Sync opt-out toggle clearly labelled and visible in Settings
 
 **Should have (differentiators):**
-- Interactive `AvailabilityDemoWidget` — player-view demo with pre-seeded mock data, no auth required
-- FeaturesBlock step-selector interactivity — click a step, swap the image (Calendly's proven pattern)
-- Scroll-triggered entrance animations — page feels polished; `FadeInSection`/`ScrollReveal` wrapper
-- "No account needed for players" callout — single line near hero CTAs; genuine UX differentiator
-- Two demo embed placements — FeaturesBlock area and "Easy for players" section
-- `prefers-reduced-motion` support — `motion-reduce:transition-none` on all animated elements
+- DM availability sync across campaigns enabled by default — "mark unavailable once, applies everywhere"
+- Sidebar content swap on date selection (Best Days slides out, date detail slides in) — less disruptive than a full-page overlay
+- Flat settings layout reduces cognitive overhead for common DM actions
 
 **Defer to v2+:**
-- Testimonials / social proof block — no real user base yet; fabricated quotes destroy trust
-- Pricing section — beta; no plans exist
-- Video explainer embed — interactive demo is more persuasive and cheaper to build
-- Feature comparison table vs competitors — invites scrutiny of gaps; D&D framing does the differentiation
-- Full footer with legal links — minimal copyright footer acceptable for v1.5
+- Visual indicator on synced vs independently-set exception dates in the calendar
+- Retroactive backfill when re-enabling sync for a campaign
+- Real-time sync via WebSocket or polling — not needed for small groups of 5–8 players
+- Three-column layout — too narrow on typical laptop screens; two columns is the correct choice
+
+See `.planning/research/FEATURES.md` for full dependency graph, open questions, and phase ordering recommendation from the feature perspective.
 
 ### Architecture Approach
 
-The architecture follows a strict separation: `app/page.tsx` stays a Server Component and handles only auth-check-then-redirect. All marketing content lives in `src/components/landing/`, with a single `LandingPage` client root assembling the sections. Static sections (`HeroSection`, `EasyForPlayersSection`, `FinalCTASection`) are children of the client tree but have no own state. Interactive components (`StickyNav`, `FeaturesBlock`, `AvailabilityDemoWidget`, `ScrollReveal`) are explicitly `'use client'`. The demo bypasses `AvailabilityForm` entirely and reuses only the pure leaf components (`WeeklySchedule`, `AvailabilityCalendar`) with hardcoded mock data — no server actions, no Prisma, no routing.
+The single `'use client'` boundary (`CampaignTabs.tsx`) must be restructured to own the conditional page layout: two-column when on the Availability tab, single-column when on the Settings tab. All three features are implemented inside this boundary or in direct children. One new client component is needed (`DmSyncToggle`) following the existing optimistic-update pattern from `DmExceptionCalendar`. The sync propagation lives entirely in the server action, invisible to client components — the `DmExceptionCalendar` component calls `toggleDmException` as before and the server decides what to propagate.
 
 **Major components:**
-1. `app/page.tsx` (Server Component, unchanged role) — auth check + redirect; returns `<LandingPage />`
-2. `LandingPage` (`'use client'`) — root marketing wrapper; assembles and sequences all sections
-3. `StickyNav` (`'use client'`) — scroll event listener, `useState(false)` → dark background on scroll
-4. `ScrollReveal` (`'use client'`) — `IntersectionObserver` wrapper; wraps each section for entrance animation
-5. `FeaturesBlock` (`'use client'`) — `useState(activeStep)` step-selector; image swap per step
-6. `AvailabilityDemoWidget` (`'use client'`) — self-contained mock; reuses `WeeklySchedule` + `AvailabilityCalendar` with hardcoded state; no server actions
-7. `HeroSection`, `EasyForPlayersSection`, `FinalCTASection` — static JSX children of client tree
+1. **`CampaignTabs.tsx` (modified)** — owns `activeTab`, `selectedDate`, and all layout state; renders two-column availability layout and flat settings; gains `dmSyncEnabled` prop
+2. **`DmSyncToggle.tsx` (new)** — per-campaign sync opt-out toggle with optimistic update + rollback; calls new `setDmSyncEnabled` server action
+3. **`toggleDmException` server action (extended)** — after writing to the target campaign, finds all other DM campaigns with `dmSyncEnabled = true` and writes the same exception to each within their planning window
 
-Build order: `ScrollReveal` first (needed by all sections), then `AvailabilityDemoWidget` (validates demo isolation early), then sections in dependency order, then `LandingPage`, then the one-line swap in `page.tsx` last.
+**Unchanged components:** `BestDaysList`, `DashboardCalendar`, `DmExceptionCalendar`, `UpdatePlanningWindowForm`, `UpdateMaxPlayersForm`, `CopyLinkButton`, `DeleteCampaignButton` — all receive the same props; only their position in the layout or their containing wrapper changes.
+
+See `.planning/research/ARCHITECTURE.md` for the full build order (8 steps), data flow diagrams, and anti-patterns to avoid.
 
 ### Critical Pitfalls
 
-1. **Hydration mismatch from browser-only APIs (`window`, `IntersectionObserver`) accessed outside `useEffect`** — Always initialise animation and scroll state as `useState(false)`. All browser API access must be inside `useEffect`. Server always renders the "hidden" state; client reveals on mount. Pattern is identical to `CampaignTabs.tsx` keyboard listener setup.
+1. **Fixed date panel backdrop blocks sidebar clicks** — the current `fixed inset-0 z-10` backdrop intercepts all clicks on the persistent sidebar while a date panel is open. Fix: convert the date panel to a sidebar content swap using `absolute` positioning within the sidebar div, not `fixed` to the viewport. No full-screen backdrop needed.
 
-2. **Demo component accidentally importing Prisma through `@/lib/` chain** — `AvailabilityDemoWidget` must import only `WeeklySchedule` and `AvailabilityCalendar`. Verify `@/lib/calendarUtils` has no server-only dependency chain before importing. All demo data is module-level constants — no `@/lib/` utility imports for data computation. Run `next build` to catch PrismaClient-in-browser errors early.
+2. **`CampaignTabs` patched instead of restructured** — placing the sidebar outside `CampaignTabs` makes `selectedDate` state-sharing impossible (server components cannot hold state). The correct fix is a structural refactor so both calendar and sidebar are children of the same top-level client component. Do this first, before any other v1.6 work.
 
-3. **`page.tsx` gaining `'use client'` and silently losing the auth redirect** — `page.tsx` must never have `'use client'`. The `getSessionDM()` + `redirect('/campaigns')` guard must remain the first lines of the default export. Document with a comment. This risk is present in every phase that touches `page.tsx`.
+3. **Schema migration deferred until after server action code** — the `dmSyncEnabled` field must exist in the Prisma schema before any sync server action code can be written or TypeScript will not recognise the field. Run `prisma db push` as the literal first step of the sync phase.
 
-4. **FeaturesBlock image swap causing layout shift** — Fix the image container with `aspect-ratio` (e.g., `aspect-video`) and `overflow-hidden`. Use `next/image` with `fill` + `object-cover`. All step screenshots must share the same aspect ratio. Pre-load the first image with `priority`.
+4. **Rapid double-click race condition** — two opposing server actions in flight simultaneously (add then remove, or remove then add) can leave sync-enabled campaigns in split-brain state. Add a per-date in-flight guard (`pendingDates: Set<string>`) that ignores clicks while an action is already in flight.
 
-5. **`AvailabilityDemoWidget` using `new Date()` for planning window, causing SSR/client mismatch** — Use static hardcoded placeholder dates (e.g., `2026-04-01` to `2026-05-31`). The demo is illustrative, not real-time; fixed dates are more predictable and communicate "example" clearly.
+5. **Re-enable sync backfill has no safe canonical source** — per-campaign exception storage means diverged exception sets after an opt-out period cannot be reconciled without an authoritative source. Do not attempt retroactive backfill. Re-enabling sync applies forward only; document this in the toggle UI label.
 
-See `PITFALLS.md` for the full set of 15 pitfalls including: `prefers-reduced-motion` support (Pitfall 9), `StickyNav` z-index collision with `HowItWorksModal` at `z-50` (Pitfall 2), `backdrop-blur` Safari artefacts with the fixed overlay image (Pitfall 12), and demo state resetting on animated wrapper re-renders (Pitfall 11).
-
----
+See `.planning/research/PITFALLS.md` for the full set of 15 pitfalls with exact code prevention patterns, including mobile layout concerns, duplicate join link handling, empty sidebar state, and `revalidatePath` performance considerations.
 
 ## Implications for Roadmap
 
-The FEATURES.md MVP recommendation provides a validated build order. Each phase is isolated by dependency, meaning each can be verified independently before the next is built. The full landing page can be delivered in 5 logical phases.
+Based on dependencies discovered in research, the natural phase structure is three phases driven by a strict dependency order: schema and server layer first, then each UI feature independently.
 
-### Phase 1: Static Page Shell
-**Rationale:** Validates layout, copy, and section structure before any complex component is added. All content visible immediately; no interactive pieces to debug. Establishes the `src/components/landing/` folder structure and the `page.tsx` one-line swap.
-**Delivers:** Fully readable landing page — sticky nav (static, no scroll behaviour yet), hero with CTAs, FeaturesBlock as a static list, "Easy for players" card grid, final CTA section. Logged-in redirect confirmed working.
-**Addresses:** All table-stakes features except interactivity.
-**Avoids:** Pitfall 3 (auth redirect lost) — establishing `page.tsx` structure correctly from the start.
+### Phase 1: Schema and Sync Server Layer
 
-### Phase 2: Scroll-Triggered Entrance Animations
-**Rationale:** Low complexity, high visual impact. Validates the `ScrollReveal`/`FadeInSection` pattern before wrapping more complex components. Easiest phase to verify — visual feedback is immediate.
-**Delivers:** All sections animate in on scroll. `ScrollReveal` wrapper component. `prefers-reduced-motion` support baked in from day one.
-**Addresses:** Scroll animation differentiator from FEATURES.md.
-**Avoids:** Pitfall 1 (hydration mismatch), Pitfall 9 (`prefers-reduced-motion`), Pitfall 8 (multiple observer instances — observe section containers, not individual cards).
+**Rationale:** Everything else depends on the `dmSyncEnabled` field existing in the Prisma schema. The server action extension must exist before the `DmSyncToggle` component can be built. Building this first also allows the sync logic to be tested in isolation before any UI exists, and locks down the sync semantics (bidirectionality, window scoping, no backfill on re-enable) before any UI makes assumptions about them.
 
-### Phase 3: FeaturesBlock Step-Selector
-**Rationale:** Interactive but self-contained — depends only on local `useState` and screenshot assets. No server interaction. Can be built and verified in isolation.
-**Delivers:** Clickable 4-step feature explainer with image swap. Step content: Create campaign → Share with players → See who's free → Pick the best day.
-**Addresses:** FeaturesBlock differentiator from FEATURES.md.
-**Avoids:** Pitfall 6 (image container layout shift — fix `aspect-ratio` from the start).
-**Dependency:** Screenshot assets for all 4 steps must be captured from the live app before implementation begins. Flag as a prerequisite task.
+**Delivers:** `dmSyncEnabled Boolean @default(true)` field on `Campaign` with migration applied; `toggleDmException` propagates to sync-enabled sibling campaigns (scoped to each sibling's planning window); new `setDmSyncEnabled` server action; sync semantics decision record documented.
 
-### Phase 4: Interactive Demo Embed (AvailabilityDemoWidget)
-**Rationale:** Most technically complex component. Built once, placed in two locations. Building after the simpler phases means any SSR/hydration patterns are already proven before the most sensitive component is added.
-**Delivers:** Self-contained interactive player availability demo with pre-seeded mock data. Reuses `WeeklySchedule` + `AvailabilityCalendar` unchanged. Two placements (FeaturesBlock area and "Easy for players" section).
-**Addresses:** Interactive demo differentiator — the single most persuasive element for DM conversion.
-**Avoids:** Pitfall 4 (Prisma import chain), Pitfall 7 (dynamic `new Date()` SSR mismatch), Pitfall 11 (state reset on animated wrapper re-render — use class-switching not conditional render in `ScrollReveal`).
+**Addresses:** Feature 3 (DM availability sync), server layer only
 
-### Phase 5: Sticky Nav Scroll Behaviour
-**Rationale:** Purely cosmetic refinement. Saved for last because it has the most cross-browser risk (`backdrop-blur` on Safari) and zero impact on functional correctness. All other phases work fine with the static nav from Phase 1.
-**Delivers:** Nav background transitions from transparent to dark on scroll. `{ passive: true }` scroll listener. `onScroll()` called on mount to sync state immediately after hydration.
-**Addresses:** Sticky nav scroll-opacity differentiator from FEATURES.md.
-**Avoids:** Pitfall 2 (hydration mismatch from `scrollY` in initial render), Pitfall 2 (z-index at `z-40` below modals at `z-50`), Pitfall 12 (`backdrop-blur` artefacts — test early, prefer solid `bg-[var(--dnd-input-bg)]/90` if blur looks wrong on Safari).
+**Avoids:** Pitfall 10 (schema missing at runtime), Pitfall 3 (backfill edge case locked down before UI ships), Pitfall 5 (sync semantics documented before component integration), Pitfall 4 (only revalidate originating campaign path, not all siblings)
+
+### Phase 2: Two-Column Layout Restructure
+
+**Rationale:** The `CampaignTabs` structural refactor is the highest-risk change in v1.6 and must be isolated as its own phase. It is independent of the sync schema (no data model dependency) but is a prerequisite for the Settings phase because Settings renders inside the same restructured component. Doing this as a focused, standalone phase makes it reviewable and rollback-safe.
+
+**Delivers:** Two-column availability layout (calendar left, persistent sidebar right); sidebar contains `BestDaysList` and `CopyLinkButton`; date detail panel converted from full-viewport fixed overlay to sidebar content swap; mobile responsive (single-column stack below `lg:` breakpoint, calendar source-ordered first); `selectedDate` state correctly owned by the top-level client component; join link removed from Settings tab (now in sidebar).
+
+**Addresses:** Feature 1 (two-column layout), join link sidebar placement
+
+**Avoids:** Pitfall 1 (fixed panel backdrop blocks sidebar), Pitfall 2 (CampaignTabs restructured not patched), Anti-Pattern 4 (sidebar is in-flow not fixed), Pitfall 7 (mobile source order correct for keyboard/screen reader), Pitfall 8 (selectedDate not duplicated in sidebar)
+
+### Phase 3: Flat Settings UI and Sync Toggle
+
+**Rationale:** This phase is low complexity and low risk. Accordion removal is pure markup change. The `DmSyncToggle` component calls the server action from Phase 1 and follows the existing optimistic-update pattern from `DmExceptionCalendar` — it is a small, well-understood component. Phases 1 and 2 must precede this so the `dmSyncEnabled` prop chain is wired through the restructured `CampaignTabs` and the server action is ready to call.
+
+**Delivers:** Flat grouped settings layout — `<details>` wrappers removed entirely and replaced with `<section>` elements; all settings sections always visible; `DmSyncToggle` component rendered in Settings; Settings section order: Planning Window → Players → My Unavailable Dates → DM Availability Sync → Danger Zone; join link section removed from Settings (already in sidebar from Phase 2).
+
+**Addresses:** Feature 2 (settings cleanup), Feature 3 UI (sync toggle)
+
+**Avoids:** Pitfall 9 (details/summary removed entirely, not hidden with CSS — hidden interactive elements cause screen reader confusion), Pitfall 11 (inline planning window editor decision made before implementation), Pitfall 14 (sync semantics communicated in toggle label copy)
 
 ### Phase Ordering Rationale
 
-- **Shell first** because it establishes the component structure that all later phases populate. Any layout problems surface without the complexity of interactive components.
-- **Animations second** because `ScrollReveal` is a dependency for all sections; building it early means wrapping each section is a one-line addition, not a retrofit.
-- **FeaturesBlock third** because it depends on screenshot assets (an external dependency) — getting the component shape right early validates the image swap logic before assets exist, and assets can be added once captured.
-- **Demo fourth** because it is the highest-risk component (Prisma chain risk, SSR mismatch risk, state reset risk). Building it after simpler components means all SSR patterns are already verified in the codebase.
-- **Nav behaviour last** because it is cosmetic and has the most browser-specific risk. It can be added, adjusted, or simplified without touching any other phase's work.
+- Schema must precede server actions because Prisma client regeneration must run before TypeScript can see the new field
+- Server actions must precede client components that call them
+- `CampaignTabs` layout restructure must precede the Settings cleanup because Settings renders inside the same component; combining both in one phase creates a large, hard-to-review diff
+- Features 1 (layout) and 2+3 (settings + sync UI) are independent of each other but share the same component file, so the layout restructure is isolated first to reduce diff complexity in the Settings phase
 
 ### Research Flags
 
-Phases with standard, well-documented patterns (skip `/gsd:research-phase`):
-- **Phase 1 (Static shell):** HTML/JSX structure with Tailwind CSS — fully established
-- **Phase 2 (Animations):** `IntersectionObserver` + Tailwind transitions — pattern is codebase-proven
-- **Phase 3 (FeaturesBlock):** `useState` tab/step-selector pattern identical to `CampaignTabs.tsx`
-- **Phase 4 (Demo):** Wrapping existing controlled components — no novel patterns
-- **Phase 5 (Sticky nav):** `scroll` event + `useState` + Tailwind `transition-colors` — fully standard
+Phases with well-documented patterns (skip `/gsd:research-phase`):
+- **Phase 1:** Prisma schema migrations, `@default` fields, and server action patterns are established and already in use in this codebase; no additional research needed
+- **Phase 2:** Tailwind CSS grid patterns verified against existing codebase usage; sidebar `sticky` positioning is standard CSS; sidebar content swap pattern is documented in ARCHITECTURE.md
+- **Phase 3:** `<details>` removal and accessible `<section>` replacement is straightforward markup; optimistic toggle pattern is already implemented in `DmExceptionCalendar` and can be cloned directly
 
-No phase requires deeper external research. All implementation patterns are documented in the research files with exact code samples.
-
----
+One area to verify during Phase 1 implementation (not requiring a full research phase — a quick integration test is sufficient):
+- **`revalidatePath('/campaigns', 'layout')` segment cache invalidation** — MEDIUM confidence that this cascades to all `/campaigns/[id]` children. If it does not behave as expected, fall back to per-ID invalidation in a loop (already specified in ARCHITECTURE.md as the fallback).
 
 ## Confidence Assessment
 
 | Area | Confidence | Notes |
 |------|------------|-------|
-| Stack | HIGH | All decisions grounded in direct codebase inspection; zero new dependencies removes all version/compatibility unknowns |
-| Features | HIGH | Table stakes from established SaaS landing page conventions; differentiators derived directly from codebase reading and project requirements |
-| Architecture | HIGH | Component boundaries derived from direct inspection of `AvailabilityCalendar`, `WeeklySchedule`, `AvailabilityForm`, and `page.tsx`; patterns match existing codebase discipline |
-| Pitfalls | HIGH (most) / MEDIUM (2) | Hydration, Prisma chain, auth redirect, image layout shift — all HIGH from direct codebase grounding. `backdrop-blur` Safari artefact and Framer Motion bundle sizes are MEDIUM (knowledge cutoff August 2025, not live-verified) |
+| Stack | HIGH | All three features traced directly to existing browser APIs, Tailwind utilities, and Prisma patterns already in the codebase. Zero new dependencies confirmed via direct `package.json` and component inspection. |
+| Features | HIGH | Based on direct codebase inspection and established UX research for accordion removal and slide-in panel scoping. Sync-specific UX patterns derived from analogous multi-calendar tools — MEDIUM for that sub-area only. |
+| Architecture | HIGH | Based on direct inspection of all relevant files: `CampaignTabs.tsx`, `DmExceptionCalendar.tsx`, `BestDaysList.tsx`, `DashboardCalendar.tsx`, `campaign.ts` actions, `schema.prisma`, `page.tsx`. Component boundaries and data flow are well-understood. |
+| Pitfalls | HIGH (structural pitfalls) / MEDIUM (sync edge cases) | Structural pitfalls (z-index, state lifting, schema order) are grounded in direct codebase reading. Cross-campaign sync edge cases (race conditions, cascading revalidation performance) are validated against known Prisma and Next.js behaviour but not live-tested in this exact schema configuration. |
 
 **Overall confidence:** HIGH
 
 ### Gaps to Address
 
-- **Screenshot assets for FeaturesBlock:** 4 step images do not exist yet. These must be captured from the running app before Phase 3 implementation begins. Flag as a prerequisite task in the roadmap.
+- **`revalidatePath` with `'layout'` type for nested dynamic segments** — MEDIUM confidence. Verify during Phase 1 implementation. Fallback is already specified (loop over sibling IDs) and adds no meaningful complexity.
 
-- **`AvailabilityCalendar` planning window prop format:** ARCHITECTURE.md specifies `planningWindowStart` / `planningWindowEnd` as string props, and recommends hardcoded placeholder dates. Confirm the exact date string format expected (ISO `YYYY-MM-DD` assumed) against the component source before writing `AvailabilityDemoWidget`.
+- **Mobile layout for sidebar date panel** — the research specifies the sidebar content swap pattern (`absolute` positioning within sidebar div) for desktop. The exact mobile behaviour needs a decision before Phase 2 implementation: on narrow screens, should the date panel revert to `fixed` full-screen, or does the single-column stacked layout mean the panel simply replaces the sidebar section inline? Recommendation: revert to `fixed` full-screen on mobile (matches current behaviour, keeps mobile path simple).
 
-- **`backdrop-blur` on Safari with fixed overlay:** PITFALLS.md flags this as MEDIUM confidence (not verified against this specific background stack). Test the scroll nav background in Safari early in Phase 5; have the fallback (`bg-[var(--dnd-input-bg)]/90` solid) ready to drop in if the blur effect looks wrong.
+- **Retroactive sync on toggle-on** — research recommends no backfill (forward-only sync). Confirm this is acceptable before Phase 3 ships. Toggle label copy must clearly communicate forward-only semantics so DMs are not confused when enabling sync does not immediately populate a campaign with the DM's existing unavailable dates from other campaigns.
 
-- **Page meta description:** The current `layout.tsx` has generic metadata. A landing-page-specific `export const metadata` in `page.tsx` improves SEO and sharing previews. Low complexity; worth flagging for Phase 1 scope.
-
-- **Demo reset behaviour:** FEATURES.md recommends a "Reset" / "Try it yourself" button in `AvailabilityDemoWidget`. Confirm whether the demo starts pre-seeded (populated, then resettable) or starts empty (visitor fills in from scratch). Pre-seeded is more persuasive — it shows what a filled calendar looks like before the visitor does anything.
-
----
+- **Inline planning window editor fate** — the inline editor in the Availability tab currently duplicates `UpdatePlanningWindowForm` from Settings (Pitfall 11). Decision needed before Phase 3: keep the inline editor, remove it, or replace it with a "Jump to Settings" affordance. Research recommendation: keep a lightweight link in the calendar header that sets `activeTab = 'settings'`, avoiding both form duplication and loss of discoverability.
 
 ## Sources
 
 ### Primary (HIGH confidence)
-- Direct codebase inspection: `src/app/page.tsx`, `src/components/AvailabilityCalendar.tsx`, `src/components/WeeklySchedule.tsx`, `src/components/AvailabilityForm.tsx`, `src/components/CampaignTabs.tsx`, `src/components/Toast.tsx`, `src/app/layout.tsx`, `src/app/globals.css`, `package.json`, `.planning/PROJECT.md`
-- `IntersectionObserver` Web API — Living Standard, universal browser support 2026
-- React 19 `useState` / `useEffect` SSR contract — stable core behaviour
-- Next.js App Router `redirect()` + `cookies()` server-only constraint — stable, knowledge cutoff August 2025
-- Tailwind CSS 4 `motion-reduce:` variant, `transition-*`, `backdrop-blur-sm` — confirmed by codebase usage
+
+- Codebase direct inspection: `src/app/campaigns/[id]/page.tsx`, `src/components/CampaignTabs.tsx`, `src/components/DmExceptionCalendar.tsx`, `src/components/BestDaysList.tsx`, `src/components/DashboardCalendar.tsx`, `src/components/CopyLinkButton.tsx`, `src/lib/actions/campaign.ts`, `prisma/schema.prisma`, `package.json`, `.planning/PROJECT.md`, `.planning/STATE.md` — all read directly in this research session
+- Prisma 7 `createMany` / `deleteMany` APIs — consistent with existing `deleteMany` usage confirmed in codebase
+- ARIA `role="switch"` toggle pattern — ARIA specification; stable
+- Tailwind CSS 4 arbitrary `grid-cols-[...]` value syntax — confirmed by existing arbitrary value usage in this codebase
+- React 19 state lifting pattern — React core specification; stable
+- CSS Grid source-order vs visual-order accessibility concern — WCAG 1.3.2, CSS Grid specification; stable
 
 ### Secondary (MEDIUM confidence)
-- Calendly, Doodle, Cal.com, Linear marketing page patterns — training data through late 2024/early 2025; stable conventions unlikely to have reversed
-- Framer Motion bundle sizes (~30–60 KB gzipped for `motion` package) — training data; bundlephobia.com is live verification source if Framer Motion is reconsidered
-- `backdrop-filter: blur()` Safari compositing with fixed-position overlays — known browser behaviour, not verified against this specific background stack
+
+- Next.js App Router `revalidatePath` with `'layout'` type — Next.js 15+ cache documentation; exact behaviour for nested dynamic segments not live-tested in this app
+- Baymard / UK Government user research on accordion UX — established research; general UX principles, not app-specific
+- PatternFly drawer design guidelines and Adobe Commerce slide-out panel patterns — enterprise design systems; applicable as analogy for sidebar vs overlay patterns
+- Optimistic update + per-date in-flight guard pattern — well-known React pattern; not verified against this codebase's specific `DmExceptionCalendar` implementation detail
+
+### Tertiary (LOW confidence)
+
+- OneCal / CalendarBridge multi-calendar sync — referenced only as analogy for cross-calendar availability propagation design patterns; enterprise tools not directly comparable to this app's use case
 
 ---
-*Research completed: 2026-03-13*
+*Research completed: 2026-03-16*
 *Ready for roadmap: yes*

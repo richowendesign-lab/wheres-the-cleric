@@ -1,482 +1,344 @@
 # Domain Pitfalls
 
-**Domain:** Next.js 16 App Router — adding a marketing landing page with scroll animations, sticky nav, and an interactive demo to an existing production app
-**Milestone:** v1.5 Marketing Home Page
-**Researched:** 2026-03-13
-**Confidence:** HIGH for pitfalls grounded in direct codebase inspection and established Next.js/React 19 behaviour; MEDIUM for Framer Motion–specific details (knowledge cutoff August 2025, no live verification available)
+**Domain:** Next.js 16 App Router — adding two-column layout, flat settings, and cross-campaign DM availability sync to an existing D&D scheduling app
+**Milestone:** v1.6 Campaign Detail Rework
+**Researched:** 2026-03-16
+**Confidence:** HIGH for pitfalls grounded in direct codebase inspection and established Next.js/React 19/Prisma behaviour; MEDIUM for cross-campaign sync edge cases (race conditions, cascading revalidation) which are architectural patterns validated against known behaviour but not live-tested in this exact schema
 
 ---
 
 ## Critical Pitfalls
 
-### Pitfall 1: Scroll-triggered animation components cause hydration mismatch because they read `window` or `scrollY` on first render
+### Pitfall 1: The fixed date slide-in panel (z-20, `position: fixed`) collides with the new persistent sidebar at the same layer
 
 **What goes wrong:**
-Scroll-triggered animations need to know whether a section is in the viewport. The naive implementation uses `window.scrollY` or `document.querySelector` in component body code, or initialises `useIntersectionObserver` state differently on server vs client. The server renders all sections as "not yet visible" (hidden / `opacity-0`). The client hydrates and immediately sees some sections are already in view — so their "visible" state differs from what the server rendered. React throws a hydration warning, and in some cases visually flickers or snaps sections into their end state without animating.
+The current `CampaignTabs.tsx` renders the date detail panel as `fixed inset-y-0 right-0 w-80 z-20` — a full-height fixed drawer that slides in from the right edge of the viewport. The planned two-column layout puts a persistent Best Days + join link sidebar in the right column. When the date panel slides in, it occupies the same right-side viewport space as the persistent sidebar, and at `z-20` it visually overlaps the sidebar but may be behind it depending on stacking context.
+
+More critically: the backdrop dismiss layer for the date panel is `fixed inset-0 z-10` — a full-screen transparent overlay. In the new layout, this backdrop will intercept all clicks on the persistent sidebar content, blocking interaction with the sidebar while the date panel is open.
 
 **Why it happens:**
-`window`, `document`, and `IntersectionObserver` do not exist in the Node.js SSR environment. Code that references them at module level or in the component body (outside `useEffect`) crashes the server render or produces mismatched output. Conditional guards like `typeof window !== 'undefined'` in component body code are not sufficient — they silence the crash but the render still produces different HTML on server vs client.
+The date panel was designed for a single-column layout where "the right side of the screen" was empty space. In the two-column layout, the right column is no longer empty — it is a real content region. The fixed panel needs to overlay the sidebar deliberately, not accidentally.
 
 **Consequences:**
-- Hydration warning in the console (`Expected server HTML to contain a matching...`)
-- Visible layout flash as sections snap from `opacity-0` to `opacity-100` without transition on first load
-- In production, React 19's stricter hydration may throw and force a full client re-render, removing SSR benefits
+- DM cannot click Best Days list items while a date panel is open (backdrop intercepts)
+- If sidebar is sticky/scrollable, the fixed panel and sidebar create competing scroll contexts
+- Visual confusion: the persistent sidebar shows Best Days but the date panel also shows date detail — two right-side panels can appear simultaneously on desktop if the panel z-index is insufficient
 
 **Prevention:**
-Two reliable patterns:
+Redesign the date slide-in to work in the two-column context. Two reliable patterns:
 
-**Pattern A — `useEffect` + `useState(false)` for all animation state:**
-```tsx
-'use client'
-import { useEffect, useRef, useState } from 'react'
+**Pattern A — Overlay that covers only the left (calendar) column:**
+The slide-in panel overlays only the calendar area, not the full viewport. Position the panel absolutely within the calendar column's container, not fixed to the viewport. This requires the calendar column to have `position: relative` and `overflow: hidden`.
 
-export function AnimatedSection({ children }: { children: React.ReactNode }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false) // always false on server
+**Pattern B — Replace the fixed slide-in with inline expansion within the sidebar:**
+When a date is selected, the sidebar transitions from showing the Best Days list to showing the date detail (replacing or prepending the date content at the top of the sidebar). No fixed overlay needed. This removes the backdrop/z-index problem entirely and is the better UX for this layout: the sidebar is already the "secondary info" region.
 
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(true) },
-      { threshold: 0.15 }
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
+**Which phases:** Layout phase, date panel integration phase.
 
-  return (
-    <div
-      ref={ref}
-      className={`transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
-    >
-      {children}
-    </div>
-  )
+---
+
+### Pitfall 2: The two-column layout shifts `CampaignTabs` from a single-component with internal sections to a parent layout that must be orchestrated — but `CampaignTabs` is a single `'use client'` boundary
+
+**What goes wrong:**
+`CampaignTabs.tsx` currently owns all state: `activeTab`, `selectedDate`, `editingWindow`, `windowSaved`. It renders the date slide-in panel, the tab bar, and all tab content. The new layout does not use tabs for the calendar vs sidebar — the calendar and sidebar are always both visible on desktop. This changes the component's responsibilities fundamentally.
+
+The temptation is to keep `CampaignTabs` as-is and wrap it in a new two-column layout div. This fails because:
+1. The date slide-in panel state (`selectedDate`) is in `CampaignTabs` but the new sidebar (now a sibling, not a child) needs to react to it
+2. The Settings tab is still a tab — it needs to hide the two-column layout and show flat settings instead
+3. The whole page layout (two-column vs full-width Settings) is conditional on `activeTab`, which is inside `CampaignTabs`
+
+Patching the existing component without restructuring produces tangled state and invalid layout hierarchy.
+
+**Why it happens:**
+The existing component architecture was correctly designed for the single-column layout it shipped with. It was not designed for a parent-level layout change. Incremental changes resist the structural edit needed.
+
+**Consequences:**
+- `selectedDate` shared between sidebar and calendar requires prop-lifting or context — impossible if sidebar is outside `CampaignTabs`'s render tree
+- Tab switching between Availability and Settings must control a higher-level layout — two-column visible vs full-width single column — but the `activeTab` state is inside `CampaignTabs`
+- If the sidebar is placed outside `CampaignTabs` in `page.tsx`, it cannot receive `selectedDate` updates without a prop chain through a server component (impossible — server components cannot hold state)
+
+**Prevention:**
+Accept that `CampaignTabs` needs structural refactoring, not patching. The correct model:
+
+1. The server page (`page.tsx`) stays as a Server Component — no change to its data fetching pattern
+2. A new top-level client component (`CampaignDetail.tsx` or similar) replaces `CampaignTabs` as the `'use client'` boundary — it owns `activeTab`, `selectedDate`, and all interactive state
+3. This component renders a conditional layout: two-column when `activeTab === 'availability'`, single-column when `activeTab === 'settings'`
+4. Both the calendar column and the sidebar column are children of this single client component, so they share state naturally
+
+The existing `CampaignTabs` component can either be renamed/refactored in place or replaced. The key constraint is: **a single `'use client'` component must own the layout switch and all shared state**.
+
+**Which phases:** Layout restructuring phase (must be done before any other v1.6 work).
+
+---
+
+### Pitfall 3: The DM availability sync server action creates phantom exceptions on the re-enable path ("re-sync on toggle-on" edge case)
+
+**What goes wrong:**
+The planned sync feature: when a DM marks a date as unavailable on any campaign, that exception propagates to all other campaigns owned by the same DM (unless a campaign has opted out). When the DM re-enables sync for a campaign (toggle-on after it was opted out), the feature should backfill the campaign with all currently synced exceptions from the DM's other campaigns.
+
+The edge case: what is the "current synced set" at the moment of re-enable? If the DM has modified exceptions across several campaigns after the opt-out was set, each campaign may have a different set of synced dates. There is no single authoritative "DM exception list" — each campaign has its own `DmAvailabilityException` rows. The backfill on re-enable must pick a source, and any choice can be surprising:
+
+- "Copy from campaign A" — the DM may have removed a date from campaign A but not B; the re-enabled campaign silently inherits A's state, not B's
+- "Union of all campaigns" — adds dates from campaigns the DM already cleaned up; looks like a bug
+- "Intersection of all campaigns" — drops dates that should carry over; silent data loss
+
+The "re-sync on toggle-on" path has no obviously correct answer, and getting it wrong silently corrupts the DM's exception data.
+
+**Why it happens:**
+The schema has no global DM-level exception model. Exceptions are per-campaign (`DmAvailabilityException` has `campaignId`). Sync is a propagation pattern imposed on top of per-campaign storage. When sync is disabled for a campaign, the campaign's exceptions diverge from other campaigns. Re-enabling sync cannot know which state is "correct."
+
+**Prevention:**
+Two viable approaches:
+
+**Approach A — Re-sync on toggle-on does NOT backfill (simplest and safest):**
+When sync is re-enabled, the campaign starts receiving new exceptions going forward, but existing exceptions on the campaign are left unchanged. The campaign's prior state (from when it was opted out) is kept as-is. This is easy to explain to the DM: "Your existing dates stay the same. New unavailable dates will now sync." No data corruption risk. The only downside is that the DM may need to manually clear/add dates to bring the re-enabled campaign in line.
+
+**Approach B — Re-sync on toggle-on backfills from a defined source (explicit but complex):**
+Define a canonical source — one campaign as the "primary" source, or simply the most-recently-modified exception set. Document this as the expected behaviour and explain it in the UI. More correct but requires schema changes (tracking which campaign is primary, or adding timestamps to exception sets) and adds significant complexity.
+
+**Recommendation:** Approach A. Implement it first and document the behaviour in the UI toggle label (e.g., "Sync enabled — new unavailable dates will apply to this campaign"). A future milestone can add backfill if users request it.
+
+**Which phases:** DM availability sync server action phase.
+
+---
+
+### Pitfall 4: Cascading `revalidatePath` calls across all campaigns in a single server action can cause Vercel Edge function timeout on DMs with many campaigns
+
+**What goes wrong:**
+The sync server action — called on every DM exception toggle — must:
+1. Write the new exception to the originating campaign
+2. Find all other campaigns owned by the same DM that have sync enabled
+3. Write the exception to each of those campaigns
+4. Call `revalidatePath` for each affected campaign
+
+Steps 2–4 are O(n) where n = number of DM campaigns with sync enabled. Each campaign gets a DB write (upsert or delete) and a `revalidatePath`. For this app's use case (small groups, 5–15 campaigns per DM), this is trivial. But `revalidatePath` in Next.js 15/16 triggers a cache invalidation that requires a round-trip to the Vercel deployment infrastructure — and N concurrent `revalidatePath` calls in a single server action adds latency to the action response.
+
+More practically: if a DM has campaigns with different planning windows and a sync'd exception date falls outside a campaign's planning window, the write is harmless but `revalidatePath` still fires, causing unnecessary cache churn.
+
+**Why it happens:**
+Developers follow the existing pattern (one `revalidatePath` per action) without considering that the sync action loops over multiple campaigns.
+
+**Prevention:**
+- Use `Promise.all()` for the DB writes across campaigns to run them in parallel, not serially — this keeps total DB time under control
+- Only call `revalidatePath` for the originating campaign in the sync action (the current campaign the DM is on). Do NOT call `revalidatePath` for every affected campaign — the DM is not viewing those pages right now. Their cache will be naturally invalidated when they next navigate to them, because `page.tsx` fetches fresh data on every server render (no `generateStaticParams`, no ISR)
+- This is safe because: the date panel and Best Days list in the currently-viewed campaign are the only things that need to update immediately. Other campaigns will be re-fetched when navigated to
+
+**Which phases:** DM availability sync server action phase.
+
+---
+
+### Pitfall 5: Optimistic updates in `DmExceptionCalendar` interact badly with cross-campaign sync — the optimistic state on one campaign is inconsistent with the actual DB state after sync
+
+**What goes wrong:**
+`DmExceptionCalendar.tsx` uses optimistic UI: when the DM clicks a date, it immediately updates local state (`exceptions` set) and shows the new state before the server confirms. This is correct for single-campaign exceptions. With cross-campaign sync, the server action writes the exception to multiple campaigns. But each campaign detail page has its own `DmExceptionCalendar` instance with its own local `exceptions` state. Those other instances are not notified of the sync — they still show the pre-sync state for their campaign.
+
+The critical scenario: DM has Campaign A and Campaign B, both with sync enabled. On Campaign A's page, they mark a date as unavailable. Campaign A's calendar shows it optimistically. The server action syncs it to Campaign B. When the DM navigates to Campaign B, the page does a fresh server render (revalidated), so Campaign B shows the synced exception correctly. **This is fine — the problem does not manifest here.**
+
+The problem manifests when: the DM is on Campaign A, has the date panel open showing a date that is now synced to Campaign B, and then navigates back to Campaign A after making further changes on Campaign B. The local state in Campaign A's `DmExceptionCalendar` may have drifted from DB truth (if Campaign B's changes were also synced back to Campaign A).
+
+More practically: the toggle direction matters. Marking a date **unavailable** syncs it. But what about marking it **available** again (unblocking)? If the DM unblocks a date on Campaign A, does that sync the unblock to Campaign B? If yes, and Campaign B had independently added that date as blocked, the DM loses that Campaign B exception silently.
+
+**Why it happens:**
+Sync logic at the server action level is invisible to client-side optimistic state. The component assumes it is the only writer for its campaign's exceptions — sync breaks that assumption.
+
+**Prevention:**
+- The sync action for the delete/unblock case must also propagate the delete to all sync-enabled campaigns. The DM unblocking a date on Campaign A should remove it from Campaign B too (otherwise "sync enabled" means asymmetric: adds propagate, removes don't)
+- Document the sync semantics explicitly before implementing: "when sync is on, the DM's exception list is shared — any add or remove on any campaign propagates to all sync-enabled campaigns"
+- Do NOT extend the optimistic state to reflect cross-campaign sync. The optimistic update correctly reflects the current campaign's expected state. The DM sees sync effects when they navigate to other campaigns (fresh server render). Trying to update other campaigns' state client-side from one campaign's page is overengineering and requires a shared state mechanism that does not exist in this architecture
+
+**Which phases:** DM availability sync server action phase, DmExceptionCalendar integration phase.
+
+---
+
+### Pitfall 6: Race condition on simultaneous toggles — two rapid clicks on the same date produce inconsistent final state
+
+**What goes wrong:**
+`DmExceptionCalendar.tsx` already has this risk for single campaigns, but sync makes it worse. The existing implementation:
+1. User clicks date → optimistic UI update → server action fired
+2. User clicks same date again before action 1 completes → second optimistic update → second server action fired
+
+With no debounce and no in-flight guard, two opposite server actions (add then delete, or delete then add) race to completion. Whichever completes last wins in the DB. The optimistic UI may show the opposite state from the DB.
+
+With cross-campaign sync, each toggle fires N DB writes. Two racing toggles can leave some campaigns in one state and others in the opposite state — a split-brain exception set.
+
+**Why it happens:**
+The existing component has rollback on error but no in-flight state guard. Rapid double-clicks on the same cell trigger two actions. The existing delete+upsert pattern (with `@@unique` constraint) is safe for single actions but not for simultaneous opposing actions.
+
+**Consequences:**
+- Optimistic UI shows the date as blocked; DB has it unblocked (or vice versa) — silent inconsistency
+- With sync: Campaign A blocked, Campaign B unblocked — DB is split across campaigns
+- The error rollback in the existing component only handles action failure, not the "wrong final state" case when two actions both succeed in the wrong order
+
+**Prevention:**
+Add a per-date in-flight guard: track which `dateKey` values have an active server action, and ignore clicks on those cells until the action resolves. This is already the right pattern for the single-campaign case; it becomes critical with sync.
+
+```typescript
+const [pendingDates, setPendingDates] = useState<Set<string>>(new Set())
+
+function handleDateClick(dateKey: string) {
+  if (pendingDates.has(dateKey)) return  // guard: ignore rapid second click
+  setPendingDates(prev => new Set([...prev, dateKey]))
+  // ... rest of optimistic update + action call
+  // In .then() / .catch(): setPendingDates(prev => { const next = new Set(prev); next.delete(dateKey); return next })
 }
 ```
 
-The key: `useState(false)` always renders `opacity-0` on both server and client first paint. `useEffect` only runs client-side, so no mismatch.
+Apply visual feedback to the pending cell (reduced opacity or spinner) so the DM knows the click registered and further clicks are intentional.
 
-**Pattern B — Framer Motion `motion` components with `initial` / `whileInView`:**
-Framer Motion's `whileInView` prop internally uses `IntersectionObserver` only on the client. The server-rendered output uses the `initial` state. This matches Pattern A's behaviour when used correctly — but see Pitfall 5 for Framer Motion–specific SSR issues.
-
-**What NOT to do:**
-- Do not initialise animation state based on `getBoundingClientRect()` outside `useEffect`
-- Do not use `suppressHydrationWarning` on animated elements as a shortcut — it hides the symptom, not the cause
-- Do not use CSS `@keyframes` animations without a `prefers-reduced-motion` media query — see Pitfall 9
-
-**Phase:** Scroll-triggered section entrance animations phase.
-
----
-
-### Pitfall 2: Sticky nav with scroll detection causes hydration mismatch or layout shift when background transition is driven by JS state
-
-**What goes wrong:**
-The nav's "scrolled" state (dark background on scroll) requires reading `window.scrollY`. If `scrollY` is read during SSR or used to set initial state, the server always renders the nav as "not scrolled" (transparent), but a returning user with a cached page and existing scroll position sees a flash. More critically: if the sticky nav's height is used in layout calculations (e.g., `scroll-margin-top`, section offsets), a mismatch between SSR height and actual rendered height causes layout shift.
-
-The specific risk for this app: `layout.tsx` has a fixed background gradient and a `fixed` background image overlay. A `position: fixed` sticky nav that adds itself to the DOM flow on the landing page but not on the campaigns page needs to be carefully scoped to avoid affecting the existing logged-in experience.
-
-**Why it happens:**
-`scroll` event listeners and `window.scrollY` are client-only. Rendering with different initial state (e.g., `const [scrolled, setScrolled] = useState(window.scrollY > 0)`) crashes on server. Even with a `typeof window !== 'undefined'` guard, the mismatch between server's `false` and client's `true` triggers hydration errors if the guard runs in component body rather than `useEffect`.
-
-**Consequences:**
-- Flash of unstyled nav (transparent background briefly visible then switching to dark)
-- If nav height is used in any scroll offset calculation, those calculations are wrong on first render
-- If the nav is added to `layout.tsx` globally, it appears on the campaigns/dashboard pages (breaking the existing logged-in experience)
-
-**Prevention:**
-
-**Scoping:** Do NOT add the sticky nav to `layout.tsx`. The nav is landing-page–only. Keep it inside the landing page's own component tree. The existing campaigns page has its own header pattern — a global nav would visually conflict with it.
-
-**Correct scroll-detection pattern:**
-```tsx
-'use client'
-import { useEffect, useState } from 'react'
-
-export function StickyNav() {
-  const [scrolled, setScrolled] = useState(false) // always false on server
-
-  useEffect(() => {
-    function onScroll() { setScrolled(window.scrollY > 20) }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    onScroll() // sync on mount without waiting for scroll event
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  return (
-    <nav className={`fixed top-0 inset-x-0 z-40 transition-colors duration-300 ${
-      scrolled ? 'bg-[#140326]/90 backdrop-blur-sm' : 'bg-transparent'
-    }`}>
-      {/* ... */}
-    </nav>
-  )
-}
-```
-
-`{ passive: true }` is essential — scroll listeners without `passive: true` block the main thread and cause jank on mobile. The `onScroll()` call on mount ensures the state is correct immediately after hydration without waiting for the user to scroll.
-
-**z-index:** The existing app uses `z-50` for modals (`ShareModal`, `HowItWorksModal`). The sticky nav must use `z-40` or lower to stay below modals. The `HowItWorksButton` on the home page opens a `<dialog>` at `z-50` — if the nav is at `z-50`, the modal backdrop will render behind it.
-
-**Phase:** Sticky nav phase.
-
----
-
-### Pitfall 3: The existing `page.tsx` redirect-to-`/campaigns` for logged-in DMs breaks when the page becomes long-form — the server auth check must stay at the top
-
-**What goes wrong:**
-The current home page (`page.tsx`) has `const dm = await getSessionDM(); if (dm) redirect('/campaigns')`. This redirect fires on every server render for logged-in DMs. When the page becomes a full landing page with many sections, this redirect is still the right behaviour — but there is a temptation to restructure the file during the conversion (e.g., splitting into many components, changing the export default structure). Any restructuring that moves the `getSessionDM()` call lower in the component, or wraps it in a condition that skips it, silently removes the auth redirect for logged-in DMs.
-
-**Why it happens:**
-Large component files with many sections invite refactoring. A developer building the FeaturesBlock or DemoEmbed component might extract the entire page body and inadvertently move the auth check inside a sub-component — which no longer has access to the await before the render returns.
-
-**Consequences:**
-Logged-in DMs see the marketing landing page instead of being sent to their campaigns list. This is a UX regression with no error — it silently breaks the existing flow.
-
-**Prevention:**
-Keep the auth check and redirect as the very first thing in the `page.tsx` default export, before any JSX is returned or any section component is rendered. Document this constraint with a comment:
-
-```tsx
-export default async function HomePage() {
-  // Auth guard: logged-in DMs always go directly to /campaigns
-  const dm = await getSessionDM()
-  if (dm) redirect('/campaigns')
-
-  // Marketing landing page for logged-out visitors
-  return (
-    <main>
-      <StickyNav />
-      <HeroSection />
-      {/* ... */}
-    </main>
-  )
-}
-```
-
-Do not move `getSessionDM()` into a child Server Component or a shared layout. The redirect must fire before any page content is sent to the client.
-
-**Phase:** All landing page phases — this risk is present whenever `page.tsx` is modified.
-
----
-
-### Pitfall 4: The interactive demo component accidentally imports or calls real Prisma / server action code
-
-**What goes wrong:**
-The interactive demo component is a self-contained client component that simulates the player availability experience with placeholder data. It visually resembles `AvailabilityCalendar.tsx` and `WeeklySchedule.tsx`. The most common mistake is importing one of those real components (which themselves are `'use client'`) and passing fake props — but those components may import utilities from `@/lib/calendarUtils` or `@/lib/availability` that in turn import from Prisma client or server-only modules.
-
-If any component in the demo's import tree imports `@/lib/prisma` (even indirectly), Next.js will throw during the build or at runtime:
-```
-Error: PrismaClient is not supported in the browser
-```
-
-**Why it happens:**
-The real availability components are display-only and look safe to reuse. Developers import `AvailabilityCalendar` into the demo to avoid duplicating UI. But `AvailabilityCalendar` imports from `@/lib/calendarUtils` which may share a module boundary with `@/lib/prisma` through re-exports or barrel files.
-
-**Consequences:**
-Build failure or runtime error in the demo component. The entire landing page fails to render. Because this error appears at build time on Vercel, it blocks deployment.
-
-**Prevention:**
-The demo component must be **fully self-contained** — it must not import from any `@/lib/` module that has a server-side dependency chain. Specifically:
-- Do not import `AvailabilityCalendar` directly — copy only the visual/display logic needed
-- Do not import from `@/lib/calendarUtils` unless you have verified that file has zero imports from `@/lib/prisma`, `@/lib/actions/`, or any module marked `server-only`
-- Add `'use client'` at the top of every file in the demo component tree
-- Use hardcoded placeholder data defined inline in the demo file, not fetched or derived from server utilities
-
-**Detection:**
-Run `next build` and watch for "PrismaClient is not supported in the browser" errors. Better: run the dev server and check the browser console for module resolution errors before shipping.
-
-**Phase:** Interactive demo component phase.
-
----
-
-### Pitfall 5: Framer Motion's `LazyMotion` / `m` component strategy is skipped, bloating the landing page bundle
-
-**What goes wrong:**
-Framer Motion's full bundle is approximately 100–140 KB gzipped. If the entire `framer-motion` package is imported with `import { motion } from 'framer-motion'`, the full animation engine ships on the first page load for every visitor — including the CSS and JS for features like gestures, drag, and layout animations that the landing page will never use.
-
-For a landing page that only needs simple entrance animations (fade-in, slide-up), shipping 140 KB of animation library is disproportionate. This matters because the landing page is the first thing users see — a slow load undermines the credibility of the product it markets.
-
-**Why it happens:**
-`import { motion } from 'framer-motion'` is the canonical example in Framer Motion's README. Developers copy it without reading the optimisation docs.
-
-**Consequences:**
-- Slower first contentful paint on the landing page (the only page new users see)
-- Lighthouse performance score degrades
-- The app was previously zero-animation-library — adding 140 KB for what could be achieved with Tailwind CSS transitions is hard to justify
-
-**Prevention:**
-Two alternatives in order of preference:
-
-**Option A — No Framer Motion (preferred for this app):**
-CSS Tailwind transitions with `IntersectionObserver` (Pattern A from Pitfall 1) achieve all required landing page effects: fade-in, slide-up, scale. The existing codebase uses this approach already for the side panel and snackbar in `CampaignTabs.tsx`. Zero new dependencies, zero bundle impact. The FeaturesBlock step selector is pure state toggling — no animation library needed.
-
-**Option B — Framer Motion with `LazyMotion` + `domAnimation`:**
-If Framer Motion is chosen, use `LazyMotion` with the `domAnimation` feature bundle (~18 KB gzipped) instead of the full bundle:
-```tsx
-import { LazyMotion, domAnimation, m } from 'framer-motion'
-
-// Wrap the landing page sections:
-<LazyMotion features={domAnimation}>
-  <m.section initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}>
-    ...
-  </m.section>
-</LazyMotion>
-```
-`m` is the tree-shaken component, `domAnimation` is the minimal feature set. This keeps the bundle under 20 KB for the animation use case here.
-
-**Decision for this milestone:** Given the animation requirements (scroll-entrance only, no drag, no layout, no gestures), Option A is recommended. Framer Motion adds a dependency with ongoing maintenance cost; Tailwind CSS transitions handle the same effects at zero cost.
-
-**Phase:** All animation phases.
+**Which phases:** DmExceptionCalendar integration phase.
 
 ---
 
 ## Moderate Pitfalls
 
-### Pitfall 6: The `FeaturesBlock` step-selector image swap causes layout shift if images are not sized explicitly
+### Pitfall 7: The two-column layout breaks the existing mobile layout that CampaignTabs provides
 
 **What goes wrong:**
-The `FeaturesBlock` component shows a step list on one side and a swappable image on the other. When the user clicks a step, the image changes. If the image container does not have fixed dimensions (or `aspect-ratio`), the block reflowing as the new image loads causes visible layout shift. This is especially jarring because the block is interactive and the shift happens on user action.
+The existing layout is single-column and works on mobile by default. The new two-column layout (large calendar left, sidebar right) is only appropriate at wider viewport widths. On mobile, both columns must stack vertically. The question is the stacking order: should the sidebar (Best Days) appear above the calendar, or below?
+
+If stacking order is calendar-first (natural HTML order), mobile users see the calendar first and must scroll down to see Best Days. This is reasonable since the calendar is the primary content. But if the sidebar is positioned first in HTML order (for desktop CSS grid to pull it right), mobile users see the sidebar first, which breaks the expected flow.
 
 **Why it happens:**
-`next/image` with `width` and `height` props reserves space — but only if the image container itself has defined dimensions. If the image is rendered with `fill` mode inside a container that has no height, the container collapses to zero before the image loads, then expands. When switching between step images of different aspect ratios, the container height jumps between renders.
-
-**Consequences:**
-Visual jank on every step click. Users on slow connections see a flash of empty space before the new image appears. The interactive feature that is supposed to demonstrate the app's quality instead makes the landing page feel unpolished.
+CSS Grid with `order` properties or column-reversal for responsive layout can make HTML source order and visual order diverge. Screen readers and keyboard navigation follow source order, not visual order — if the sidebar is visually on the right but first in source, keyboard users tab through the sidebar before the calendar.
 
 **Prevention:**
-- Define the image container with a fixed `aspect-ratio` (e.g., `aspect-video` or `aspect-[4/3]`) and `overflow-hidden`
-- Use `next/image` with `fill` and `object-cover` inside this fixed-aspect container
-- All step images must be the same aspect ratio, or the container must be sized to accommodate the largest
-- Pre-load all step images: `<link rel="preload" as="image" />` or use `priority` on the first visible step image
+Use source order that matches mobile reading order: calendar section first, sidebar second. On desktop, use CSS Grid `grid-template-columns` with the sidebar placed in the second column via grid area assignments — not by reordering elements. This ensures: mobile = calendar above sidebar; desktop = calendar left, sidebar right; keyboard/screen reader = calendar before sidebar at all widths. Tailwind CSS 4's `grid` utilities support this cleanly:
 
-**Phase:** FeaturesBlock / interactive step-selector phase.
-
----
-
-### Pitfall 7: The interactive demo component uses `new Date()` for its planning window, causing SSR/client mismatch
-
-**What goes wrong:**
-The demo component shows a calendar with a planning window. If the window start/end dates are computed with `new Date()` (i.e., "today + 30 days"), the server renders the calendar with one date range, and the client hydrates with a different date range if the time-of-day or date has changed between server render and client hydration. React flags a hydration mismatch.
-
-More subtly: even if the dates match, `new Date().toLocaleDateString()` produces different output depending on the server's locale vs the client's locale. The server (Vercel Node.js) may use a different locale than the user's browser.
-
-**Why it happens:**
-Using `new Date()` for demo/placeholder dates feels natural — "show a calendar starting from today." It is not obvious that this creates an SSR mismatch.
-
-**Consequences:**
-Hydration mismatch warning. Depending on how React 19 handles it, the demo calendar may flicker or re-render entirely on mount, causing a visible flash.
-
-**Prevention:**
-Use **static, hardcoded placeholder dates** in the demo component — not dynamic dates. Example:
-```tsx
-const DEMO_PLANNING_WINDOW_START = '2025-06-01'
-const DEMO_PLANNING_WINDOW_END = '2025-06-30'
 ```
-The demo is illustrative, not real-time. A fixed date range is more predictable and communicates "here is an example" more clearly than "here is a calendar starting today."
-
-If the demo truly needs to feel current, compute the date on the client side only inside `useEffect` and update state there — ensuring the server always renders the static fallback and the client updates after hydration without a mismatch.
-
-**Phase:** Interactive demo component phase.
-
----
-
-### Pitfall 8: Multiple `IntersectionObserver` instances per section component creates performance problems on long pages
-
-**What goes wrong:**
-If each animated section creates its own `IntersectionObserver` with `new IntersectionObserver(...)` in a `useEffect`, a page with 6 sections creates 6 observer instances. While browsers can handle this, it is wasteful — each observer adds overhead per scroll event. On low-end devices, multiple observers firing simultaneously on fast scrolls can cause frame drops.
-
-**Why it happens:**
-The per-component `useEffect` pattern (Pattern A from Pitfall 1) naturally creates one observer per component. This is fine for a small number of sections but not for a page with many repeated animated elements (e.g., the 3-card grid in "Easy for players" where each card animates independently).
-
-**Consequences:**
-Scroll jank on low-end mobile devices. More pronounced with staggered animations on card grids where all 3 cards have independent observers.
-
-**Prevention:**
-- Use a single shared `IntersectionObserver` that observes multiple elements, implemented as a React context or a shared hook
-- Or: use `once: true` in the observer options and disconnect after the first intersection (already done in Pattern A above with the `observer.disconnect()` in the callback) — this means each observer only fires once and the overhead is time-limited
-- For card grids: animate the grid container as one unit rather than animating each card independently with staggered observers. Use CSS `animation-delay` with a single observer on the parent:
-
-```tsx
-// Parent container observed once
-// Children use CSS animation-delay
-<div className={visible ? 'animate-in' : 'opacity-0'}>
-  {cards.map((card, i) => (
-    <div key={i} style={{ animationDelay: `${i * 100}ms` }}>
-      {card}
-    </div>
-  ))}
-</div>
+grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6
 ```
 
-**Phase:** Scroll-triggered section entrance animations phase.
+Calendar column in source order first; sidebar in source order second; CSS positions sidebar to the right on desktop without source reordering.
+
+**Which phases:** Layout phase.
 
 ---
 
-### Pitfall 9: Scroll animations run at full intensity for users with `prefers-reduced-motion` enabled
+### Pitfall 8: The persistent sidebar "Best Days" list duplicates state already in `BestDaysList` — two sources of truth for `selectedDate`
 
 **What goes wrong:**
-Users who have enabled "Reduce motion" in their OS accessibility settings (`prefers-reduced-motion: reduce`) expect animations to be minimal or absent. Scroll-triggered fade-ins and slide-ups that ignore this preference are an accessibility violation and a poor user experience for motion-sensitive users.
+`BestDaysList.tsx` currently receives `selectedDate` and `onSelectDate` as props, driving the date panel from the Best Days list. In the new layout, Best Days is in the persistent sidebar. If the persistent sidebar and `DashboardCalendar` are siblings that both need to write `selectedDate`, the state must live in their shared parent — the top-level client component (see Pitfall 2).
+
+If `BestDaysList` is refactored to manage its own selected state internally (tempting since it is self-contained), it diverges from the calendar's `selectedDate`. The calendar cell may show a ring around a selected date that the sidebar's own state does not reflect, and vice versa.
 
 **Why it happens:**
-Tailwind CSS utility classes for transitions and `IntersectionObserver`-driven state changes do not automatically respect `prefers-reduced-motion`. The developer must explicitly handle it.
-
-**Consequences:**
-Motion-sensitive users experience the full scroll animation sequence. On a landing page with 6+ animated sections, this is a significant accessibility issue.
+Component authors reach for local state first. When two sibling components need to share the same piece of state, the fix is always to lift it, but the pattern is easy to miss during a refactor.
 
 **Prevention:**
-Tailwind CSS 4 provides the `motion-reduce:` variant. Apply it to all animation-related classes:
+The rule is already established in the existing codebase: `selectedDate` is owned by `CampaignTabs` (the top-level client component) and passed down as props to both `BestDaysList` and `DashboardCalendar`. This pattern must be preserved in the refactored component. Neither `BestDaysList` nor the new sidebar component should manage `selectedDate` locally.
 
-```tsx
-className={`transition-all duration-700 motion-reduce:transition-none ${
-  visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-}`}
-```
-
-Or use a custom hook that detects the preference and disables animation state changes entirely:
-```tsx
-const prefersReduced = useMediaQuery('(prefers-reduced-motion: reduce)')
-const [visible, setVisible] = useState(prefersReduced) // immediately visible if reduced motion
-```
-
-For Framer Motion, use the built-in `useReducedMotion()` hook.
-
-**Phase:** All animation phases.
+**Which phases:** Layout phase, sidebar component phase.
 
 ---
 
-### Pitfall 10: The home page becomes a mixed Server/Client component tree that conflicts with the existing redirect-first pattern
+### Pitfall 9: The Settings tab accordion-to-flat migration leaves the `<details>` / `<summary>` elements in the DOM, creating hidden interactive elements
 
 **What goes wrong:**
-The landing page requires several Client Components (`StickyNav`, `FeaturesBlock`, `AnimatedSection`, the demo component). A common mistake is making the top-level `page.tsx` a Client Component by adding `'use client'` to accommodate one of these — which breaks the `getSessionDM()` server-side auth check and the `redirect('/campaigns')` call.
-
-`redirect()` from `next/navigation` must be called in a Server Component (or a Server Action). It throws an error if called in a Client Component. `getSessionDM()` uses `cookies()` from `next/headers` and makes a Prisma database query — both are server-only.
+The current Settings tab has two `<details>` accordions: "Players" and "My Unavailable Dates." The flat redesign removes the accordions and shows all sections in a single scannable layout. During migration, the `<details>` elements might be kept but with `open` attribute forced, or kept but with `display: none` on the `<summary>`. Either approach leaves hidden interactive elements in the DOM that are still accessible to keyboard navigation and screen readers.
 
 **Why it happens:**
-Large pages with many interactive sections tempt developers to make the whole page `'use client'` to avoid thinking about the Server/Client boundary. This pattern was already flagged in v1.4 for the campaigns page — the landing page has the same risk with even more client-interactive sections.
-
-**Consequences:**
-- `page.tsx` with `'use client'` causes `getSessionDM()` to throw (`cookies()` is not available in Client Components)
-- The auth redirect disappears silently — logged-in DMs see the marketing page
-- Any server data (if added later, e.g., showing a live player count) requires an `api/` route call instead of a direct Prisma query
+Developers incrementally modify existing markup rather than replacing it. Adding `open` to `<details>` makes it look flat visually but the `<summary>` is still a keyboard-focusable toggle that confuses screen reader users (it announces "disclosure button" on elements that appear to not be collapsible).
 
 **Prevention:**
-Keep `page.tsx` as a Server Component — it has no `'use client'` at the top. All interactive sections are separate Client Component files imported into the server page. The pattern established in v1.2/v1.3 is: Server Component page → imports → Client Component islands. Follow the same pattern:
+Remove `<details>` and `<summary>` entirely when converting to flat layout. Replace with `<section>` with a `<h2>` heading and direct content — no interactive collapse wrapper. The flat layout does not use disclosure widgets. Leaving hidden interactive structure causes accessibility violations and keyboard navigation confusion.
 
-```tsx
-// page.tsx — Server Component, no 'use client'
-import { getSessionDM } from '@/lib/auth'
-import { redirect } from 'next/navigation'
-import { StickyNav } from '@/components/landing/StickyNav'       // 'use client'
-import { HeroSection } from '@/components/landing/HeroSection'   // Server Component (static)
-import { FeaturesBlock } from '@/components/landing/FeaturesBlock' // 'use client'
-import { DemoEmbed } from '@/components/landing/DemoEmbed'       // 'use client'
-
-export default async function HomePage() {
-  const dm = await getSessionDM()
-  if (dm) redirect('/campaigns')
-  return (
-    <main>
-      <StickyNav />
-      <HeroSection />
-      <FeaturesBlock />
-      <DemoEmbed />
-    </main>
-  )
-}
-```
-
-**Phase:** All landing page phases.
+**Which phases:** Settings tab redesign phase.
 
 ---
 
-### Pitfall 11: The demo component's "fake" availability state is reset on every parent re-render
+### Pitfall 10: The `dmAvailabilitySync` opt-out toggle needs a schema migration — the field does not exist yet
 
 **What goes wrong:**
-The interactive demo component shows player availability that users can toggle (clicking calendar cells marks days free/busy). Its state lives in `useState` inside the demo. If the demo component is embedded inside an `AnimatedSection` wrapper that re-renders on scroll (because `visible` state changes), the demo's internal state resets — days the user just toggled go back to their initial values.
+The current `Campaign` model has no `dmAvailabilitySyncEnabled` (or equivalent) field. The sync opt-out toggle requires a boolean column on `Campaign`. Forgetting to add the migration means the server action has no field to read or write, and either crashes with a Prisma validation error at runtime or silently treats all campaigns as "sync enabled" (if the field is undefined and the action defaults to true).
+
+Additionally: the migration's default value matters. When the field is first added, what does it default to? If it defaults to `true`, all existing campaigns inherit sync-enabled behaviour — the DM may be surprised when a date they mark on Campaign A suddenly appears on Campaign B. If it defaults to `false`, sync is opt-in, which is safer but contradicts the planned "sync on by default" UX.
 
 **Why it happens:**
-When a parent component re-renders and changes a prop that is part of the JSX key (or React's reconciler loses track of the component identity), the child component unmounts and remounts, resetting all local state. This happens when animated wrappers change their className or when conditional rendering causes the demo to unmount and remount.
-
-**Consequences:**
-User interacts with the demo (clicks days to mark them available), then scrolls away and back — the demo resets to its initial state. This is confusing and makes the demo feel broken.
+Schema changes are easy to defer during prototyping. The server action logic can be written and partially tested by hardcoding a default, and the migration gets forgotten or deferred.
 
 **Prevention:**
-- The `AnimatedSection` wrapper must change only CSS classes, never unmount/remount its children. Conditional rendering (`{visible && <Demo />}`) will unmount the demo — use `opacity-0`/`opacity-100` class switching instead
-- Keep the demo's state in a `useRef` or in a stable parent component that does not re-render due to scroll events
-- Alternatively, lift the demo state one level up into the landing page component so it is immune to animated wrapper re-renders
+Add the schema field and run `prisma migrate dev` as the first step of the sync feature phase — before writing any server action code. The field name should clearly indicate its purpose (`dmAvailabilitySyncEnabled Boolean @default(true)` per the planned "on by default, opt-out" model). Document the default value rationale in a schema comment or in this file.
 
-**Phase:** Interactive demo component phase.
+Regarding the default: "sync on by default" requires the `@default(true)` migration. Existing DMs should be notified (via UI) that sync is now active when they first visit a campaign after the migration — a one-time info banner or tooltip on the toggle is sufficient.
+
+**Which phases:** DM availability sync schema phase (must precede all sync action work).
 
 ---
 
-### Pitfall 12: The landing page's dark background and the app's existing `html/body` background conflict when the sticky nav `backdrop-blur` is applied
+### Pitfall 11: The flat Settings layout causes the `UpdatePlanningWindowForm` to appear twice — once in the Availability tab (inline editor triggered by pencil icon) and once in Settings
 
 **What goes wrong:**
-The existing `globals.css` applies a radial gradient to `html, body` and a fixed `bg-cover` overlay image in `layout.tsx`. The landing page uses a sticky nav with `backdrop-blur-sm`. On Safari, `backdrop-blur` requires the element to be composited — if the background behind the nav is the `html` gradient rather than a painted element, the blur may not work or may produce visual artefacts (particularly with the fixed overlay image).
+In the current layout, `UpdatePlanningWindowForm` appears in Settings (always visible). In the Availability tab, a pencil icon opens an inline editing panel that also renders `UpdatePlanningWindowForm`. In the new layout, the inline editor in the Availability tab may be removed (since Settings is now a flat, always-readable layout, not an accordion buried two taps deep). However, if the inline editor is removed from the Availability tab without a clear navigation affordance to Settings, DMs lose the ability to edit the planning window from the main calendar view — requiring them to switch tabs to Settings for a common action.
 
 **Why it happens:**
-`backdrop-filter: blur()` blurs whatever is rendered behind the element in the compositing layer. A `position: fixed` overlay image (`pointer-events-none fixed inset-0 opacity-30`) in the layout sits above the background gradient. If the nav is `position: fixed` and `backdrop-blur-sm`, the blur samples from the elements behind it — including the fixed overlay image. The resulting blur may look grey rather than dark-purple because the overlay image blurs into an averaged colour.
-
-**Consequences:**
-Nav background looks wrong on Safari (grey blur instead of dark-purple tint). The visual design of the nav dark-on-scroll effect is broken in production (Vercel, which most users will access via a standard browser including Safari).
+The two-column layout and flat Settings are designed independently. The interaction between "where do you edit the planning window" and "what the Settings tab now looks like" is a cross-feature concern that gets missed.
 
 **Prevention:**
-- Test `backdrop-blur` against the existing background stack early (local dev with the fixed overlay image active)
-- If the blur effect looks wrong, use `bg-[#140326]/90` (solid dark colour at 90% opacity) instead of `backdrop-blur` — this achieves the "dark nav on scroll" requirement without the compositing risk and is consistent with the existing design tokens (`--dnd-input-bg: #1e0439`)
-- The simpler `bg-[var(--dnd-input-bg)]/90` approach with a `transition-colors` on scroll is more reliable cross-browser than `backdrop-filter`
+Explicitly decide, before implementation: should the inline planning window editor in the Availability tab be kept, removed, or replaced with a Settings tab link? Recommendation: keep a lightweight pencil/edit link in the calendar header that navigates to (or focuses) the planning window section in the Settings tab. This avoids duplicating the form while keeping discoverability.
 
-**Phase:** Sticky nav phase.
+**Which phases:** Settings tab phase, calendar header phase.
+
+---
+
+### Pitfall 12: The sidebar join link section duplicates the join link from the Settings tab — two out-of-sync UI elements for the same value
+
+**What goes wrong:**
+The planned sidebar contains the join link. The Settings tab also has a "Join Link" section with `CopyLinkButton`. Both render the same URL, but if either section's styling or content ever diverges, the DM sees two different renderings of the same information with no indication of which is "authoritative." More concretely: the Settings tab has explanatory copy ("Share this link with your players…") that the sidebar may not have. A DM who only looks at the sidebar misses this context.
+
+**Why it happens:**
+The sidebar join link is a convenience affordance (always visible without switching tabs). It is natural to add it without removing the Settings tab copy.
+
+**Prevention:**
+This is acceptable as-is — two presentations of the same URL are fine as long as they share the same underlying `joinUrl` prop. The key constraint: both must use the same `CopyLinkButton` component and the same `joinUrl` value passed from the server. No hardcoding or re-derivation of the URL in the sidebar. Document in the component comment that the URL value comes from the server-rendered `page.tsx` and must not be derived client-side.
+
+**Which phases:** Sidebar component phase.
 
 ---
 
 ## Minor Pitfalls
 
-### Pitfall 13: Section anchor IDs for in-page navigation are not added, making future links to sections fragile
+### Pitfall 13: The sidebar "Best Days" section has no empty state if no planning window is set
 
 **What goes wrong:**
-The landing page has distinct sections (hero, features, "easy for players," CTA). If any external link or future marketing email needs to link directly to the features section, there is no anchor to target. This is a minor pitfall because v1.5 does not require in-page navigation — but it is cheap to add and expensive to retrofit later if section IDs conflict with other IDs added during development.
+`BestDaysList` currently renders nothing (or a placeholder) when `dayAggregations` is empty because no planning window is set. In a sidebar, an empty region looks broken — the sidebar appears to have a gap or missing section. The calendar column already shows a "Set a planning window to see group availability" message, but the sidebar has no corresponding empty state.
 
 **Prevention:**
-Add stable `id` attributes to each top-level section element during initial build: `id="features"`, `id="demo"`, `id="how-it-works-players"`, `id="cta"`. The sticky nav can use these for smooth scroll if needed later.
+Add an explicit empty state to the sidebar Best Days section: "Set a planning window to see best days." Match the tone and styling of the empty state already in `DashboardCalendar`.
 
-**Phase:** Landing page structure phase.
+**Which phases:** Sidebar component phase.
 
 ---
 
-### Pitfall 14: The `suppressHydrationWarning` on `<body>` in `layout.tsx` masks real hydration errors in the new landing page
+### Pitfall 14: The `dmAvailabilitySync` opt-out toggle UI is adjacent to the `DmExceptionCalendar` in Settings — DMs may not understand which dates are synced vs independently set
 
 **What goes wrong:**
-`layout.tsx` currently has `suppressHydrationWarning` on `<body>`. This suppresses hydration warnings for the body element and its direct children. If the landing page's animated sections produce hydration mismatches (Pitfall 1), the `suppressHydrationWarning` may mask some of these warnings in development, making them harder to catch before production.
-
-**Why it happens:**
-`suppressHydrationWarning` on `<body>` is a common pattern to suppress browser extension injection warnings (password managers, ad blockers add attributes to `<body>`). It is already in this codebase for that reason. Its scope is limited to the element it is applied to and its direct children — but it is easy to misread as suppressing all hydration warnings in the tree.
-
-**Consequences:**
-Animation-related hydration mismatches on `<section>` or `<div>` elements deeper in the tree are NOT suppressed by `<body suppressHydrationWarning>`. So this is more a confusion risk than a real masking risk — developers may assume hydration is fine because no warnings appear, not realising the `suppressHydrationWarning` does not cover deep tree mismatches. The actual warning will still appear for animation state mismatches in the section components.
+After sync is enabled, some exceptions came from other campaigns (synced), some were added directly on this campaign. The exception calendar shows all of them identically. When the DM looks at the calendar on Campaign B and sees a blocked date, they cannot tell if it was set on Campaign B directly or synced from Campaign A. If they remove it on Campaign B, does it remove it from Campaign A too? The sync semantics (bidirectional or unidirectional?) must be obvious from the UI, but are easy to get wrong.
 
 **Prevention:**
-When building the landing page, temporarily remove `suppressHydrationWarning` from `<body>` in local development and verify no new warnings appear. Restore it for production (it is legitimate for browser-extension attribute injection). Do not add `suppressHydrationWarning` to any animated element as a substitute for fixing the underlying mismatch.
+Before implementation, lock down the sync semantics in a decision record:
+- Is sync bidirectional? (Recommended yes: any campaign can write, all sync-enabled campaigns receive the write)
+- Does an unblock on Campaign B sync the unblock back to Campaign A? (See Pitfall 5)
+- Is there any visual indication in the exception calendar that a date was synced vs locally added? (Nice to have; not required for v1.6)
 
-**Phase:** All landing page phases.
+Communicate the sync behaviour in the toggle label and a brief description near the `DmExceptionCalendar` in Settings. "Unavailable dates are synced across all your campaigns. Turn this off to manage this campaign's dates independently."
+
+**Which phases:** Settings tab phase, DM sync UX phase.
 
 ---
 
-### Pitfall 15: Sign up / Log in CTA links in the landing page use the wrong `href` if auth routes change
+### Pitfall 15: The `revalidatePath` in the sync action invalidates the current campaign page, causing a full server re-render, which races with the optimistic update's rollback window
 
 **What goes wrong:**
-The landing page has multiple CTA sections with Sign up / Log in buttons. The existing home page uses `href="/auth/login"` and `href="/auth/signup"`. If these paths are hardcoded in several places across the landing page components, a future auth route change requires updating every occurrence. Currently there are 2 CTAs (hero + final section) plus the sticky nav buttons — that is 6 total link instances if each has both Sign up and Log in.
+The existing `toggleDmException` action calls `revalidatePath` then returns `{ success: true }`. The client component receives `{ success: true }`, clears the saving indicator, and assumes the DB matches the optimistic state. But `revalidatePath` in Next.js invalidates the RSC cache for the path — meaning the next navigation to `/campaigns/${campaignId}` will fetch fresh server data. This is fine.
+
+The risk: if the client component's optimistic update and the RSC invalidation race (e.g., the user refreshes the page while the action is still resolving), the server may render the pre-action state (the DB write has not committed yet) while the client shows the post-action optimistic state. On refresh, the old state reappears briefly, then the page re-fetches and shows the correct state.
+
+**Why it matters for sync:** With sync, the `revalidatePath` is called for the originating campaign. If the DM navigates to another campaign immediately after toggling, they land on a non-invalidated page that may not show the synced exception. The page will not show the synced exception until next navigation or manual refresh.
 
 **Prevention:**
-Define auth route constants at the top of `page.tsx` or in a shared `routes.ts` constant file and reference them in all CTA components:
-```ts
-export const ROUTES = {
-  login: '/auth/login',
-  signup: '/auth/signup',
-}
-```
-This is a minor discipline improvement that prevents subtle bugs if auth routing changes.
+This is acceptable and expected behaviour for `revalidatePath`-based cache invalidation in Next.js App Router. The only risk worth flagging: if the sync feature's UX implies "your change is instantly visible everywhere," the DM may be confused when they navigate to Campaign B and do not see the synced date. Set expectations in the UI: sync applies when Campaign B is next loaded. Alternatively, invalidate Campaign B's path too — but see Pitfall 4 for the tradeoff.
 
-**Phase:** Landing page structure phase.
+**Which phases:** DM availability sync server action phase.
 
 ---
 
@@ -484,31 +346,29 @@ This is a minor discipline improvement that prevents subtle bugs if auth routing
 
 | Phase Topic | Likely Pitfall | Mitigation |
 |---|---|---|
-| Sticky nav | Hydration mismatch from `window.scrollY` in initial render | `useState(false)` + `useEffect` scroll listener with `passive: true`; never read `window` outside `useEffect` |
-| Sticky nav | z-index collision with `HowItWorksModal` (`z-50`) | Nav at `z-40`; modals at `z-50`; document the scale |
-| Sticky nav | `backdrop-blur` visual artefacts with fixed overlay image (Safari) | Test early; prefer solid `bg-[var(--dnd-input-bg)]/90` over `backdrop-blur` |
-| Sticky nav | Nav appears on logged-in campaigns page | Keep nav inside `page.tsx` component tree, NOT in `layout.tsx` |
-| Scroll animations | SSR/client mismatch from `IntersectionObserver` initialisation | `useState(false)` always renders hidden on server; observer runs in `useEffect` only |
-| Scroll animations | `prefers-reduced-motion` not respected | Apply `motion-reduce:transition-none` to all animated elements |
-| Scroll animations | Multiple observers per card grid causing scroll jank | Observe parent container once; use CSS `animation-delay` for stagger |
-| FeaturesBlock step selector | Image swap causes layout shift | Fix image container with `aspect-ratio` and `overflow-hidden`; use `next/image fill` |
-| Interactive demo | Import chain reaching `@/lib/prisma` | Demo must be fully self-contained; no imports from `@/lib/` with server-side dependencies |
-| Interactive demo | `new Date()` for planning window causes hydration mismatch | Use static hardcoded placeholder dates |
-| Interactive demo | State resets when animated wrapper re-renders | Use class-switching not conditional render for animation; lift demo state above animation wrapper |
-| `page.tsx` (all phases) | `getSessionDM()` and `redirect()` lost if file gains `'use client'` | `page.tsx` must never have `'use client'`; keep auth guard as first lines |
-| `page.tsx` (all phases) | Logged-in DM sees marketing page | `getSessionDM()` + `redirect('/campaigns')` must remain at top of Server Component |
-| Bundle size | Framer Motion full bundle (~140 KB gzipped) added unnecessarily | Use Tailwind CSS transitions + IntersectionObserver instead; if Framer Motion used, use `LazyMotion` + `domAnimation` |
+| Layout restructure | `CampaignTabs` single-component boundary must expand to own the layout switch | Refactor `CampaignTabs` to a `CampaignDetail` layout component before any other v1.6 work |
+| Two-column layout | Fixed date slide-in panel collides with persistent sidebar — backdrop blocks sidebar clicks | Redesign date panel as sidebar-replacement or column-scoped overlay, not full-viewport fixed |
+| Two-column layout mobile | Source order divergence between desktop visual order and mobile reading order | Calendar first in source; sidebar second; CSS Grid places sidebar right on desktop |
+| Two-column layout | `selectedDate` state must remain in the top-level client component | Neither `BestDaysList` nor sidebar should manage `selectedDate` locally |
+| Settings flat redesign | `<details>/<summary>` accordions left in DOM after migration causes hidden interactive elements | Remove `<details>` elements entirely; replace with `<section>` + `<h2>` |
+| Settings flat redesign | `UpdatePlanningWindowForm` appears in two places; inline editor may become redundant | Decide and document: keep inline editor or add "Edit in Settings" link |
+| Sync schema | `dmAvailabilitySyncEnabled` field missing from schema — Prisma crash at runtime | Add field and migrate first, before writing any sync action code; default `true` |
+| Sync server action | `revalidatePath` loop over N campaigns adds latency | Only revalidate the originating campaign; other campaigns refresh naturally on navigation |
+| Sync server action | Re-enable sync (toggle-on) backfill has no safe "correct" source | Do not backfill; re-enable applies forward only; document in UI label |
+| Sync server action | Opposing syncs: does an unblock on Campaign A remove the date from Campaign B? | Lock down bidirectional semantics before implementing; document decision |
+| DmExceptionCalendar | Rapid double-click on same date creates racing actions, split-brain state across campaigns with sync | Add per-date in-flight guard; ignore second click while first action is pending |
+| Sync UX | DM cannot distinguish synced dates from independent dates in exception calendar | Add explanatory copy near opt-out toggle; defer per-date sync indicator to later milestone |
+| Sidebar | Empty state when no planning window set — sidebar Best Days region appears broken | Add "Set a planning window to see best days" empty state to sidebar |
 
 ---
 
 ## Sources
 
-- Codebase inspection (HIGH confidence): `src/app/page.tsx`, `src/app/layout.tsx`, `src/app/globals.css`, `src/app/campaigns/page.tsx`, `src/components/HowItWorksModal.tsx`, `src/components/HowItWorksButton.tsx`, `src/components/AvailabilityCalendar.tsx`, `src/components/CampaignTabs.tsx`, `src/lib/auth.ts`, `package.json` — all read directly
-- Project context (HIGH confidence): `.planning/PROJECT.md` — active v1.5 requirements, architectural decisions, existing auth pattern
-- Next.js App Router Server/Client boundary rules — `redirect()` and `cookies()` server-only; `'use client'` promotion consequences (HIGH confidence — stable Next.js core behaviour, knowledge cutoff August 2025)
-- React 19 hydration strictness — `useState` initial value must match server render; `useEffect` runs client-only (HIGH confidence — React 19 docs, knowledge cutoff August 2025)
-- `IntersectionObserver` API — browser-only, must be in `useEffect`; `{ passive: true }` for scroll listeners (HIGH confidence — Web API spec, stable)
-- Framer Motion `LazyMotion` / `domAnimation` bundle strategy — bundle sizes and `m` component usage (MEDIUM confidence — knowledge cutoff August 2025, not verified via live docs in this session)
-- `prefers-reduced-motion` — Tailwind CSS 4 `motion-reduce:` variant (HIGH confidence — Tailwind 4 docs, knowledge cutoff August 2025)
-- `backdrop-filter: blur()` Safari compositing behaviour with fixed-position overlays (MEDIUM confidence — known browser quirk, but exact reproduction not verified against this specific background stack)
-- Prisma client browser error — "PrismaClient is not supported in the browser" (HIGH confidence — reproducible error, well-documented in Next.js / Prisma community)
+- Codebase inspection (HIGH confidence): `src/app/campaigns/[id]/page.tsx`, `src/components/CampaignTabs.tsx`, `src/components/DashboardCalendar.tsx`, `src/components/DmExceptionCalendar.tsx`, `src/lib/actions/campaign.ts`, `prisma/schema.prisma` — all read directly
+- Project context (HIGH confidence): `.planning/PROJECT.md` — active v1.6 requirements, v1.3 architectural decisions, existing auth and revalidation patterns
+- Next.js App Router revalidation behaviour — `revalidatePath` invalidates RSC cache for path; safe to call from server actions; does not block action response (HIGH confidence — stable Next.js core behaviour, knowledge cutoff August 2025)
+- React 19 Client Component state lifting — sibling components sharing state via common parent; `useState` in the lowest shared ancestor (HIGH confidence — React core pattern, stable)
+- Prisma `@@unique` constraint on `DmAvailabilityException(campaignId, date)` — safe for upsert, not for simultaneous opposing delete+create (HIGH confidence — read directly from schema)
+- Optimistic update + in-flight guard pattern — `useState<Set<string>>` for pending cells; ignore clicks while action is in flight (MEDIUM confidence — well-known pattern, not verified against this codebase's existing component code)
+- CSS Grid source-order vs visual-order for responsive two-column layouts — accessibility concern for keyboard/screen reader navigation (HIGH confidence — WCAG 1.3.2, CSS Grid specification, stable)
+- `revalidatePath` and Next.js RSC cache: calling it for N paths in one server action (MEDIUM confidence — documented Next.js behaviour; exact performance characteristics on Vercel Edge at knowledge cutoff August 2025, not live-verified)

@@ -1,222 +1,61 @@
 # Feature Landscape
 
-**Domain:** SaaS/tool marketing landing page — scheduling tool for tabletop RPG groups (v1.5)
-**Researched:** 2026-03-13
-**Overall confidence:** HIGH for established marketing page patterns; HIGH for implementation context (direct codebase reading); MEDIUM for conversion-specific claims (based on well-documented industry patterns, not A/B test data for this app specifically)
+**Domain:** Campaign detail UX — two-column layout, settings cleanup, DM availability sync (v1.6)
+**Researched:** 2026-03-16
+**Overall confidence:** HIGH for UX patterns (established calendar/settings conventions); HIGH for implementation context (direct codebase reading); MEDIUM for sync-specific design patterns (derived from analogous tools, not identical precedent)
 
 ---
 
 ## Context
 
-This milestone replaces the current minimal logged-out home page (icon + heading + two buttons) with a full marketing landing page. The page is public-facing and must:
+This milestone reworks the existing campaign detail page (CampaignTabs.tsx) across three distinct concerns:
 
-1. Explain the value proposition to a stranger who has never heard of the app
-2. Show — not just describe — what the app does via interactive demo embeds
-3. Convert visitors into sign-ups via primary CTAs repeated at strategic scroll positions
+1. **Two-column layout** — large calendar on the left, persistent sidebar (Best Days list + join link copy) on the right. Date detail slide-in currently flies in from the right edge of the screen and covers everything. In the new layout it should overlay only the sidebar column.
 
-The target audience is a D&D DM who is frustrated by session scheduling chaos. The app already exists and works well; this page's job is to make that obvious before the visitor even creates an account.
+2. **Settings cleanup** — five sections currently use a mix of always-open content and `<details>` accordions. Goal is a flat, grouped layout that is scannable without collapsing/expanding anything.
 
-The existing app already has these reusable interactive components that can power the demo:
-- `AvailabilityCalendar` — player-side calendar with `weeklySelection` and `overrides` props
-- `WeeklySchedule` — day-of-week toggle buttons
+3. **DM availability sync** — when a DM marks a date unavailable in one campaign, that exception should auto-propagate to all their other campaigns. Per-campaign opt-out toggle. Dates sync; block/flag mode does not.
 
-The v1.5 requirements from PROJECT.md define seven specific sections:
-1. Sticky nav with scroll-triggered dark background
-2. Hero section with heading, subtitle, primary CTAs
-3. Interactive FeaturesBlock (4 selectable steps with images)
-4. "Easy for players" card grid + second demo embed
-5. Final CTA section
-6. Section entrance animations on scroll
-7. Logged-in home page unaffected
+The existing codebase has these relevant components:
+- `CampaignTabs.tsx` — single `'use client'` boundary owning all tab state, the date side-panel, and tab switching
+- `BestDaysList.tsx` — renders ranked clickable rows; accepts `selectedDate` + `onSelectDate` as controlled props
+- `DashboardCalendar.tsx` — group availability calendar; same controlled selection props
+- `DmExceptionCalendar.tsx` — DM unavailable dates calendar with block/flag mode toggle
+- `CopyLinkButton.tsx` — single-button copy-to-clipboard component
 
----
-
-## Research: Core Questions
-
-### Q1 — What makes a scheduling tool landing page convert visitors?
-
-Scheduling tools (Calendly, Doodle, When2meet, Cal.com) converge on the same pattern because the product category has one core problem: the visitor doesn't understand what the tool actually does until they try it. The conversion challenge is collapsing the time-to-understanding.
-
-**The four things that convert on scheduling tool pages:**
-
-1. **A concrete outcome in the hero headline, not a feature description.** "Find the best day for your next D&D session" converts better than "Group availability coordination tool." The visitor must immediately see their problem solved, not a product description.
-
-2. **A visual or interactive product preview above the fold (or close to it).** Calendly shows a booking page preview in the hero. Doodle shows a filled poll grid. When2meet shows its green-heatmap grid. The visitor recognises "that is what I'll get" before they click anything. Tools that rely on abstract descriptions of what they do consistently underperform.
-
-3. **Friction-free CTAs with no-risk framing.** "Free", "No account needed for players", "Takes 2 minutes" — these remove the mental cost of signing up. For this app specifically, "No account needed for players" is a genuine differentiator: DMs sign up, players don't. This should appear near the hero CTA.
-
-4. **Social proof or context.** Calendly uses customer logos and testimonials. Doodle uses user counts. For a beta app with no user base yet, the equivalent is specificity ("built for groups of 5–8") — this filters in the right audience and implies the tool is designed for their use case rather than generic.
-
-**What does not convert:**
-
-- Long feature lists without visual evidence
-- Marketing copy that emphasises the app's cleverness rather than the visitor's outcome
-- Multiple competing primary CTAs at the same scroll position (sign up vs learn more vs watch demo — pick one primary)
-
-**Confidence:** HIGH — these patterns are consistent across Calendly, Doodle, Cal.com, Notion, Linear, and Basecamp marketing pages as of 2025. The specific conversion science claims (e.g. exact CTR deltas) are industry knowledge, not data from this app.
-
----
-
-### Q2 — What is table stakes for a marketing landing page of this type?
-
-These features are expected by visitors who land on any modern SaaS tool page. Their absence creates doubt ("is this app real?") or friction ("I can't find what I need").
-
-See Table Stakes section below.
-
----
-
-### Q3 — What is the right interactive demo for this app?
-
-The demo is the most technically complex part of this milestone. The goal: show visitors the player availability experience without requiring them to sign up, log in, or navigate to a real campaign.
-
-**What to show:**
-- The player-side view: weekly schedule toggles and a calendar with dates marked available/busy
-- Pre-seeded with mock data that makes it visually interesting (a few days pre-selected, some overrides)
-- The calendar should respond to user interaction (clicking a day changes its state) to make it feel real
-
-**What NOT to show:**
-- The DM dashboard (complex; requires mock campaign data, player data, aggregation — high implementation cost)
-- The full campaign creation form (gives the wrong impression of the first action)
-- The join/name-entry step (too trivial to demo)
-
-**Why the player view:**
-The DM is the visitor who needs to sign up. Showing them what their players will experience is more persuasive than showing them their own dashboard, because the DM's anxiety is "will my players actually fill this in?" — not "will I be able to see the data?" The demo answers "yes, it's this easy for players."
-
-**How to implement it:**
-`AvailabilityCalendar` and `WeeklySchedule` are already standalone React components that accept all their data as props and manage no server state. A demo embed is:
-- A `'use client'` wrapper component with `useState` for `weeklySelection` and `overrides`
-- Pre-seeded state (e.g. `weeklySelection = new Set(['6'])` for Saturday pre-selected; a couple of overrides)
-- Planning window hard-coded to cover the next 4–6 weeks from current date
-- A reset button ("Try it yourself") that clears overrides back to the seeded state
-- No server calls, no auth, no navigation
-
-Implementation complexity: **Low-Medium.** The underlying components already exist. The wrapper is 60–80 lines of client state management.
-
-**Demo embed placement (two instances in the spec):**
-1. In the main Features section, alongside the interactive step-selector — this demo should show the player calendar in its most populated state (Saturday highlighted, a busy override on one date)
-2. In the "Easy for players" section — same component, possibly with a slightly different seed to show a different state, or the same component reused
-
-**Confidence:** HIGH — derived directly from reading `AvailabilityCalendar.tsx` and `WeeklySchedule.tsx`. Both components accept data as props with zero server dependency.
-
----
-
-### Q4 — What patterns do Calendly, Doodle, and When2meet use on their landing pages?
-
-**Calendly:**
-- Sticky nav with logo, product links, Log In, and a primary "Sign up free" button (always visible)
-- Hero: short outcome-focused headline ("Easy scheduling ahead"), subtitle, CTA button, product preview screenshot/mockup
-- "How it works" in 3 steps with icons — host creates link, shares, invitees pick times
-- Social proof block (customer logos, testimonial quotes)
-- Feature highlights with screenshots or animated GIFs
-- Pricing section (not relevant here — beta)
-- Final CTA section
-
-**Doodle:**
-- Hero immediately shows a poll creation interface in-page (not a screenshot — an interactive mockup)
-- Step-by-step explainer for how to create and share a poll
-- Player/invitee perspective shown separately ("Easy for your participants")
-- Multiple CTA placements (hero, after features, final section)
-
-**When2meet:**
-- Minimal — no real marketing page, just the tool itself
-- Not a model to follow for conversion
-
-**Cal.com:**
-- Open-source positioning prominently featured
-- Interactive feature demo in the hero (actual product preview)
-- Step-by-step onboarding flow shown on page
-
-**Patterns common across all three relevant tools (Calendly, Doodle, Cal.com):**
-
-1. Sticky nav with persistent CTA button — always one click to sign up
-2. Outcome headline + social proof or specificity in hero
-3. Product preview at or near hero (visual evidence)
-4. Two-perspective explainer (host/DM vs guest/player) — always both roles shown
-5. Repeated CTA at the bottom (for visitors who scroll the whole page)
-6. Footer with legal links (privacy, terms) — expected even for beta
-
-**What this app does that the big tools do not:**
-- D&D-specific framing — the fantasy theme and Cinzel font already differentiate it visually. This should be leaned into, not hidden. "Your next session" not "your next meeting."
-- Player-friendly model — "players don't need an account" is a genuine UX differentiator vs Calendly (all users need accounts) and Doodle (poll participants don't create accounts but polls are ephemeral). Worth calling out explicitly.
-
-**Confidence:** MEDIUM — based on direct familiarity with these tools' marketing pages as of late 2024/early 2025. Specific page structures may have changed; the patterns described are stable conventions not likely to have reversed.
-
----
-
-### Q5 — What is the right content for the FeaturesBlock step-selector?
-
-The spec calls for "4 selectable steps" with a highlight/expand interaction and accompanying image swap. This is Calendly's feature carousel pattern.
-
-**Recommended step content:**
-
-| Step | Heading | Description | Image/visual |
-|------|---------|-------------|--------------|
-| 1 | Create your campaign | Set a planning window and copy your join link in seconds | Campaign creation form screenshot or mockup |
-| 2 | Share with players | Players open the link, enter their name, and set their availability — no account required | Join page or availability page screenshot |
-| 3 | See who's free | A live calendar shows each player's availability as they respond | Dashboard calendar screenshot with 3–4 players filled in |
-| 4 | Pick the best day | A ranked list surfaces the top dates for everyone — copy it to your group chat | BestDaysList screenshot with "Copy to chat" button |
-
-This four-step sequence matches the actual DM workflow and gives the step-selector concrete content to show. Images can be static screenshots of the actual app UI (not custom illustrations) — this is both faster to build and more persuasive (visitors see the real product).
-
-**Confidence:** HIGH — derived from reading PROJECT.md's feature description and mapping the actual DM user journey in the codebase.
-
----
-
-### Q6 — What should the scroll animation system look like?
-
-The spec calls for sections to "animate in smoothly as they enter the viewport on scroll."
-
-**The established pattern is intersection-observer-based fade/slide-in:**
-- Each section starts at `opacity: 0` and either `translateY: 20px` or `translateY: 0`
-- On intersection (threshold ~10% of the element visible), a CSS class is toggled that transitions to `opacity: 1` and `translateY: 0`
-- Duration: 400–600ms ease-out
-- No stagger within sections required unless cards in a grid need to animate sequentially
-
-**Implementation options in Next.js + Tailwind CSS 4:**
-
-Option A: Custom `useIntersectionObserver` hook + Tailwind transition classes — no new dependencies. The hook adds/removes a CSS class; Tailwind handles the transition. This is the correct choice for this project.
-
-Option B: Framer Motion — `framer-motion` adds ~30kB gzipped, which is justified for complex sequences (e.g. staggered card entrances) but overkill for simple section fade-ins. Adds a dependency with potential SSR complications in Next.js App Router (requires `'use client'` on every animated component).
-
-Option C: CSS `@keyframes` with `animation-play-state` toggle — same effect as option A but less composable.
-
-**Recommendation:** Option A. A reusable `useFadeInOnScroll` hook (20 lines) + a `FadeInSection` wrapper component covers all seven sections cleanly with zero new dependencies. This is the pattern used by many Next.js + Tailwind sites without any animation library.
-
-**Confidence:** HIGH — intersection observer is a baseline browser API with near-universal support. The Tailwind approach is the natural fit given the project's existing CSS setup.
+Schema: `DmAvailabilityException` is per-campaign (campaignId + date unique). `Campaign.dmExceptionMode` is per-campaign string. `Campaign.dmId` links campaigns to DM — the FK that makes cross-campaign sync possible.
 
 ---
 
 ## Table Stakes
 
-Features visitors (prospective DMs) expect on any modern scheduling tool marketing page. Missing = page feels incomplete, amateur, or untrustworthy.
+Features that a DM expects once the layout changes. Missing or broken = the page feels worse than before.
 
 | Feature | Why Expected | Complexity | Notes |
 |---------|--------------|------------|-------|
-| Sticky nav with logo + Sign Up / Log In buttons | Users expect to be able to sign up from any scroll position; a nav that disappears on scroll is a modern baseline | Low | Nav background must change on scroll (transparent to dark) — scroll event listener or `IntersectionObserver` on a sentinel element |
-| Outcome-focused hero headline | Visitors won't read further without understanding "what does this do for me?" in 10 words or less | Low | Copy decision — "Find the best session date, without the back-and-forth" is one option; "Never chase your players for session dates again" is more direct |
-| Primary CTA button in hero | The conversion action must be available at zero scroll | Low | "Sign up free" with secondary "Log in" — matches existing auth pages |
-| Product visual in or near hero | Visitors need visual evidence the product exists and works | Medium | A static screenshot of the dashboard calendar with players filled in works; the demo embed is richer but adds complexity — static screenshot is table stakes, interactive demo is a differentiator |
-| Section explaining how it works | Visitors won't sign up for a tool they don't understand | Medium | The FeaturesBlock (4 steps) covers this — but step content and images must actually explain the workflow, not just list features |
-| Player-side explainer | DMs need to understand what their players will experience (their primary anxiety) | Medium | The "Easy for players" section in the spec covers this |
-| Final CTA repeat | Visitors who scroll the whole page without clicking the hero CTA get one more chance to convert | Low | "Ready to plan your next adventure?" with Sign Up / Log In buttons |
-| "Beta" badge or honesty signal | Without it, visitors may wonder why they haven't heard of this app; a Beta badge sets expectations correctly and is already present in the current design | Low | Already exists in current `page.tsx`; must be preserved in nav |
-| Responsive layout | Mobile visitors exist; a broken mobile layout destroys trust | Medium | Tailwind's responsive utilities handle this; sticky nav collapses gracefully; hero goes single-column; FeaturesBlock goes vertical; card grid becomes single-column |
+| Calendar fills the main content area | DMs expect the primary data surface to dominate the page; a small calendar in a two-column layout would feel like a downgrade | Low | CSS grid: `grid-cols-[1fr_280px]` or similar; DashboardCalendar already fills its container |
+| Sidebar always visible while calendar is shown | If the Best Days list disappears when scrolling the calendar, the DM loses orientation. Persistent sidebar is the core of the layout rework. | Medium | Requires `position: sticky` on the sidebar or a CSS grid where both columns are full-height. Current implementation puts BestDaysList above DashboardCalendar in a single column — the order and container must change |
+| Slide-in panel scoped to the sidebar column | With a persistent sidebar, a full-viewport slide-in covering the whole page is disorienting. The panel should overlay only the sidebar area, replacing Best Days content with date detail, then restoring it on close. | Medium | Currently `fixed inset-y-0 right-0 w-80` — must change to sidebar-relative positioning. Options: (a) animate a state swap within the sidebar div, or (b) use `position: absolute` within the sidebar container |
+| Sidebar join link one-click copy | Best Days is the primary content in the sidebar; the join link copy is secondary but expected to be reachable without switching tabs. A compact copy button at the bottom of the sidebar satisfies this. | Low | CopyLinkButton already exists; just needs to render inside the sidebar |
+| Smooth slide-in animation on date panel open/close | The existing slide-in uses `translate-x-full` / `translate-x-0` with a 200ms transition. Any new overlay must preserve this feel — snappy, not jarring. | Low | Same Tailwind transition pattern; just scoped to a different container |
+| Keyboard close (Escape) for date panel | The existing panel closes on Escape via a `useEffect` listener. This must be preserved in the new layout. | Low | Already implemented in CampaignTabs — no change needed if state management stays in the same component |
+| Backdrop click to close date panel | Clicking outside the panel (on the calendar) should close it. Current implementation uses a `fixed inset-0 z-10` click trap. With a sidebar-scoped panel, this becomes clicking anywhere outside the sidebar. | Low | Same click-outside pattern; adjust z-index layering |
+| Settings sections always visible without accordion clicks | The goal is flat grouped layout. DMs expect settings to be readable without interaction — no hunting for hidden fields behind collapsed rows. | Low-Medium | Remove `<details>` wrappers from Players and My Unavailable Dates sections; render all content expanded by default |
+| Settings sync toggle visible and labelled clearly | If DM availability sync is on by default, DMs who don't want it must be able to find and turn it off without digging. A labelled toggle in the My Unavailable Dates section (or a dedicated section) is expected. | Low | New UI element; toggle state stored on Campaign model (new column needed: `dmSyncEnabled Boolean @default(true)`) |
 
 ---
 
 ## Differentiators
 
-Features beyond table stakes that increase conversion or delight the target audience.
+Features beyond baseline that add real value for this specific app and user.
 
 | Feature | Value Proposition | Complexity | Dependencies |
 |---------|-------------------|------------|--------------|
-| Interactive demo embed (player view) | Visitors experience the player side of the app before signing up — eliminates "will my players figure this out?" anxiety | Medium | `AvailabilityCalendar` and `WeeklySchedule` already exist; wrapper client component with pre-seeded state; no server calls |
-| Interactive FeaturesBlock step-selector | Clicking a step highlights it, expands description, and swaps the image — more engaging than static screenshots; matches Calendly's proven pattern | Medium | Client component with `useState(activeStep)`, step data array, conditional image render; no dependency on app data |
-| Scroll-triggered entrance animations | Sections fade+slide in as they enter the viewport — page feels polished and intentional | Low-Medium | Reusable `FadeInSection` wrapper; no animation library required |
-| D&D-specific copy and framing | "Quest for the perfect session date" tone — differentiates from generic scheduling tools immediately; appeals directly to the DM's identity as a Game Master | Low | Copy decision only; no implementation complexity |
-| "No account needed for players" callout near hero | This is a genuine friction-reducer — players don't sign up, they just click a link. Many tools don't do this. Calling it out near the CTA reduces the DM's anxiety about player adoption | Low | A single line of copy near or below the hero CTA buttons |
-| Two demo embeds (different scroll positions) | The spec calls for two instances — one in the FeaturesBlock and one in "Easy for players." Two exposures to the interactive player UI reinforces the simplicity message | Low (second embed is same component, different seed) | First demo satisfies the complexity cost; second is free |
-| Scroll-triggered nav background opacity | Nav goes from transparent to dark on scroll — prevents hero text from being obscured while giving the nav a presence once the user scrolls | Low | `IntersectionObserver` on a sentinel `<div>` at the bottom of the hero, or `scroll` event listener with a threshold |
+| Best Days list as sidebar anchor | Placing Best Days in a persistent sidebar means it is always in view alongside the calendar — DM sees the ranked dates and the calendar simultaneously, removing the need to mentally map between two separate sections. This is the core UX win of the rework. | Medium | Requires layout restructure in CampaignTabs; BestDaysList receives same props, just renders in a different position |
+| Date panel slides in over sidebar only (not full page) | When a date is clicked, the panel replacing the Best Days sidebar creates a "detail on demand" pattern: context is temporarily replaced with detail, then restored. This is less disruptive than a full-page overlay because the calendar remains fully visible and interactive. | Medium | Sidebar must be a positioned container; panel uses `absolute` positioning within it rather than `fixed`. Requires CampaignTabs layout to define the sidebar as a `relative` container |
+| DM availability sync across campaigns | A DM running two campaigns (e.g. different groups, different days) marks a personal unavailable date once and both campaigns reflect it. This removes a real friction point: currently the DM must manually replicate the same dates in every campaign. No comparable scheduling app in this niche does this. | High | Schema: new `dmSyncEnabled` boolean on Campaign; new server action `syncExceptionToAllCampaigns(dmId, date, isBlocked)` that writes DmAvailabilityException rows for all campaigns owned by the DM where `dmSyncEnabled = true`; revalidatePath for each affected campaign |
+| Sync enabled by default with per-campaign opt-out | "Opt-in sync" would go unused by most DMs (low discoverability). "Opt-out" means the feature works immediately and DMs who want independence can disable it. This matches the mental model: "my unavailability is mine, not campaign-specific." | Low | Default `true` in schema; toggle in Settings UI calls `updateSyncEnabled(campaignId, enabled)` server action |
+| Flat settings layout reduces scrolling | The current Settings tab has five sections, two of which are behind accordions. A flat layout where all sections are always visible is scannable in one pass. For a small-screen DM (laptop), this reduces cognitive friction around "where is the thing I need?" | Low-Medium | Remove `<details>` from Players and DM Unavailable Dates sections; adjust vertical spacing between sections |
 
 ---
 
@@ -226,162 +65,111 @@ Features to explicitly NOT build in this milestone.
 
 | Anti-Feature | Why Avoid | What to Do Instead |
 |--------------|-----------|-------------------|
-| Pricing/plan section | No plans exist; this is beta; pricing creates expectation that must be managed | Omit entirely; the Beta badge handles this implicitly |
-| Testimonials or social proof block | No real users yet; fabricated or placeholder testimonials destroy trust if noticed | If needed later, add after launch with real DM quotes; for now, specificity ("built for groups of 5–8") is the honesty alternative |
-| Video explainer embed | High production cost; adds a third-party embed (YouTube/Vimeo) with privacy implications; the interactive demo is better for this product | Use the interactive demo instead |
-| Feature comparison table vs competitors | Doodle/Calendly comparisons invite scrutiny of gaps; this is a niche tool, not a Calendly replacement | Let D&D-specific framing do the differentiation |
-| Newsletter signup or email capture below the CTA | Friction before the primary conversion action; adds an email form the visitor hasn't asked for | Use Sign Up / Log In as the only capture mechanism |
-| Animated illustrations or Lottie animations | High production cost; requires design assets not in the project | Static screenshots of actual app UI are more persuasive anyway |
-| Cookie banner / consent popup | No analytics, no third-party tracking; no legal obligation for a beta with no advertising | Add only if analytics are ever added |
-| Mobile hamburger menu with drawer | Adds JS complexity for a nav with only two buttons; on mobile, the two CTA buttons can reflow as a stacked row | Responsive Tailwind classes handle the nav at mobile breakpoints |
-| Parallax scrolling effects | Jarring on mobile; accessibility issues for vestibular disorders; adds complexity with zero conversion benefit for this product type | Simple fade-in animations are sufficient |
-| Full onboarding tour on the landing page (product tour) | The interactive demo is already the onboarding; a separate tour overlay on top of a marketing page is conceptually confusing | The demo embed is the tour |
+| Full three-column layout (calendar + sidebar + detail panel as columns) | Three columns on a typical laptop screen makes each column too narrow to be useful. The calendar especially needs width to render month grids legibly. | Two columns only: main area (calendar) + sidebar (Best Days/detail); sidebar swaps content on date select |
+| DM availability sync that copies block/flag mode | Block/flag mode is a per-campaign strategic preference — some campaigns may want unavailable dates excluded from Best Days; others may want them flagged. Syncing mode would silently override these independent decisions. | Sync dates only; mode remains per-campaign as it is today |
+| Sync that creates exceptions in campaigns with different planning windows | If Campaign A runs March–May and Campaign B runs June–August, syncing a March exception to Campaign B creates a phantom exception outside its planning window. This is confusing at best, corrupted data at worst. | Sync should still write the exception row regardless of window — the DmExceptionCalendar already handles out-of-window dates by rendering them dimmed and unclickable. The exception record is harmless if outside the window; it becomes visible if the window is later extended. OR: only sync dates that fall within the target campaign's planning window. The simpler approach (always write, let window filter visibility) is lower risk. Flag for planning decision. |
+| Accordion-style expansion for date panel within sidebar | An accordion (expand/collapse in place) would shift the Best Days list down, causing layout jitter. The slide-in/overlay pattern is correct. | Sidebar content swap: when date selected, Best Days slides out, panel slides in; on close, panel slides out, Best Days slides back |
+| Settings accordion retained for DM Unavailable Dates section | The DmExceptionCalendar is large (multi-month grid). Hiding it behind an accordion was a workaround for vertical space. In a flat layout, it should render visibly but optionally be placed lower in the settings flow so it doesn't block the quick-access fields above it. | Always render, position last before Danger Zone (already the current order); remove the `<details>` wrapper |
+| Modal for date detail instead of slide-in | Modals block the underlying calendar completely and require a close action to return to context. The existing slide-in pattern is correct for this use case — it preserves the calendar view while showing detail. Do not regress to a modal. | Preserve the slide-in pattern; just scope it to the sidebar |
+| Real-time sync via WebSocket or polling | For a small group (5–8 people), updates are infrequent. When the DM marks a date in one campaign, they will likely navigate to other campaigns manually. Server-side propagation on the toggle action is sufficient — no live sync infrastructure needed. | Server action writes all rows on toggle; `revalidatePath` for each campaign path |
 
 ---
 
 ## Feature Dependencies
 
 ```
-Sticky nav
-  → New component: LandingNav.tsx (client component — needs scroll state for bg transition)
-  → Logo: existing /dnd-icon.png
-  → Beta badge: copy from current page.tsx
-  → Auth links: href="/auth/signup" and href="/auth/login" (no change to auth pages)
-  → No data dependencies
+Feature 1: Two-column layout
+  → CampaignTabs.tsx restructure — layout changes from stacked sections to CSS grid
+  → Sidebar container must be position:relative (for absolute date panel)
+  → BestDaysList moves from Availability tab main content to sidebar
+  → CopyLinkButton renders inside sidebar (currently only in Settings tab Join Link section)
+  → DashboardCalendar remains in main area
+  → Side panel changes from fixed inset-y-0 right-0 to absolute inset-y-0 right-0 within sidebar
+  → Side panel width stays ~w-80 (320px) — same as sidebar width; panel fills the sidebar
+  → Availability tab layout becomes a two-column grid; Settings tab is unaffected by this change
+  → Awaiting Response section moves to main area or above the grid (above the calendar, below breadcrumbs)
 
-Hero section
-  → Static content only (headline, subtitle, CTAs)
-  → CTA buttons: same Link components as current page.tsx
-  → "No account needed for players" callout: single line of text
-  → No data dependencies
+Feature 2: Settings cleanup
+  → Remove <details> wrapper from Players section
+  → Remove <details> wrapper from My Unavailable Dates section
+  → Both sections render always-visible
+  → New section: DM Availability Sync (a new toggle)
+  → Section order: Join Link → Planning Window → Players → My Unavailable Dates → DM Availability Sync → Danger Zone
+  → ChevronDownIcon SVG can be removed if no other consumer uses it (only used in the two accordions)
+  → No prop API changes — UpdateMaxPlayersForm, DmExceptionCalendar, etc. receive same props
 
-FeaturesBlock (interactive step-selector)
-  → New client component: FeaturesBlock.tsx
-  → useState for activeStep (0–3)
-  → Step data: hardcoded array (heading, description, imageSrc)
-  → Images: static screenshots of the actual app, stored in /public
-  → Image swap: conditional Next.js <Image> or array index into step data
-  → No demo embed in FeaturesBlock itself — spec says "accompanying image" per step, not a live demo
-  → Dependency: screenshots must be captured and added to /public before implementation
+Feature 3: DM availability sync
+  → Schema: add dmSyncEnabled Boolean @default(true) to Campaign model
+  → Migration: prisma migrate dev
+  → Server action: toggleDmException must be updated (or a new action added) to propagate to sibling campaigns
+    - After writing the exception for the current campaign, query all other campaigns by this DM where dmSyncEnabled = true
+    - Write or delete DmAvailabilityException rows for each sibling campaign for the same date
+    - revalidatePath for each affected campaign path
+  → Server action: updateDmSyncEnabled(campaignId, enabled) — new action, updates Campaign.dmSyncEnabled
+  → Settings UI: new toggle row in Settings tab (DM Availability Sync section)
+  → Toggle must show current sync state; optimistic update + rollback pattern (same as DmExceptionCalendar mode toggle)
+  → DmExceptionCalendar.tsx: no prop changes needed — it already receives initialExceptions and calls toggleDmException
+  → The propagation happens inside the server action, invisible to the component
+  → Awaiting response: what happens when sync is toggled from off to on?
+    - Does enabling sync retroactively push current exceptions to other campaigns? This is ambiguous.
+    - Recommended: NO retroactive sync on toggle. Only new exceptions sync after enablement. This is simpler and avoids unexpected mutations.
+    - Flag for planning decision.
 
-Interactive demo embed (DemoEmbed)
-  → New client component: DemoEmbed.tsx
-  → useState for weeklySelection (Set<string>) and overrides (Map<string, 'free' | 'busy'>)
-  → Pre-seeded state: e.g. weeklySelection = new Set(['6']) + one or two overrides
-  → Planning window: hard-coded date range (next 4–5 weeks from render time)
-  → Imports: AvailabilityCalendar and WeeklySchedule (existing components)
-  → No server calls, no auth, no navigation
-  → Reset button: clears overrides back to seed state
-  → Two instances of DemoEmbed on page (FeaturesBlock area and "Easy for players" section)
-    - Either same component with different seeds, or same component with different framing text
-  → Complexity: LOW-MEDIUM — all underlying logic exists; wrapper is ~60–80 lines
-
-"Easy for players" section
-  → Static card grid (3 cards: open link → enter name → mark availability)
-  → Card content: heading + 1-line description + optional icon
-  → Second DemoEmbed instance below the cards
-  → No data dependencies
-
-Scroll animations
-  → New utility/component: FadeInSection.tsx (client component wrapping IntersectionObserver)
-  → Wraps each page section; adds/removes a CSS class on intersection
-  → All page sections use FadeInSection as a wrapper
-  → No new npm dependencies
-
-Final CTA section
-  → Static content (heading + two CTA buttons)
-  → Reuses same button styles as hero
-
-Footer
-  → Not specified in v1.5 requirements — minimal footer (copyright) acceptable
-  → No new dependencies
-
-Logged-in redirect (unchanged)
-  → Current page.tsx: if (dm) redirect('/campaigns') — this line must be preserved
-  → All landing page content is conditional on the user NOT being logged in
-  → Simplest approach: the redirect at the top of page.tsx stays; logged-out content is the rest of the file
+Dependencies between features:
+  Feature 1 → independent of Features 2 and 3 (pure layout change)
+  Feature 2 → independent of Feature 1 (Settings tab is unchanged by layout)
+  Feature 2 → depends on Feature 3 for the new Sync toggle section
+  Feature 3 → independent of Features 1 and 2 (schema + action change)
+  Feature 3 → Feature 2 surfaces the sync toggle (they ship together)
 ```
 
 ---
 
-## MVP Recommendation for v1.5
+## Complexity Assessment
 
-Build in this order to minimise risk and deliver value incrementally:
-
-1. **Static page shell** — All sections present with real copy but no interactivity. Sticky nav, hero, placeholder for FeaturesBlock (static list), "Easy for players" card grid, final CTA. This is the baseline: all content visible, no complex components. Validates the layout before the interactive pieces are added.
-
-2. **Scroll animations** — Add FadeInSection wrapper to all sections. Low complexity, high visual impact, validates the animation approach before building demo components.
-
-3. **FeaturesBlock** — Add step-selector interactivity (activeStep state + image swap). Requires screenshots in /public. Complexity is isolated to one component.
-
-4. **DemoEmbed** — The most complex piece. Build once, place in both locations. Validate that AvailabilityCalendar and WeeklySchedule work correctly with synthetic props and no server data.
-
-5. **Nav scroll behaviour** — Scroll-triggered background opacity. Low complexity; save for last since it's purely cosmetic.
-
-**Defer:** Footer with full legal links — acceptable to ship a minimal one-line copyright footer; full legal pages are out of scope for v1.5.
+| Feature | Complexity | Primary effort | Risk |
+|---------|------------|----------------|------|
+| Two-column layout | Medium | CSS grid in CampaignTabs; repositioning side panel from `fixed` to `absolute` within sidebar container | Side panel stacking context — sidebar must be `z-auto` or properly layered; fixed panel z-index layering currently uses z-10/z-20 which must be revisited for absolute positioning |
+| Date panel scoped to sidebar | Medium | Changing `fixed inset-y-0 right-0` to sidebar-relative absolute positioning; ensuring calendar remains fully visible when panel is open | Mobile breakpoint: two-column layout likely collapses to single column on small screens; need to define collapse behaviour (revert to old full-screen panel on mobile?) |
+| Settings cleanup — remove accordions | Low | Delete `<details>` wrappers; adjust spacing | None — pure markup change |
+| Settings sync toggle UI | Low | New toggle row; optimistic update; calls new server action | None if server action exists first |
+| DM availability sync — schema | Low | One new column: `dmSyncEnabled Boolean @default(true)` on Campaign | Migration is safe (default true means all existing campaigns behave as if sync is on — this is correct since no exceptions exist to propagate at migration time) |
+| DM availability sync — server action | High | Update `toggleDmException` or wrap it: query all DM campaigns with sync enabled, batch write/delete exceptions, revalidate multiple paths | Transactional safety: if the batch write partially fails, sibling campaigns get out of sync. Should wrap in a Prisma transaction. Multiple `revalidatePath` calls are fine but each triggers a page re-render server-side. |
+| Retroactive sync behaviour | Low (decision) | Decide: enable = only forward, or enable = push current state | Recommend NO retroactive sync. Simpler mental model. Less risk of accidental overwrites on campaigns with deliberate independent exceptions. |
 
 ---
 
-## Complexity Notes for Planning
+## Phase Ordering Recommendation
 
-| Component | Complexity | Why | Risk |
-|-----------|------------|-----|------|
-| LandingNav | Low | Scroll event or IntersectionObserver + 2 Link buttons; Tailwind transitions | None — isolated client component |
-| Hero section | Low | Static content; no interactivity | None |
-| FeaturesBlock | Medium | Client state (activeStep), image swap, step data array; images must exist in /public | Image sourcing — screenshots must be taken before implementation |
-| DemoEmbed | Medium | Client state for weeklySelection + overrides; AvailabilityCalendar expects planning window strings (must compute real dates from `new Date()`) | Date computation: planning window must be future dates; hard-coded past dates will render empty calendars |
-| FadeInSection | Low | ~20 lines; IntersectionObserver is baseline browser API | SSR: IntersectionObserver does not exist in Node.js — must guard with `typeof window !== 'undefined'` or use `useEffect` for setup |
-| "Easy for players" cards | Low | Static content; CSS grid | None |
-| Final CTA + Footer | Low | Static content | None |
+Based on dependencies and risk:
+
+1. **Schema + sync action** first (Feature 3, server layer only) — no UI visible to the DM, safe to ship, establishes the data model
+2. **Two-column layout** (Feature 1) — high visual impact, independent, no schema dependencies
+3. **Settings cleanup + sync toggle** (Features 2 + 3 UI) — low complexity, ships together since the toggle is the reason to add a new settings section
 
 ---
 
-## Dependency on Existing Features
+## Open Questions for Planning
 
-| Landing page element | Depends on existing feature | Notes |
-|----------------------|-----------------------------|-------|
-| DemoEmbed | `AvailabilityCalendar` component | Must import directly; no prop API changes needed |
-| DemoEmbed | `WeeklySchedule` component | Same — accepts `selection: Set<string>` and `onChange` callback |
-| Auth CTAs | `/auth/signup` and `/auth/login` routes | Already exist; no changes |
-| Beta badge | Existing badge style in `page.tsx` | Copy the existing `<span>` markup |
-| Background texture | `bg-swirl.png` in `/public` + layout.tsx fixed background | Persists across all pages including landing; no change needed |
-| Cinzel font | Already loaded in `layout.tsx` via `next/font/google` | `font-fantasy` class available globally |
-| Design tokens | CSS custom properties (`--dnd-accent`, `--dnd-text-muted`, etc.) in `globals.css` | Available to all components |
+- **Mobile breakpoint for two-column layout:** On screens narrower than ~768px, does the layout collapse to single column? If yes, the side panel must revert to the current `fixed inset-y-0 right-0` behaviour on small screens. This adds a responsive state branch to CampaignTabs.
 
----
+- **Sidebar width:** BestDaysList rows currently truncate to fit. At sidebar width (~280–320px), ranked rows with date + free count + optional DM badge should still fit without wrapping. Worth verifying with the longest plausible date label ("Wednesday, 30 September 2026").
 
-## Confidence Assessment
+- **Retroactive sync on toggle-on:** Decided not to retroactively push existing exceptions when sync is enabled. Confirm this is acceptable — a DM who has 5 exceptions in Campaign A and enables sync expecting Campaign B to also get them will be surprised if it doesn't happen immediately.
 
-| Area | Confidence | Notes |
-|------|------------|-------|
-| Table stakes features | HIGH | Stable conventions across all major scheduling tool pages |
-| Differentiators | HIGH | Direct recommendations from project requirements + competitive analysis |
-| Anti-features | HIGH | Clear rationale in each case; no speculation |
-| Demo embed design | HIGH | Derived from direct reading of AvailabilityCalendar and WeeklySchedule source |
-| FeaturesBlock step content | HIGH | Derived from actual DM user journey in the codebase |
-| Conversion patterns | MEDIUM | Well-documented industry patterns; no A/B data for this specific app |
-| Scroll animation approach | HIGH | IntersectionObserver is baseline browser API; Tailwind transition approach is standard |
+- **Out-of-window exceptions in sibling campaigns:** When syncing an exception that falls outside a sibling campaign's planning window, write the row anyway (invisible but harmless) or skip it. Recommend: write it. DmExceptionCalendar already dimly renders out-of-window dates; the exception is simply invisible until the window is extended.
 
----
-
-## Gaps to Address
-
-- **Screenshot assets for FeaturesBlock:** The step-selector requires 4 images (one per step). These do not exist yet — they must be captured from the live app or from a locally running dev build. This is a build dependency for FeaturesBlock implementation. The planner should flag this as a prerequisite task.
-
-- **Planning window for DemoEmbed:** The demo needs a planning window (start + end date) that covers several future weeks. The simplest approach is to compute it at render time from `new Date()` — e.g. `start = today, end = today + 35 days`. This keeps the demo always showing a relevant date range. Confirm this approach before building.
-
-- **"Try it yourself" UX in the demo:** The spec does not detail reset behaviour. The FEATURES.md recommendation is a "Reset" or "Try it yourself" button. If reset is not desired, the demo can simply start in an empty state and let visitors fill it in freely. The seeded-then-resettable approach is more persuasive because it shows what a filled calendar looks like before the visitor has done anything.
-
-- **LandingNav behaviour when DM is logged in:** The current `page.tsx` redirects logged-in DMs to `/campaigns` before rendering. The landing page and its LandingNav are therefore only ever seen by logged-out visitors. No special "if logged in" logic is needed in the nav.
-
-- **Page title and meta description:** The current `metadata` in `layout.tsx` is generic ("D&D Session Planner"). For a marketing page, a more specific meta description improves SEO and sharing previews. This can be added as `export const metadata` in `page.tsx` — low complexity but worth flagging.
+- **Existing campaigns at migration time:** `dmSyncEnabled` defaults to `true`. All existing campaigns will behave as if sync is on after migration. Since no prior mechanism created cross-campaign exceptions, there is nothing unexpected to propagate. This is safe.
 
 ---
 
 ## Sources
 
-- Project codebase: direct reading of `src/app/page.tsx`, `src/components/AvailabilityCalendar.tsx`, `src/components/WeeklySchedule.tsx`, `src/app/layout.tsx`, `src/app/campaigns/page.tsx` — HIGH confidence (authoritative)
-- PROJECT.md v1.5 active requirements — HIGH confidence (authoritative)
-- Domain knowledge: Calendly, Doodle, Cal.com, When2meet, Notion, Linear marketing page patterns — training data, confidence MEDIUM-HIGH (patterns observed across multiple products; stable conventions, not A/B-test specific)
-- UX conversion science for SaaS landing pages — training data, confidence MEDIUM (established patterns; specific metrics are illustrative not authoritative)
-- Note: Web search was unavailable in this research session. All UX and conversion pattern claims are based on established conventions consistent across multiple major products over several years.
+- Project codebase: direct reading of `CampaignTabs.tsx`, `BestDaysList.tsx`, `DmExceptionCalendar.tsx`, `CopyLinkButton.tsx`, `schema.prisma` — HIGH confidence (authoritative)
+- PROJECT.md v1.6 active requirements — HIGH confidence (authoritative)
+- UX research: [Accordion UX: The Pitfalls of Inline Accordion and Tab Designs (Baymard)](https://baymard.com/blog/accordion-and-tab-design) — MEDIUM confidence (established research; general, not app-specific)
+- UX research: [No more accordions: how to choose a form structure (UK Government user research)](https://userresearch.blog.gov.uk/2015/08/13/no-more-accordions-how-to-choose-a-form-structure/) — MEDIUM confidence (directional; from 2015 but the finding is stable and often cited)
+- UX research: [PatternFly Drawer design guidelines](https://www.patternfly.org/components/drawer/design-guidelines/) — MEDIUM confidence (enterprise design system; inline vs overlay drawer patterns are widely applicable)
+- UX research: [Adobe Commerce slide-out panels and overlays pattern library](https://developer.adobe.com/commerce/admin-developer/pattern-library/containers/slideouts-modals-overlays) — MEDIUM confidence (establishes slide-in for contextual detail as a standard admin pattern)
+- Calendar UI patterns: [Calendar UI Examples (Eleken)](https://www.eleken.co/blog-posts/calendar-ui); [Calendar design best practices (setproduct)](https://www.setproduct.com/blog/calendar-ui-design) — LOW-MEDIUM confidence (marketing/UX blog; directional)
+- Multi-calendar sync: [OneCal](https://www.onecal.io/); [CalendarBridge](https://calendarbridge.com/) — LOW confidence for this app (enterprise sync tools; relevant only as analogy for cross-calendar availability propagation patterns)
