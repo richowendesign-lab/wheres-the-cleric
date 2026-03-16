@@ -44,9 +44,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SYNC-01 | Phase 25 | Pending |
-| SYNC-02 | Phase 25 | Pending |
-| SYNC-04 | Phase 25 | Pending |
+| SYNC-01 | Phase 25 | In progress (schema done; logic in 25-02) |
+| SYNC-02 | Phase 25 | In progress (schema done; logic in 25-02) |
+| SYNC-04 | Phase 25 | In progress (schema done; logic in 25-02) |
 | LAYOUT-01 | Phase 26 | Pending |
 | LAYOUT-02 | Phase 26 | Pending |
 | LAYOUT-03 | Phase 26 | Pending |
@@ -61,4 +61,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-03-16*
-*Last updated: 2026-03-16 — traceability filled after roadmap creation*
+*Last updated: 2026-03-16 — SYNC-01/02/04 in progress after 25-01 schema migration*

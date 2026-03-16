@@ -106,7 +106,7 @@ Full phase details: `.planning/milestones/v1.5-ROADMAP.md`
 **Plans**: 2 plans
 
 Plans:
-- [ ] 25-01-PLAN.md — Add dmSyncEnabled to schema and apply prisma db push
+- [x] 25-01-PLAN.md — Add dmSyncEnabled to schema and apply prisma db push
 - [ ] 25-02-PLAN.md — Extend toggleDmException with sibling propagation; add setDmSyncEnabled action
 
 ### Phase 26: Two-Column Layout Restructure
@@ -160,6 +160,6 @@ Plans:
 | 22. Features Step-Selector | v1.5 | 2/2 | Complete | 2026-03-13 |
 | 23. Availability Demo | v1.5 | 2/2 | Complete | 2026-03-14 |
 | 24. Sticky Nav Scroll Behaviour | v1.5 | 1/1 | Complete | 2026-03-14 |
-| 25. Sync Schema and Server Layer | v1.6 | 0/2 | Not started | - |
+| 25. Sync Schema and Server Layer | v1.6 | 1/2 | In progress | - |
 | 26. Two-Column Layout Restructure | v1.6 | 0/? | Not started | - |
 | 27. Flat Settings and Sync Toggle | v1.6 | 0/? | Not started | - |
