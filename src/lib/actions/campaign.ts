@@ -2,7 +2,6 @@
 
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-import { cookies } from 'next/headers'
 import { prisma } from '@/lib/prisma'
 import { getSessionDM } from '@/lib/auth'
 
@@ -67,8 +66,6 @@ export async function deleteCampaign(campaignId: string) {
   if (!campaign || campaign.dmId !== dm.id) return { error: 'Unauthorized' }
 
   await prisma.campaign.delete({ where: { id: campaignId } })
-  const cookieStore = await cookies()
-  cookieStore.delete('dm_secret')
   redirect('/')
 }
 

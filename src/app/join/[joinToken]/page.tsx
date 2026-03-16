@@ -1,6 +1,7 @@
 import { notFound, redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 import { prisma } from '@/lib/prisma'
+import { getSessionDM } from '@/lib/auth'
 import { registerPlayer } from '@/lib/actions/player'
 import JoinForm from './JoinForm'
 import Image from 'next/image'
@@ -22,13 +23,13 @@ export default async function JoinPage({
     notFound()
   }
 
-  const cookieStore = await cookies()
-
-  // DM redirect — if the dm_secret cookie matches this campaign
-  const dmSecret = cookieStore.get('dm_secret')?.value
-  if (dmSecret && dmSecret === campaign.dmSecret) {
+  // DM redirect — if the logged-in DM owns this campaign, send them to the dashboard
+  const dm = await getSessionDM()
+  if (dm && dm.id === campaign.dmId) {
     redirect(`/campaigns/${campaign.id}`)
   }
+
+  const cookieStore = await cookies()
 
   // Returning player redirect — if player_id cookie matches a slot in this campaign
   const playerIdCookie = cookieStore.get('player_id')?.value

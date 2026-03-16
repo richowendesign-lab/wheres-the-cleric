@@ -17,7 +17,7 @@ function setSessionCookie(cookieStore: Awaited<ReturnType<typeof cookies>>, toke
     httpOnly: true,
     path: '/',
     maxAge: SESSION_MAX_AGE,
-    sameSite: 'lax',
+    sameSite: 'strict',
     secure: process.env.NODE_ENV === 'production',
   })
 }

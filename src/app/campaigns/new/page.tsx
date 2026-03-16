@@ -1,7 +1,11 @@
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import { getSessionDM } from '@/lib/auth'
 import { CampaignForm } from '@/components/CampaignForm'
 
-export default function NewCampaignPage() {
+export default async function NewCampaignPage() {
+  const dm = await getSessionDM()
+  if (!dm) redirect('/auth/login')
   return (
     <main className="min-h-screen text-gray-100 px-4 py-12">
       <div className="max-w-lg mx-auto">

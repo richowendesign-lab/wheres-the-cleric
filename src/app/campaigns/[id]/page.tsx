@@ -1,7 +1,7 @@
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
-import { headers } from 'next/headers'
 import { prisma } from '@/lib/prisma'
+import { getSessionDM } from '@/lib/auth'
 import { computeDayStatuses } from '@/lib/availability'
 import { EditableCampaignField } from '@/components/EditableCampaignField'
 import { updateCampaignName, updateCampaignDescription } from '@/lib/actions/campaign'
@@ -16,11 +16,14 @@ export default async function CampaignDetailPage({
   params: Promise<{ id: string }>
   searchParams: Promise<{ share?: string }>
 }) {
+  const dm = await getSessionDM()
+  if (!dm) redirect('/auth/login')
+
   const { id } = await params
   const { share } = await searchParams
 
   const campaign = await prisma.campaign.findUnique({
-    where: { id },
+    where: { id, dmId: dm.id },
     include: {
       playerSlots: { include: { availabilityEntries: true }, orderBy: { createdAt: 'asc' } },
       dmAvailabilityExceptions: true,
@@ -55,10 +58,10 @@ export default async function CampaignDetailPage({
     ? campaign.dmExceptionMode
     : null
 
-  const hdrs = await headers()
-  const host = hdrs.get('host') ?? 'localhost:3000'
-  const proto = hdrs.get('x-forwarded-proto') ?? (host.startsWith('localhost') ? 'http' : 'https')
-  const joinUrl = `${proto}://${host}/join/${campaign.joinToken}`
+  // Use NEXT_PUBLIC_APP_URL (set at deployment, not spoofable via headers).
+  // Falls back to localhost for local dev where the env var is unset.
+  const appBaseUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ?? 'http://localhost:3000'
+  const joinUrl = `${appBaseUrl}/join/${campaign.joinToken}`
   const missingPlayers = campaign.playerSlots.filter(s => s.availabilityEntries.length === 0)
 
   return (
