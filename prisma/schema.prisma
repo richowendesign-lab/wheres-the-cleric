@@ -22,6 +22,7 @@ model Campaign {
   dm                       DM?                      @relation(fields: [dmId], references: [id])
   playerSlots              PlayerSlot[]
   dmExceptionMode          String?
+  dmSyncEnabled            Boolean                  @default(true)
   dmAvailabilityExceptions DmAvailabilityException[]
 }
 
