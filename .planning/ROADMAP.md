@@ -103,7 +103,11 @@ Full phase details: `.planning/milestones/v1.5-ROADMAP.md`
   2. Removing an unavailable date in one campaign removes it from all other sync-enabled campaigns
   3. Sync respects each sibling campaign's own planning window — dates outside a sibling's window are not written
   4. Re-enabling sync after opting out does not retroactively populate past exceptions — only future toggles propagate
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 25-01-PLAN.md — Add dmSyncEnabled to schema and apply prisma db push
+- [ ] 25-02-PLAN.md — Extend toggleDmException with sibling propagation; add setDmSyncEnabled action
 
 ### Phase 26: Two-Column Layout Restructure
 **Goal**: The Availability tab presents a large calendar alongside a persistent sidebar so DM has constant access to Best Days and the join link without scrolling or tab-switching
@@ -156,6 +160,6 @@ Full phase details: `.planning/milestones/v1.5-ROADMAP.md`
 | 22. Features Step-Selector | v1.5 | 2/2 | Complete | 2026-03-13 |
 | 23. Availability Demo | v1.5 | 2/2 | Complete | 2026-03-14 |
 | 24. Sticky Nav Scroll Behaviour | v1.5 | 1/1 | Complete | 2026-03-14 |
-| 25. Sync Schema and Server Layer | v1.6 | 0/? | Not started | - |
+| 25. Sync Schema and Server Layer | v1.6 | 0/2 | Not started | - |
 | 26. Two-Column Layout Restructure | v1.6 | 0/? | Not started | - |
 | 27. Flat Settings and Sync Toggle | v1.6 | 0/? | Not started | - |
