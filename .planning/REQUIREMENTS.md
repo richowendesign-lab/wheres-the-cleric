@@ -20,10 +20,10 @@ Requirements for v1.6 Campaign Detail Rework. Each maps to roadmap phases.
 
 ### Sync
 
-- [ ] **SYNC-01**: DM marking a date unavailable in one campaign automatically marks it in all their other sync-enabled campaigns
-- [ ] **SYNC-02**: DM removing an unavailable date in one campaign removes it from all their other sync-enabled campaigns
+- [x] **SYNC-01**: DM marking a date unavailable in one campaign automatically marks it in all their other sync-enabled campaigns
+- [x] **SYNC-02**: DM removing an unavailable date in one campaign removes it from all their other sync-enabled campaigns
 - [ ] **SYNC-03**: Each campaign has a "Sync DM availability" toggle in Settings (on by default); turning it off makes that campaign's exceptions independent
-- [ ] **SYNC-04**: Re-enabling sync does not backfill existing exceptions — only future toggles propagate
+- [x] **SYNC-04**: Re-enabling sync does not backfill existing exceptions — only future toggles propagate
 
 ## Future Requirements
 
