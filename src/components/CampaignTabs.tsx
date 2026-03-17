@@ -105,68 +105,6 @@ export function CampaignTabs({
         Planning window updated
       </div>
 
-      {/* ── Shared side panel — shown over any tab ── */}
-      {selectedDate && (
-        <div
-          className="fixed inset-0 z-10"
-          onClick={() => setSelectedDate(null)}
-          aria-hidden="true"
-        />
-      )}
-      <div className={`fixed inset-y-0 right-0 w-80 bg-gray-900 border-l border-gray-800
-        shadow-2xl z-20 flex flex-col transition-transform duration-200
-        ${selectedDate ? 'translate-x-0' : 'translate-x-full'}`}>
-        {selectedDate && (() => {
-          const agg = aggMap.get(selectedDate)
-          return (
-            <>
-              <div className="flex items-center justify-between p-4 border-b border-gray-800">
-                <h3 className="font-semibold text-gray-100">{formatPanelDate(selectedDate)}</h3>
-                <button
-                  onClick={() => setSelectedDate(null)}
-                  className="text-gray-400 hover:text-gray-100 transition-colors cursor-pointer"
-                  aria-label="Close panel"
-                >
-                  ✕
-                </button>
-              </div>
-              <div className="p-4 space-y-3 overflow-y-auto flex-1">
-                {/* CLAR-02: DM unavailable indicator */}
-                {agg?.dmBlocked && (
-                  <div className="flex items-center gap-3 pb-3 border-b border-gray-800">
-                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="text-amber-400/80 shrink-0">
-                      <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5"/>
-                      <line x1="8" y1="4.5" x2="8" y2="9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                      <circle cx="8" cy="11.5" r="0.75" fill="currentColor"/>
-                    </svg>
-                    <span className="text-amber-300/80 text-sm font-medium">DM unavailable</span>
-                  </div>
-                )}
-                {/* CLAR-03: Empty state when no players are free */}
-                {agg && agg.freeCount === 0 && agg.totalPlayers > 0 && (
-                  <p className="text-sm text-gray-500 italic">No players available this day.</p>
-                )}
-                {playerSlots.map(slot => {
-                  const status = agg?.playerStatuses[slot.id] ?? 'no-response'
-                  return (
-                    <div key={slot.id} className="flex items-center gap-3">
-                      <span className={`w-3 h-3 rounded-full shrink-0
-                        ${status === 'free' ? 'bg-green-400' : 'bg-gray-500'}`}
-                      />
-                      <span className="text-gray-100 font-medium">{slot.name}</span>
-                      <span className={`text-sm ml-auto
-                        ${status === 'free' ? 'text-green-400' : 'text-gray-500'}`}>
-                        {status === 'free' ? 'Free' : 'No response'}
-                      </span>
-                    </div>
-                  )
-                })}
-              </div>
-            </>
-          )
-        })()}
-      </div>
-
       {/* ── Tab bar ── */}
       <div className="flex gap-0 border-b border-[var(--dnd-border-muted)] mb-6" role="tablist">
         {(['availability', 'settings'] as const).map(tab => (
@@ -189,11 +127,10 @@ export function CampaignTabs({
 
       {/* ── Availability tab ── */}
       {activeTab === 'availability' && (
-        <div className="space-y-8">
-
-          {/* Awaiting Response */}
+        <>
+          {/* Awaiting Response — full width above the two-column grid */}
           {missingPlayers.length > 0 && (
-            <section>
+            <section className="mb-6">
               <h2 className="text-lg font-semibold text-white mb-2">Awaiting Response</h2>
               <div className="flex flex-wrap gap-2">
                 {missingPlayers.map(slot => (
@@ -210,94 +147,165 @@ export function CampaignTabs({
             </section>
           )}
 
-          {/* Best Days — full width, above calendar */}
-          {windowStartStr && windowEndStr && (
-            <section>
-              <BestDaysList
-                days={dayAggregations}
-                playerSlots={playerSlots}
-                dmExceptionMode={dmExceptionMode}
-                selectedDate={selectedDate}
-                onSelectDate={setSelectedDate}
-              />
-            </section>
-          )}
+          {/* Two-column grid: sidebar first in DOM (→ top on mobile), calendar second (→ below on mobile) */}
+          {/* On desktop (lg+): sidebar placed in right column via col-start-2, calendar in left column via col-start-1 */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 items-start">
 
-          {/* Group Availability Calendar */}
-          <section>
-            {/* Heading row — title + window dates + pencil */}
-            <div className="flex items-baseline flex-wrap gap-x-2 gap-y-1 mb-2">
-              <h2 className="text-lg font-semibold text-white">Group Availability</h2>
-              {windowLabel ? (
-                <span className="text-sm text-[var(--dnd-text-muted)]">{windowLabel}</span>
+            {/* Sidebar column — first in source order so it stacks above calendar on mobile */}
+            <aside className="lg:col-start-2 lg:row-start-1 lg:sticky lg:top-20 space-y-4">
+              {selectedDate ? (
+                /* Date detail — inline replacement for Best Days when a date is selected */
+                <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="font-semibold text-gray-100">{formatPanelDate(selectedDate)}</h3>
+                    <button
+                      onClick={() => setSelectedDate(null)}
+                      className="text-gray-400 hover:text-gray-100 transition-colors cursor-pointer"
+                      aria-label="Close panel"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                  {(() => {
+                    const agg = aggMap.get(selectedDate)
+                    return (
+                      <div className="space-y-3">
+                        {/* DM unavailable indicator */}
+                        {agg?.dmBlocked && (
+                          <div className="flex items-center gap-3 pb-3 border-b border-gray-800">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="text-amber-400/80 shrink-0">
+                              <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5"/>
+                              <line x1="8" y1="4.5" x2="8" y2="9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                              <circle cx="8" cy="11.5" r="0.75" fill="currentColor"/>
+                            </svg>
+                            <span className="text-amber-300/80 text-sm font-medium">DM unavailable</span>
+                          </div>
+                        )}
+                        {/* Empty state when no players are free */}
+                        {agg && agg.freeCount === 0 && agg.totalPlayers > 0 && (
+                          <p className="text-sm text-gray-500 italic">No players available this day.</p>
+                        )}
+                        {playerSlots.map(slot => {
+                          const status = agg?.playerStatuses[slot.id] ?? 'no-response'
+                          return (
+                            <div key={slot.id} className="flex items-center gap-3">
+                              <span className={`w-3 h-3 rounded-full shrink-0
+                                ${status === 'free' ? 'bg-green-400' : 'bg-gray-500'}`}
+                              />
+                              <span className="text-gray-100 font-medium">{slot.name}</span>
+                              <span className={`text-sm ml-auto
+                                ${status === 'free' ? 'text-green-400' : 'text-gray-500'}`}>
+                                {status === 'free' ? 'Free' : 'No response'}
+                              </span>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )
+                  })()}
+                </div>
               ) : (
-                <span className="text-sm text-gray-500 italic">No planning window set</span>
+                /* Default view: Best Days list + join link */
+                <>
+                  {windowStartStr && windowEndStr && (
+                    <BestDaysList
+                      days={dayAggregations}
+                      playerSlots={playerSlots}
+                      dmExceptionMode={dmExceptionMode}
+                      selectedDate={selectedDate}
+                      onSelectDate={setSelectedDate}
+                    />
+                  )}
+                  {/* Join link — below Best Days, per locked decision */}
+                  <div className="border border-[#ba7df6]/30 rounded-lg px-4 py-3 bg-[var(--dnd-input-bg)]">
+                    <p className="text-xs text-[var(--dnd-text-muted)] mb-2">Join link</p>
+                    <div className="flex items-center gap-3">
+                      <span className="flex-1 text-sm font-mono text-[var(--dnd-accent)] truncate">{joinUrl}</span>
+                      <CopyLinkButton url={joinUrl} />
+                    </div>
+                  </div>
+                </>
               )}
-              <button
-                type="button"
-                onClick={() => setEditingWindow(v => !v)}
-                aria-label="Edit planning window"
-                className="p-1 rounded text-[var(--dnd-text-muted)] hover:text-white transition-colors"
-              >
-                <PencilIcon />
-              </button>
-            </div>
+            </aside>
 
-            {/* Inline planning window editor */}
-            {editingWindow && (
-              <div className="border border-[var(--dnd-border-muted)] rounded-lg px-4 pt-4 pb-2 mb-4 bg-[#140326]/80">
-                <div className="flex items-center justify-between mb-3">
-                  <p className="text-sm font-medium text-gray-300">Planning Window</p>
+            {/* Calendar column — second in source order so it appears below sidebar on mobile */}
+            <div className="lg:col-start-1 lg:row-start-1 min-w-0">
+              <section>
+                {/* Heading row — title + window dates + pencil */}
+                <div className="flex items-baseline flex-wrap gap-x-2 gap-y-1 mb-2">
+                  <h2 className="text-lg font-semibold text-white">Group Availability</h2>
+                  {windowLabel ? (
+                    <span className="text-sm text-[var(--dnd-text-muted)]">{windowLabel}</span>
+                  ) : (
+                    <span className="text-sm text-gray-500 italic">No planning window set</span>
+                  )}
                   <button
                     type="button"
-                    onClick={() => setEditingWindow(false)}
-                    className="text-gray-500 hover:text-white transition-colors text-lg leading-none"
-                    aria-label="Close"
+                    onClick={() => setEditingWindow(v => !v)}
+                    aria-label="Edit planning window"
+                    className="p-1 rounded text-[var(--dnd-text-muted)] hover:text-white transition-colors"
                   >
-                    ×
+                    <PencilIcon />
                   </button>
                 </div>
-                <UpdatePlanningWindowForm
-                  campaignId={campaignId}
-                  planningWindowStart={windowStartStr}
-                  planningWindowEnd={windowEndStr}
-                  onSuccess={handleWindowSaved}
-                />
-              </div>
-            )}
 
-            {windowStartStr && windowEndStr ? (
-              <>
-                <div className="flex flex-wrap gap-4 text-xs text-gray-500 mb-4">
-                  <span className="flex items-center gap-1.5">
-                    <span className="inline-block w-2.5 h-2.5 rounded-full bg-green-400" />Free
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="inline-block w-2.5 h-2.5 rounded-full bg-gray-600" />No response
-                  </span>
-                  {dmExceptionDates.length > 0 && (
-                    <span className="flex items-center gap-1.5">
-                      <span className="inline-block w-2.5 h-2.5 rounded border border-amber-400/60" />DM unavailable
-                    </span>
-                  )}
-                </div>
-                <DashboardCalendar
-                  dayAggregations={dayAggregations}
-                  playerSlots={playerSlots}
-                  windowStart={windowStartStr}
-                  windowEnd={windowEndStr}
-                  selectedDate={selectedDate}
-                  onSelectDate={setSelectedDate}
-                />
-              </>
-            ) : (
-              <p className="text-sm text-gray-600 mt-2">
-                Set a planning window to see group availability.
-              </p>
-            )}
-          </section>
+                {/* Inline planning window editor */}
+                {editingWindow && (
+                  <div className="border border-[var(--dnd-border-muted)] rounded-lg px-4 pt-4 pb-2 mb-4 bg-[#140326]/80">
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-sm font-medium text-gray-300">Planning Window</p>
+                      <button
+                        type="button"
+                        onClick={() => setEditingWindow(false)}
+                        className="text-gray-500 hover:text-white transition-colors text-lg leading-none"
+                        aria-label="Close"
+                      >
+                        ×
+                      </button>
+                    </div>
+                    <UpdatePlanningWindowForm
+                      campaignId={campaignId}
+                      planningWindowStart={windowStartStr}
+                      planningWindowEnd={windowEndStr}
+                      onSuccess={handleWindowSaved}
+                    />
+                  </div>
+                )}
 
-        </div>
+                {windowStartStr && windowEndStr ? (
+                  <>
+                    <div className="flex flex-wrap gap-4 text-xs text-gray-500 mb-4">
+                      <span className="flex items-center gap-1.5">
+                        <span className="inline-block w-2.5 h-2.5 rounded-full bg-green-400" />Free
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <span className="inline-block w-2.5 h-2.5 rounded-full bg-gray-600" />No response
+                      </span>
+                      {dmExceptionDates.length > 0 && (
+                        <span className="flex items-center gap-1.5">
+                          <span className="inline-block w-2.5 h-2.5 rounded border border-amber-400/60" />DM unavailable
+                        </span>
+                      )}
+                    </div>
+                    <DashboardCalendar
+                      dayAggregations={dayAggregations}
+                      playerSlots={playerSlots}
+                      windowStart={windowStartStr}
+                      windowEnd={windowEndStr}
+                      selectedDate={selectedDate}
+                      onSelectDate={setSelectedDate}
+                    />
+                  </>
+                ) : (
+                  <p className="text-sm text-gray-600 mt-2">
+                    Set a planning window to see group availability.
+                  </p>
+                )}
+              </section>
+            </div>
+
+          </div>
+        </>
       )}
 
       {/* ── Settings tab ── */}
