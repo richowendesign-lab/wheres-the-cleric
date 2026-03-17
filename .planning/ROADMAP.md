@@ -167,5 +167,5 @@ Plans:
 | 23. Availability Demo | v1.5 | 2/2 | Complete | 2026-03-14 |
 | 24. Sticky Nav Scroll Behaviour | v1.5 | 1/1 | Complete | 2026-03-14 |
 | 25. Sync Schema and Server Layer | 2/2 | Complete   | 2026-03-17 | - |
-| 26. Two-Column Layout Restructure | v1.6 | 0/? | Not started | - |
+| 26. Two-Column Layout Restructure | 0/1 | Planned    |  | - |
 | 27. Flat Settings and Sync Toggle | v1.6 | 0/? | Not started | - |
