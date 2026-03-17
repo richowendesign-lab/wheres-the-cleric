@@ -119,7 +119,10 @@ Plans:
   3. Clicking a calendar date swaps the sidebar content to show player breakdown for that date; the calendar remains fully visible (no full-screen overlay)
   4. Closing the date detail returns the sidebar to showing Best Days and the join link
   5. The join link no longer appears in the Settings tab
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 26-01-PLAN.md — Two-column availability layout + inline sidebar date detail + Settings join link removal
 
 ### Phase 27: Flat Settings and Sync Toggle
 **Goal**: Settings tab is fully scannable in one pass and exposes a per-campaign sync opt-out toggle
@@ -130,7 +133,10 @@ Plans:
   2. A "Sync DM availability" toggle is visible in Settings, on by default, and can be turned off per campaign
   3. Turning sync off for a campaign makes its DM exceptions independent — subsequent toggles in other campaigns do not affect it
   4. The toggle label communicates that re-enabling sync applies to future exceptions only
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 26-01-PLAN.md — Two-column availability layout + inline sidebar date detail + Settings join link removal
 
 ## Progress
 
