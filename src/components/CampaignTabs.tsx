@@ -312,17 +312,7 @@ export function CampaignTabs({
       {activeTab === 'settings' && (
         <div className="max-w-2xl space-y-8">
 
-          {/* 1. Join Link */}
-          <section>
-            <h2 className="text-lg font-semibold text-white mb-2">Join Link</h2>
-            <p className="text-sm text-[var(--dnd-text-muted)] mb-3">Share this link with your players. Anyone who visits it can join the campaign.</p>
-            <div className="flex items-center gap-3 bg-[var(--dnd-input-bg)] border border-[#ba7df6]/30 rounded px-4 py-3">
-              <span className="flex-1 text-sm font-mono text-[var(--dnd-accent)] truncate">{joinUrl}</span>
-              <CopyLinkButton url={joinUrl} />
-            </div>
-          </section>
-
-          {/* 2. Planning Window */}
+          {/* 1. Planning Window */}
           <section>
             <h2 className="text-lg font-semibold text-white mb-2">Planning Window</h2>
             <UpdatePlanningWindowForm
@@ -332,7 +322,7 @@ export function CampaignTabs({
             />
           </section>
 
-          {/* 3. Players — accordion */}
+          {/* 2. Players — accordion */}
           <section>
             <details className="group">
               <summary className="flex items-center gap-2 cursor-pointer [&::-webkit-details-marker]:hidden list-none select-none">
@@ -353,7 +343,7 @@ export function CampaignTabs({
             </details>
           </section>
 
-          {/* 4. DM Unavailable Dates — accordion */}
+          {/* 3. DM Unavailable Dates — accordion */}
           {windowStartStr && windowEndStr && (
             <section>
               <details className="group">
@@ -376,7 +366,7 @@ export function CampaignTabs({
             </section>
           )}
 
-          {/* 5. Danger Zone */}
+          {/* 4. Danger Zone */}
           <div className="border-t border-[var(--dnd-border-muted)] pt-6 mt-4">
             <h2 className="text-lg font-semibold text-white mb-3">Danger Zone</h2>
             <DeleteCampaignButton campaignId={campaignId} />
