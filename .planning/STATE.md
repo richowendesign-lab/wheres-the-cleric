@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.6
 milestone_name: Campaign Detail Rework
 status: unknown
-last_updated: "2026-03-17T17:35:01.527Z"
+last_updated: "2026-03-17T19:06:21.914Z"
 progress:
-  total_phases: 18
-  completed_phases: 18
-  total_plans: 41
-  completed_plans: 41
+  total_phases: 19
+  completed_phases: 19
+  total_plans: 42
+  completed_plans: 42
 ---
 
 # Project State
@@ -48,6 +48,8 @@ Progress: [█░░░░░░░░░] 11%
 
 *Updated after each plan completion*
 
+| Phase 26-two-column-layout-restructure P01 | 3min | 2 tasks | 1 files |
+
 ## Accumulated Context
 
 ### Decisions
@@ -59,6 +61,8 @@ Progress: [█░░░░░░░░░] 11%
 - v1.6 (25-01): prisma generate must be run separately after db push to refresh TypeScript types in src/generated/prisma/
 - [Phase 25-sync-schema-and-server-layer]: Originating campaign's dmSyncEnabled is irrelevant to propagation — only sibling's value gates whether that sibling receives the exception
 - [Phase 25-sync-schema-and-server-layer]: No backfill when enabling sync — setDmSyncEnabled only updates the boolean field (SYNC-04)
+- [Phase 26-two-column-layout-restructure]: Sidebar DOM source-order first for mobile stacking; lg:col-start for desktop reordering
+- [Phase 26-two-column-layout-restructure]: Join link moved from Settings to availability sidebar; single CopyLinkButton instance
 
 ### Pending Todos
 
@@ -67,10 +71,10 @@ None.
 ### Blockers/Concerns
 
 - MEDIUM: `revalidatePath('/campaigns', 'layout')` cascade to `/campaigns/[id]` children not live-tested — fallback is per-ID loop (documented in research/ARCHITECTURE.md)
-- DECISION NEEDED before Phase 26: mobile date panel behaviour — revert to fixed full-screen or inline sidebar replacement on narrow screens
+- RESOLVED (26-01): Mobile date panel decision taken — inline sidebar replacement used (DOM source-order for mobile stacking)
 
 ## Session Continuity
 
 Last session: 2026-03-17
-Stopped at: Completed 25-02-PLAN.md (toggleDmException sibling propagation + setDmSyncEnabled)
+Stopped at: 26-01 checkpoint Task 3 — awaiting human-verify of two-column layout in browser
 Resume file: None

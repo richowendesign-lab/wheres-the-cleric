@@ -9,14 +9,14 @@ Requirements for v1.6 Campaign Detail Rework. Each maps to roadmap phases.
 
 ### Layout
 
-- [ ] **LAYOUT-01**: DM sees a two-column Availability tab — large calendar on the left, persistent sidebar on the right
-- [ ] **LAYOUT-02**: Sidebar shows the Best Days list and a copyable join link
-- [ ] **LAYOUT-03**: Clicking a date overlays the sidebar with a player breakdown for that date; closing returns to Best Days + join link
+- [x] **LAYOUT-01**: DM sees a two-column Availability tab — large calendar on the left, persistent sidebar on the right
+- [x] **LAYOUT-02**: Sidebar shows the Best Days list and a copyable join link
+- [x] **LAYOUT-03**: Clicking a date overlays the sidebar with a player breakdown for that date; closing returns to Best Days + join link
 
 ### Settings
 
 - [ ] **SET-01**: Settings tab displays all options in a flat, visually grouped layout without stacked accordions
-- [ ] **SET-02**: Join Link section removed from Settings (accessible from Availability sidebar instead)
+- [x] **SET-02**: Join Link section removed from Settings (accessible from Availability sidebar instead)
 
 ### Sync
 
@@ -47,10 +47,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SYNC-01 | Phase 25 | In progress (schema done; logic in 25-02) |
 | SYNC-02 | Phase 25 | In progress (schema done; logic in 25-02) |
 | SYNC-04 | Phase 25 | In progress (schema done; logic in 25-02) |
-| LAYOUT-01 | Phase 26 | Pending |
-| LAYOUT-02 | Phase 26 | Pending |
-| LAYOUT-03 | Phase 26 | Pending |
-| SET-02 | Phase 26 | Pending |
+| LAYOUT-01 | Phase 26 | Complete |
+| LAYOUT-02 | Phase 26 | Complete |
+| LAYOUT-03 | Phase 26 | Complete |
+| SET-02 | Phase 26 | Complete |
 | SET-01 | Phase 27 | Pending |
 | SYNC-03 | Phase 27 | Pending |
 

@@ -89,7 +89,7 @@ Full phase details: `.planning/milestones/v1.5-ROADMAP.md`
 **Milestone Goal:** Improve the campaign detail page with a better layout, cleaner settings, and synced DM availability.
 
 - [x] **Phase 25: Sync Schema and Server Layer** — Add dmSyncEnabled to Campaign schema; extend toggleDmException to propagate to sync-enabled sibling campaigns (completed 2026-03-17)
-- [ ] **Phase 26: Two-Column Layout Restructure** — Restructure CampaignTabs to own a two-column availability layout; sidebar shows Best Days and join link; date panel becomes a sidebar content swap
+- [x] **Phase 26: Two-Column Layout Restructure** — Restructure CampaignTabs to own a two-column availability layout; sidebar shows Best Days and join link; date panel becomes a sidebar content swap (completed 2026-03-17)
 - [ ] **Phase 27: Flat Settings and Sync Toggle** — Remove accordion wrappers from Settings; add DmSyncToggle component to Settings tab
 
 ## Phase Details
@@ -167,5 +167,5 @@ Plans:
 | 23. Availability Demo | v1.5 | 2/2 | Complete | 2026-03-14 |
 | 24. Sticky Nav Scroll Behaviour | v1.5 | 1/1 | Complete | 2026-03-14 |
 | 25. Sync Schema and Server Layer | 2/2 | Complete   | 2026-03-17 | - |
-| 26. Two-Column Layout Restructure | 0/1 | Planned    |  | - |
+| 26. Two-Column Layout Restructure | 1/1 | Complete   | 2026-03-17 | - |
 | 27. Flat Settings and Sync Toggle | v1.6 | 0/? | Not started | - |
