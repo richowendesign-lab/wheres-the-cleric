@@ -361,7 +361,7 @@ export function CampaignTabs({
             ) : (
               <p className="text-sm text-gray-500 italic">Set a planning window first to mark unavailable dates.</p>
             )}
-            <div className="mt-5">
+            <div className="mt-8">
               <DmSyncToggle campaignId={campaignId} initialEnabled={dmSyncEnabled} />
             </div>
           </section>

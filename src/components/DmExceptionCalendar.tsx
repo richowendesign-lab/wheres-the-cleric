@@ -211,7 +211,7 @@ export function DmExceptionCalendar({
       </div>
 
       {/* Mode — below legend, close to sync toggle */}
-      <fieldset className="mt-4">
+      <fieldset className="mt-8">
         <legend className="block text-base text-gray-300 mb-2">When I mark a date as unavailable:</legend>
         <div className="flex gap-3 flex-wrap">
           {([
