@@ -113,7 +113,7 @@ export function CampaignTabs({
           aria-hidden="true"
         />
       )}
-      <div className={`fixed inset-y-0 right-0 w-80 bg-gray-900 border-l border-gray-800
+      <div className={`fixed top-0 right-0 w-80 h-[100dvh] bg-gray-900 border-l border-gray-800
         shadow-2xl z-[52] flex flex-col transition-transform duration-200
         ${selectedDate ? 'translate-x-0' : 'translate-x-full'}`}>
         {selectedDate && (() => {
