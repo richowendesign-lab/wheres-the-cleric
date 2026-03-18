@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useTransition } from 'react'
 import { DayAggregation } from '@/lib/availability'
 import { DashboardCalendar } from '@/components/DashboardCalendar'
 import { BestDaysList } from '@/components/BestDaysList'
@@ -10,6 +10,7 @@ import { UpdateMaxPlayersForm } from '@/components/UpdateMaxPlayersForm'
 import { CopyLinkButton } from '@/components/CopyLinkButton'
 import { DeleteCampaignButton } from '@/components/DeleteCampaignButton'
 import { DmSyncToggle } from '@/components/DmSyncToggle'
+import { removePlayer } from '@/lib/actions/campaign'
 
 interface CampaignTabsProps {
   campaignId: string
@@ -64,6 +65,9 @@ export function CampaignTabs({
   const [activeTab, setActiveTab] = useState<'availability' | 'settings'>('availability')
   const [editingWindow, setEditingWindow] = useState(false)
   const [windowSaved, setWindowSaved] = useState(false)
+  const [confirmingPlayerId, setConfirmingPlayerId] = useState<string | null>(null)
+  const [players, setPlayers] = useState(playerSlots)
+  const [isPending, startTransition] = useTransition()
 
   // Shared side-panel state — used by both BestDaysList and DashboardCalendar
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
@@ -335,6 +339,55 @@ export function CampaignTabs({
           <section className="py-7">
             <h2 className="text-base font-semibold text-white mb-1">Players</h2>
             <p className="text-sm text-[var(--dnd-text-muted)] mb-3">Manage the maximum number of player slots for this campaign.</p>
+            {players.length > 0 && (
+              <ul className="mb-4 space-y-1">
+                {players.map(player => (
+                  <li key={player.id} className="flex items-center justify-between py-1.5">
+                    {confirmingPlayerId === player.id ? (
+                      <span className="flex items-center gap-3 text-sm">
+                        <span className="text-gray-300">Remove {player.name}?</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const prev = players
+                            setPlayers(p => p.filter(x => x.id !== player.id))
+                            setConfirmingPlayerId(null)
+                            startTransition(async () => {
+                              const result = await removePlayer(campaignId, player.id)
+                              if (result && 'error' in result) {
+                                setPlayers(prev)
+                              }
+                            })
+                          }}
+                          disabled={isPending}
+                          className="text-red-400 hover:text-red-300 font-medium disabled:opacity-50 cursor-pointer"
+                        >
+                          Confirm
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setConfirmingPlayerId(null)}
+                          className="text-gray-500 hover:text-gray-300 cursor-pointer"
+                        >
+                          Cancel
+                        </button>
+                      </span>
+                    ) : (
+                      <>
+                        <span className="text-sm text-gray-200">{player.name}</span>
+                        <button
+                          type="button"
+                          onClick={() => setConfirmingPlayerId(player.id)}
+                          className="text-xs text-gray-500 hover:text-red-400 transition-colors cursor-pointer"
+                        >
+                          Remove
+                        </button>
+                      </>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
             <UpdateMaxPlayersForm
               key={String(maxPlayers ?? '')}
               campaignId={campaignId}
