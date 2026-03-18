@@ -83,6 +83,7 @@ export default async function CampaignDetailPage({
         {/* Tab component — receives all pre-fetched serialised data */}
         <CampaignTabs
           campaignId={campaign.id}
+          joinUrl={joinUrl}
           windowStartStr={windowStartStr}
           windowEndStr={windowEndStr}
           dayAggregations={dayAggregations}

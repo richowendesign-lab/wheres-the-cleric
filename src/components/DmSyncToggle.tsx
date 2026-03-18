@@ -36,30 +36,30 @@ export function DmSyncToggle({ campaignId, initialEnabled }: DmSyncToggleProps) 
 
   return (
     <div>
-      <label className="flex items-center gap-3 cursor-pointer select-none">
+      <div className="flex items-center gap-3">
         <button
           type="button"
           role="switch"
           aria-checked={enabled}
           onClick={handleToggle}
           disabled={status === 'saving'}
-          className={`relative flex-shrink-0 h-5 w-9 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--dnd-accent)] ${
+          className={`relative flex-shrink-0 h-6 w-11 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--dnd-accent)] disabled:opacity-60 ${
             enabled ? 'bg-[var(--dnd-accent)]' : 'bg-gray-700'
           }`}
         >
           <span
-            className={`absolute top-[3px] h-3.5 w-3.5 rounded-full bg-white shadow transition-transform ${
-              enabled ? 'translate-x-[18px]' : 'translate-x-[3px]'
+            className={`absolute top-[3px] left-[3px] h-[18px] w-[18px] rounded-full bg-white shadow transition-transform ${
+              enabled ? 'translate-x-5' : 'translate-x-0'
             }`}
           />
         </button>
-        <span className="text-sm text-gray-300">
+        <span className="text-sm text-gray-300 select-none">
           {enabled
             ? 'Sync enabled — unavailable dates apply across all your campaigns'
             : 'Sync off — unavailable dates are independent for this campaign'}
         </span>
-      </label>
-      <p className="text-xs text-gray-500 mt-1 ml-12">
+      </div>
+      <p className="text-xs text-gray-500 mt-2 ml-14">
         Re-enabling sync applies to future changes only — existing dates are not changed.
       </p>
       <Toast status={status} onRetry={() => setStatus('idle')} onDismiss={() => setStatus('idle')} />

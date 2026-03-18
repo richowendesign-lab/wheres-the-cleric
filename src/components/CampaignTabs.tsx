@@ -7,11 +7,13 @@ import { BestDaysList } from '@/components/BestDaysList'
 import { DmExceptionCalendar } from '@/components/DmExceptionCalendar'
 import { UpdatePlanningWindowForm } from '@/components/UpdatePlanningWindowForm'
 import { UpdateMaxPlayersForm } from '@/components/UpdateMaxPlayersForm'
+import { CopyLinkButton } from '@/components/CopyLinkButton'
 import { DeleteCampaignButton } from '@/components/DeleteCampaignButton'
 import { DmSyncToggle } from '@/components/DmSyncToggle'
 
 interface CampaignTabsProps {
   campaignId: string
+  joinUrl: string
   windowStartStr: string | null
   windowEndStr: string | null
   dayAggregations: DayAggregation[]
@@ -47,6 +49,7 @@ const PencilIcon = () => (
 
 export function CampaignTabs({
   campaignId,
+  joinUrl,
   windowStartStr,
   windowEndStr,
   dayAggregations,
@@ -301,11 +304,24 @@ export function CampaignTabs({
 
       {/* ── Settings tab ── */}
       {activeTab === 'settings' && (
-        <div className="max-w-2xl space-y-8">
+        <div className="max-w-2xl mx-auto px-2 sm:px-6">
 
-          {/* 1. Planning Window */}
-          <section>
-            <h2 className="text-lg font-semibold text-white mb-2">Planning Window</h2>
+          {/* 1. Join Link */}
+          <section className="py-7">
+            <h2 className="text-base font-semibold text-white mb-1">Join Link</h2>
+            <p className="text-sm text-[var(--dnd-text-muted)] mb-3">Share this link with your players. Anyone who visits it can join the campaign.</p>
+            <div className="flex items-center gap-3 bg-[var(--dnd-input-bg)] border border-[#ba7df6]/30 rounded px-4 py-3">
+              <span className="flex-1 text-sm font-mono text-[var(--dnd-accent)] truncate">{joinUrl}</span>
+              <CopyLinkButton url={joinUrl} />
+            </div>
+          </section>
+
+          <div className="border-t border-[var(--dnd-border-muted)]" />
+
+          {/* 2. Planning Window */}
+          <section className="py-7">
+            <h2 className="text-base font-semibold text-white mb-1">Planning Window</h2>
+            <p className="text-sm text-[var(--dnd-text-muted)] mb-3">Set the date range for scheduling your next session.</p>
             <UpdatePlanningWindowForm
               campaignId={campaignId}
               planningWindowStart={windowStartStr}
@@ -313,15 +329,12 @@ export function CampaignTabs({
             />
           </section>
 
-          {/* 2. Availability Sync */}
-          <section>
-            <h2 className="text-lg font-semibold text-white mb-4">Availability Sync</h2>
-            <DmSyncToggle campaignId={campaignId} initialEnabled={dmSyncEnabled} />
-          </section>
+          <div className="border-t border-[var(--dnd-border-muted)]" />
 
           {/* 3. Players */}
-          <section>
-            <h2 className="text-lg font-semibold text-white mb-4">Players</h2>
+          <section className="py-7">
+            <h2 className="text-base font-semibold text-white mb-1">Players</h2>
+            <p className="text-sm text-[var(--dnd-text-muted)] mb-3">Manage the maximum number of player slots for this campaign.</p>
             <UpdateMaxPlayersForm
               key={String(maxPlayers ?? '')}
               campaignId={campaignId}
@@ -331,10 +344,13 @@ export function CampaignTabs({
             />
           </section>
 
+          <div className="border-t border-[var(--dnd-border-muted)]" />
+
           {/* 4. My Unavailable Dates */}
-          {windowStartStr && windowEndStr && (
-            <section>
-              <h2 className="text-lg font-semibold text-white mb-4">My Unavailable Dates</h2>
+          <section className="py-7">
+            <h2 className="text-base font-semibold text-white mb-1">My Unavailable Dates</h2>
+            <p className="text-sm text-[var(--dnd-text-muted)] mb-4">Mark dates when you can't run a session. These show on the availability calendar.</p>
+            {windowStartStr && windowEndStr ? (
               <DmExceptionCalendar
                 campaignId={campaignId}
                 planningWindowStart={windowStartStr}
@@ -342,14 +358,22 @@ export function CampaignTabs({
                 initialExceptions={dmExceptionDates}
                 exceptionMode={dmExceptionMode}
               />
-            </section>
-          )}
+            ) : (
+              <p className="text-sm text-gray-500 italic">Set a planning window first to mark unavailable dates.</p>
+            )}
+            <div className="mt-5 pt-4 border-t border-[var(--dnd-border-muted)]/60">
+              <DmSyncToggle campaignId={campaignId} initialEnabled={dmSyncEnabled} />
+            </div>
+          </section>
+
+          <div className="border-t border-[var(--dnd-border-muted)]" />
 
           {/* 5. Danger Zone */}
-          <div className="border-t border-[var(--dnd-border-muted)] pt-6 mt-4">
-            <h2 className="text-lg font-semibold text-white mb-3">Danger Zone</h2>
+          <section className="py-7">
+            <h2 className="text-base font-semibold text-white mb-1">Danger Zone</h2>
+            <p className="text-sm text-[var(--dnd-text-muted)] mb-3">Permanently delete this campaign and all its data.</p>
             <DeleteCampaignButton campaignId={campaignId} />
-          </div>
+          </section>
 
         </div>
       )}
