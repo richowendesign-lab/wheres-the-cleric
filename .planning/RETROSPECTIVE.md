@@ -128,15 +128,19 @@
 | v1.2 Multi-Campaign DM | 3 | 7 | Auth-first approach; data layer before UI; fastest milestone |
 | v1.3 DM Experience | 6 | 14 | Server Component boundary discipline; post-approval polish iterations; largest LOC delta |
 | v1.4 Clarity & Polish | 3 | 3 | Purely additive UI — fastest milestone; native dialog; icon consistency audit pattern |
+| v1.5 Marketing Home Page | 5 | 9 | IntersectionObserver + CSS transitions; scroll animations with prefers-reduced-motion |
+| v1.6 Campaign Detail Rework | 3 | 4 | DOM source order for responsive stacking; `100dvh` for fixed panels; paginated DM calendar |
 
 ### Top Lessons (Verified Across Milestones)
 
-1. **Human smoke tests at phase end catch integration issues** — all four milestones verified via human test; zero regressions shipped to production
+1. **Human smoke tests at phase end catch integration issues** — all milestones verified via human test; zero regressions shipped to production
 2. **Server-side first** — server components, server actions, and server-side data aggregation consistently produce cleaner, faster code than client-side alternatives
 3. **Ship and learn** — v1.0 revealed invite link friction that became v1.1; shipping quickly generates real product insight
 4. **Data layer before UI** — splitting schema/action plans from UI plans prevents wiring errors and enables parallel verification
 5. **Scope UX interactions upfront** — leaving interaction model implicit (clickable? side panel? keyboard nav?) guarantees a post-approval iteration; specify it in the plan success criteria
 6. **Specify icon style and layout in success criteria** — name the icon, colour, and alignment to avoid post-approval feedback rounds
+7. **DOM source order drives mobile layout** — sidebar first in DOM, CSS grid reorders on desktop; avoids JS for responsive column swapping
+8. **Use `dvh` not `vh` for fixed full-screen panels** — `100vh` ignores mobile browser chrome, creating bottom gaps; `100dvh` is always correct
 
 ---
 
@@ -224,4 +228,88 @@
 ### Cost Observations
 - Sessions: 1 (all three phases in a single day)
 - Notable: Fastest milestone yet — 3 phases, 1 day, 20 files, +2,217 LOC; purely additive UI work with no data model changes
+
+---
+
+## Milestone: v1.5 — Marketing Home Page
+
+**Shipped:** 2026-03-14
+**Phases:** 5 | **Plans:** 9 | **Timeline:** 2 days (2026-03-13 → 2026-03-14)
+
+### What Was Built
+- Static page shell with sticky nav (logo, Beta badge, auth CTAs, scroll-aware background transition)
+- Scroll-triggered fade + slide-up animations via `IntersectionObserver` + CSS transitions (prefers-reduced-motion respected)
+- Features step-selector — 4 clickable steps with expanded descriptions and paired images
+- Interactive availability demo — DM dashboard and player availability pickers rendered in the page with fake data
+- Sticky nav scroll behaviour — background fades in once user scrolls past the hero
+
+### What Worked
+- `IntersectionObserver` with one-shot `disconnect()` — lightweight, no dependency, correctly fires once per element
+- CSS `grid-rows-[0fr]` / `grid-rows-[1fr]` for FAQ accordion — smooth height animation with zero JS height calculation
+- Static-data demos embedded in the marketing page reused existing UI components — zero duplication of component logic
+- Landing page as a completely separate route from the app — clean separation, no auth concerns bleeding into marketing content
+
+### What Was Inefficient
+- `plain <img>` over next/image required a comment explaining why — Next.js Image's aggressive caching caused query-string cache-busting errors; worth documenting as a known footgun for this project
+
+### Patterns Established
+- `useInView` hook with `IntersectionObserver` + `disconnect()` — reusable for any future scroll animation
+- `prefers-reduced-motion` media query check in `useInView` — always respect it; one-liner to add to the hook
+- CSS-only FAQ accordion with `grid-rows` — no state management for height animation
+
+### Key Lessons
+1. **Reuse app components in marketing demos** — identical UI components in demos stay in sync with the app automatically; no fork to maintain
+2. **next/image aggressive caching is a footgun** — plain `<img>` is safer for static assets that don't need responsive sizing or priority loading
+3. **Scroll animations require `prefers-reduced-motion` from day one** — retrofitting it is trivial but including it upfront is better practice
+
+### Cost Observations
+- Sessions: 2
+- Notable: 5 phases, 2 days — marketing page was self-contained and moved quickly; interactive demos were the most complex piece
+
+---
+
+## Milestone: v1.6 — Campaign Detail Rework
+
+**Shipped:** 2026-03-18
+**Phases:** 3 | **Plans:** 4 | **Timeline:** 2 days (2026-03-16 → 2026-03-18)
+
+### What Was Built
+- `dmSyncEnabled Boolean @default(true)` on Campaign schema — additive, non-breaking, opt-out sync model
+- `toggleDmException` extended with sibling propagation — respects each sibling's planning window, only writes dates in range
+- `setDmSyncEnabled` server action with optimistic UI rollback pattern
+- Two-column Availability tab layout — CSS Grid `lg:grid-cols-[1fr_320px]`, sidebar DOM-first for mobile stacking
+- Fixed slide-in date detail panel — `position: fixed`, `z-[52]`, `h-[100dvh]`, backdrop at `z-[51]`
+- Flat Settings tab — divider-separated sections, `max-w-2xl` left-aligned, all content visible without accordions
+- `DmSyncToggle` component — radio button pair ("Sync enabled" / "Sync off") matching exception mode radio style
+- Paginated `DmExceptionCalendar` — 2-months-at-a-time with prev/next nav, matching `DashboardCalendar` pattern
+
+### What Worked
+- DOM source order for responsive column ordering — sidebar first in DOM, `lg:col-start-*` places it visually; clean, no JS
+- `@default(true)` for sync — existing campaigns auto-enrolled; DM doesn't need to do anything for the feature to work
+- Matching radio button pattern for `DmSyncToggle` — visual consistency with exception mode toggle; user confirmed immediately
+- Paginated calendar pattern reuse from `DashboardCalendar` — identical approach applied to `DmExceptionCalendar` with minimal effort
+
+### What Was Inefficient
+- Date panel initially implemented as sidebar content swap — user rejected it, reverted to fixed panel; should have clarified this upfront in discuss-phase
+- Mode toggle briefly converted to a switch — user rejected it; radio button pattern preferred throughout; clarify toggle vs radio upfront
+- Fixed panel z-index conflict with AppNav — panel was `z-20`, AppNav is `z-50`; panel rendered behind nav; required post-build fix
+- `100vh` vs `100dvh` bug on mobile — gap at panel bottom; caught during user testing; should be in a standard checklist for any `position: fixed` full-height element
+
+### Patterns Established
+- Fixed slide-in panels must be `z` above sticky nav: `z-[51]` for backdrop, `z-[52]` for panel (AppNav is `z-50`)
+- `h-[100dvh]` for any fixed full-screen overlay — `100vh` ignores mobile browser chrome
+- DOM-first sidebar for responsive two-column layouts — sidebar in source order, `lg:col-start-1/2` for visual placement
+- `@default(true)` for opt-out features — cleaner than requiring DM to enable; existing records automatically enrolled
+- Sibling propagation in server action: `findMany({ where: { dmId, dmSyncEnabled: true, id: { not: campaignId } } })` then `createMany` within `$transaction`
+
+### Key Lessons
+1. **Clarify overlay vs sidebar swap upfront** — "date detail" is ambiguous; specify "fixed overlay keeps calendar visible" vs "sidebar swaps content" in discuss-phase
+2. **Toggle vs radio button preference should be established per project** — this codebase consistently uses radio buttons for two-option settings; document as a pattern
+3. **Check z-index of all sticky/fixed elements before planning a new overlay** — AppNav at z-50 is a known constraint; new panels need z > 50
+4. **`100dvh` is always correct for full-screen fixed elements** — add it to a standard checklist for any position:fixed panel
+5. **Opt-out defaults (`@default(true)`) are better for sync features** — zero DM action required; feature works immediately for all campaigns
+
+### Cost Observations
+- Sessions: 3-4
+- Notable: 3 phases, 4 plans, +2,605 / -224 LOC — two revision rounds (panel type, toggle style) added iterations but no major rework
 

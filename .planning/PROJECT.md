@@ -44,14 +44,15 @@ The DM can instantly see when everyone is free — without chasing people for re
 - ✓ "Built for Dungeon Masters" showcase section with multi-campaign and instant-updates cards — v1.5
 - ✓ FAQ accordion section with 6 expandable questions — v1.5
 - ✓ Shared AppNav component for authenticated pages with breadcrumb navigation — v1.5
+- ✓ DM sees a two-column campaign detail layout: large calendar left, persistent sidebar (Best Days) right — v1.6
+- ✓ Date detail opens as a fixed slide-in panel overlaying the layout — v1.6
+- ✓ Campaign Settings tab uses a flat, grouped layout with minimal scrolling (no stacked accordions) — v1.6
+- ✓ DM availability exceptions sync across campaigns by default, with a per-campaign opt-out toggle — v1.6
+- ✓ Exception mode (block/flag) remains independent per campaign; only dates sync — v1.6
 
 ### Active
 
-- [ ] DM sees a two-column campaign detail layout: large calendar left, persistent sidebar (Best Days + join link) right
-- [ ] Date detail slide-in overlays the sidebar when a date is selected
-- [ ] Campaign Settings tab uses a flat, grouped layout with minimal scrolling (no stacked accordions)
-- [ ] DM availability exceptions sync across campaigns by default, with a per-campaign opt-out toggle
-- [ ] Exception mode (block/flag) remains independent per campaign; only dates sync
+*(none — v1.7 requirements not yet defined)*
 
 ### Out of Scope
 
@@ -71,7 +72,8 @@ The DM can instantly see when everyone is free — without chasing people for re
 - Shipped v1.3 in 3 days (2026-03-09 → 2026-03-12): 6 phases, 14 plans, +9,558 / -348 LOC
 - Shipped v1.4 in 1 day (2026-03-13): 3 phases, 3 plans, +2,217 / -80 LOC
 - Shipped v1.5 in 2 days (2026-03-13 → 2026-03-14): 5 phases, 9 plans, +5,865 / -996 LOC
-- Current codebase: ~23,000 TypeScript LOC (estimated)
+- Shipped v1.6 in 2 days (2026-03-16 → 2026-03-18): 3 phases, 4 plans, +2,605 / -224 LOC
+- Current codebase: ~25,000 TypeScript LOC (estimated)
 - Tech stack: Next.js 16, React 19, TypeScript, Tailwind CSS 4, Prisma 7, bcryptjs, SQLite (local) / Neon PostgreSQL (production)
 - Deployed to Vercel: https://my-portfolio-henna-ten-97.vercel.app
 - Access model: DM has email+password account with httpOnly session cookie; players are still cookie-based (no login required)
@@ -116,16 +118,24 @@ The DM can instantly see when everyone is free — without chasing people for re
 | IntersectionObserver + CSS transitions for scroll animations (v1.5) | Zero dependency; useInView hook with one-shot disconnect(); prefers-reduced-motion respected | ✓ Good — lightweight, accessible |
 | Shared AppNav server component for authenticated pages (v1.5) | Eliminates duplicate nav markup across campaigns and campaign detail pages; uses logOut server action | ✓ Good — single source of truth |
 | Grid-row animation for FAQ accordion (v1.5) | CSS-only expand/collapse with `grid-rows-[1fr]` / `grid-rows-[0fr]`; no JS height calculation needed | ✓ Good — smooth, zero layout shift |
+| Fixed slide-in date panel over sidebar (v1.6) | User preferred original overlay panel — sidebar stays persistent for Best Days only | ✓ Good — clearer separation of concerns |
+| DOM source order drives mobile stacking (v1.6) | Sidebar first in DOM, calendar second; CSS grid reorders on desktop via `lg:col-start-*` | ✓ Good — correct mobile stack without JS |
+| `h-[100dvh]` for fixed panel height (v1.6) | `100vh` ignores mobile browser chrome causing bottom gap; `dvh` accounts for dynamic viewport | ✓ Good — correct on mobile |
+| Paginated DmExceptionCalendar (v1.6) | Flat settings would make all-months-stacked calendar very long; paginated to 2 months matches DashboardCalendar | ✓ Good — consistent pagination pattern |
+| dmSyncEnabled `@default(true)` on Campaign (v1.6) | Additive schema change — non-breaking; opt-out rather than opt-in means sync works without DM action | ✓ Good — backward-compatible, zero friction |
 
-## Current Milestone: v1.6 Campaign Detail Rework
+## Shipped: v1.6 Campaign Detail Rework
 
-**Goal:** Improve the campaign detail page with a better layout, cleaner settings, and synced DM availability.
+**Shipped:** 2026-03-18 | 3 phases, 4 plans, +2,605 / -224 LOC
 
-**Target features:**
-- Two-column campaign detail layout (large calendar + persistent sidebar)
-- Flat, scannable Settings tab
-- DM availability auto-sync across campaigns with per-campaign opt-out
+**What shipped:**
+- Two-column Availability tab: large calendar left, persistent Best Days sidebar right
+- Fixed slide-in date detail panel (raised above AppNav with `z-[52]`)
+- Flat Settings tab with dividers — join link, planning window, players, DM exceptions, danger zone
+- DmSyncToggle component: radio button pair for per-campaign sync opt-out
+- `toggleDmException` propagates to all sync-enabled sibling campaigns
+- `setDmSyncEnabled` server action with optimistic rollback
 
 ---
-*Last updated: 2026-03-16 after v1.6 milestone started*
+*Last updated: 2026-03-18 after v1.6 shipped*
 

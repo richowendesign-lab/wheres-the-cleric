@@ -1,14 +1,14 @@
 ---
 gsd_state_version: 1.0
 milestone: v1.6
-milestone_name: Campaign Detail Rework
-status: complete
-last_updated: "2026-03-18T00:00:00Z"
+milestone_name: Campaign Detail Rework — SHIPPED 2026-03-18
+status: unknown
+last_updated: "2026-03-18T18:46:22.672Z"
 progress:
-  total_phases: 27
-  completed_phases: 27
-  total_plans: 44
-  completed_plans: 44
+  total_phases: 20
+  completed_phases: 20
+  total_plans: 43
+  completed_plans: 43
 ---
 
 # Project State

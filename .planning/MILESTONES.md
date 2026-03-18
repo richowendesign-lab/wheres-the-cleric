@@ -1,5 +1,14 @@
 # Milestones
 
+## v1.6 Campaign Detail Rework (Shipped: 2026-03-18)
+
+**Phases completed:** 3 phases, 4 plans, 0 tasks
+
+**Key accomplishments:**
+- (none recorded)
+
+---
+
 ## v1.5 Marketing Home Page (Shipped: 2026-03-14)
 
 **Phases completed:** 5 phases, 9 plans
