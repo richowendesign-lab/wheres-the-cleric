@@ -40,6 +40,7 @@ export function DmExceptionCalendar({
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle')
   const [mode, setMode] = useState<'block' | 'flag'>(exceptionMode ?? 'block')
   const [modeStatus, setModeStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
+  const [currentMonthIndex, setCurrentMonthIndex] = useState(0)
 
   function handleDateClick(dateKey: string) {
     const isCurrentlyBlocked = exceptions.has(dateKey)
@@ -105,42 +106,44 @@ export function DmExceptionCalendar({
     if (mo > 11) { mo = 0; y++ }
   }
 
+  const showNav = months.length > 2
+  const displayedMonths = months.slice(currentMonthIndex, currentMonthIndex + 2)
+  const canGoPrev = currentMonthIndex > 0
+  const canGoNext = currentMonthIndex + 2 < months.length
+
   return (
     <div>
-      {/* Mode — side-by-side radios styled like boxed inputs */}
-      <fieldset className="mb-4">
-        <legend className="block text-sm text-gray-300 mb-1">When I mark a date as unavailable:</legend>
-        <div className="flex gap-3 flex-wrap">
-          {([
-            { value: 'block', label: 'Exclude from Best Days' },
-            { value: 'flag',  label: 'Show as busy in Best Days' },
-          ] as const).map(({ value, label }) => (
-            <label
-              key={value}
-              className={`flex items-center gap-2.5 px-3 py-2 rounded cursor-pointer select-none border transition-colors
-                ${mode === value
-                  ? 'bg-[var(--dnd-input-bg)] border-[var(--dnd-accent)] text-gray-100'
-                  : 'bg-[var(--dnd-input-bg)] border-gray-700 text-gray-400 hover:border-gray-500'}`}
-            >
-              <input
-                type="radio"
-                name={`dm-exception-mode-${campaignId}`}
-                value={value}
-                checked={mode === value}
-                onChange={() => handleModeChange(value)}
-                className="accent-[var(--dnd-accent)] cursor-pointer"
-              />
-              <span className="text-sm">{label}</span>
-            </label>
-          ))}
-          {modeStatus === 'saving' && <span className="text-xs text-gray-500 self-center">Saving…</span>}
-        </div>
-      </fieldset>
-
       {/* Calendar grid */}
       <div className="rounded-lg bg-[#140326]/60 p-4">
-        <div className="space-y-6">
-          {months.map(({ year, month }) => {
+        {showNav && (
+          <div className="flex items-center justify-between mb-3">
+            <button
+              type="button"
+              onClick={() => setCurrentMonthIndex(i => Math.max(0, i - 2))}
+              disabled={!canGoPrev}
+              className="p-1.5 rounded text-[var(--dnd-text-muted)] hover:text-white disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+              aria-label="Previous months"
+            >
+              &#8592;
+            </button>
+            <span className="text-xs text-gray-400">
+              {displayedMonths.map(({ year, month }) =>
+                new Date(Date.UTC(year, month, 1)).toLocaleDateString('en-GB', { month: 'short', year: 'numeric', timeZone: 'UTC' })
+              ).join(' – ')}
+            </span>
+            <button
+              type="button"
+              onClick={() => setCurrentMonthIndex(i => i + 2)}
+              disabled={!canGoNext}
+              className="p-1.5 rounded text-[var(--dnd-text-muted)] hover:text-white disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+              aria-label="Next months"
+            >
+              &#8594;
+            </button>
+          </div>
+        )}
+        <div className={displayedMonths.length > 1 ? 'grid grid-cols-1 lg:grid-cols-2 gap-6' : ''}>
+          {displayedMonths.map(({ year, month }) => {
             const monthLabel = new Date(Date.UTC(year, month, 1)).toLocaleDateString('en-GB', {
               month: 'long', year: 'numeric', timeZone: 'UTC',
             })
@@ -194,6 +197,36 @@ export function DmExceptionCalendar({
           })}
         </div>
       </div>
+
+      {/* Mode — below calendar, close to sync toggle */}
+      <fieldset className="mt-4">
+        <legend className="block text-base text-gray-300 mb-2">When I mark a date as unavailable:</legend>
+        <div className="flex gap-3 flex-wrap">
+          {([
+            { value: 'block', label: 'Exclude from Best Days' },
+            { value: 'flag',  label: 'Show as busy in Best Days' },
+          ] as const).map(({ value, label }) => (
+            <label
+              key={value}
+              className={`flex items-center gap-2.5 px-3 py-2 rounded cursor-pointer select-none border transition-colors
+                ${mode === value
+                  ? 'bg-[var(--dnd-input-bg)] border-[var(--dnd-accent)] text-gray-100'
+                  : 'bg-[var(--dnd-input-bg)] border-gray-700 text-gray-400 hover:border-gray-500'}`}
+            >
+              <input
+                type="radio"
+                name={`dm-exception-mode-${campaignId}`}
+                value={value}
+                checked={mode === value}
+                onChange={() => handleModeChange(value)}
+                className="accent-[var(--dnd-accent)] cursor-pointer"
+              />
+              <span className="text-sm">{label}</span>
+            </label>
+          ))}
+          {modeStatus === 'saving' && <span className="text-xs text-gray-500 self-center">Saving…</span>}
+        </div>
+      </fieldset>
 
       {/* Legend */}
       <div className="flex flex-wrap gap-3 text-xs text-gray-500 mt-3">

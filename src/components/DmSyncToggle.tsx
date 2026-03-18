@@ -53,7 +53,7 @@ export function DmSyncToggle({ campaignId, initialEnabled }: DmSyncToggleProps) 
             }`}
           />
         </button>
-        <span className="text-sm text-gray-300 select-none">
+        <span className="text-base text-gray-300 select-none">
           {enabled
             ? 'Sync enabled — unavailable dates apply across all your campaigns'
             : 'Sync off — unavailable dates are independent for this campaign'}
