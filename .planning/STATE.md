@@ -2,11 +2,11 @@
 gsd_state_version: 1.0
 milestone: v1.6
 milestone_name: Campaign Detail Rework
-status: in_progress
-last_updated: "2026-03-18T18:00:00.000Z"
+status: unknown
+last_updated: "2026-03-18T18:08:32.493Z"
 progress:
-  total_phases: 27
-  completed_phases: 26
+  total_phases: 20
+  completed_phases: 20
   total_plans: 43
   completed_plans: 43
 ---
@@ -63,6 +63,7 @@ Progress: [█░░░░░░░░░] 11%
 - [Phase 26-two-column-layout-restructure]: Sidebar DOM source-order first for mobile stacking; lg:col-start for desktop reordering
 - [Phase 26-two-column-layout-restructure]: Inline sidebar content swap reverted after browser verification — fixed slide-in panel restored; sidebar permanently shows BestDaysList
 - [Phase 26-two-column-layout-restructure]: Backdrop z-[51], panel z-[52] to layer above sticky AppNav (z-50); h-[100dvh] for dynamic viewport on mobile
+- [Phase 27-flat-settings-and-sync-toggle]: joinUrl prop removed from CampaignTabs entirely — Join Link section removed in this plan, prop had no other consumers
 
 ### Pending Todos
 

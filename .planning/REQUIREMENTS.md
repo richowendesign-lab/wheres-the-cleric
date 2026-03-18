@@ -15,14 +15,14 @@ Requirements for v1.6 Campaign Detail Rework. Each maps to roadmap phases.
 
 ### Settings
 
-- [ ] **SET-01**: Settings tab displays all options in a flat, visually grouped layout without stacked accordions
+- [x] **SET-01**: Settings tab displays all options in a flat, visually grouped layout without stacked accordions
 - [x] **SET-02**: Join Link section removed from Settings (accessible from Availability sidebar instead)
 
 ### Sync
 
 - [x] **SYNC-01**: DM marking a date unavailable in one campaign automatically marks it in all their other sync-enabled campaigns
 - [x] **SYNC-02**: DM removing an unavailable date in one campaign removes it from all their other sync-enabled campaigns
-- [ ] **SYNC-03**: Each campaign has a "Sync DM availability" toggle in Settings (on by default); turning it off makes that campaign's exceptions independent
+- [x] **SYNC-03**: Each campaign has a "Sync DM availability" toggle in Settings (on by default); turning it off makes that campaign's exceptions independent
 - [x] **SYNC-04**: Re-enabling sync does not backfill existing exceptions — only future toggles propagate
 
 ## Future Requirements
@@ -51,8 +51,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | LAYOUT-02 | Phase 26 | Complete |
 | LAYOUT-03 | Phase 26 | Complete |
 | SET-02 | Phase 26 | Complete |
-| SET-01 | Phase 27 | Pending |
-| SYNC-03 | Phase 27 | Pending |
+| SET-01 | Phase 27 | Complete |
+| SYNC-03 | Phase 27 | Complete |
 
 **Coverage:**
 - v1.6 requirements: 9 total
