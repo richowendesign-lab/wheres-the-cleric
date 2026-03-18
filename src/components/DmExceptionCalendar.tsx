@@ -198,7 +198,19 @@ export function DmExceptionCalendar({
         </div>
       </div>
 
-      {/* Mode — below calendar, close to sync toggle */}
+      {/* Legend */}
+      <div className="flex flex-wrap gap-3 text-xs text-gray-500 mt-3">
+        <span className="flex items-center gap-1.5">
+          <span className="inline-block w-3 h-3 rounded bg-amber-500/20 ring-1 ring-amber-400/50" />
+          DM unavailable
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="inline-block w-3 h-3 rounded bg-gray-800" />
+          Available
+        </span>
+      </div>
+
+      {/* Mode — below legend, close to sync toggle */}
       <fieldset className="mt-4">
         <legend className="block text-base text-gray-300 mb-2">When I mark a date as unavailable:</legend>
         <div className="flex gap-3 flex-wrap">
@@ -227,18 +239,6 @@ export function DmExceptionCalendar({
           {modeStatus === 'saving' && <span className="text-xs text-gray-500 self-center">Saving…</span>}
         </div>
       </fieldset>
-
-      {/* Legend */}
-      <div className="flex flex-wrap gap-3 text-xs text-gray-500 mt-3">
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block w-3 h-3 rounded bg-amber-500/20 ring-1 ring-amber-400/50" />
-          DM unavailable
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block w-3 h-3 rounded bg-gray-800" />
-          Available
-        </span>
-      </div>
 
       <Toast
         status={saveStatus}
