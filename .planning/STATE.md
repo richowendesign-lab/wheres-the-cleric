@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-03-16)
 Phase: 27 of 27 (Flat Settings and Sync Toggle) — COMPLETE
 Plan: 1 of 1 (complete)
 Status: Milestone v1.6 complete
-Last activity: 2026-03-18 — 27-01 complete (flat Settings tab + DmSyncToggle + paginated DmExceptionCalendar)
+Last activity: 2026-03-18 - Completed quick task 1: Add remove player button to campaign Settings
 
 Progress: [██████████] 100%
 
@@ -76,6 +76,12 @@ None.
 ### Blockers/Concerns
 
 - MEDIUM: `revalidatePath('/campaigns', 'layout')` cascade to `/campaigns/[id]` children not live-tested — fallback is per-ID loop (documented in research/ARCHITECTURE.md)
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 1 | Add remove player button to campaign Settings | 2026-03-18 | 6757047 | [1-add-remove-player-button-to-campaign-set](.planning/quick/1-add-remove-player-button-to-campaign-set/) |
 
 ## Session Continuity
 
