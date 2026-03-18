@@ -210,35 +210,35 @@ export function DmExceptionCalendar({
         </span>
       </div>
 
-      {/* Mode toggle — below legend, close to sync toggle */}
-      <div className="mt-8">
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            role="switch"
-            aria-checked={mode === 'block'}
-            onClick={() => handleModeChange(mode === 'block' ? 'flag' : 'block')}
-            disabled={modeStatus === 'saving'}
-            className={`relative flex-shrink-0 h-6 w-11 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--dnd-accent)] disabled:opacity-60 ${
-              mode === 'block' ? 'bg-[var(--dnd-accent)]' : 'bg-gray-700'
-            }`}
-          >
-            <span
-              className={`absolute top-[3px] left-[3px] h-[18px] w-[18px] rounded-full bg-white shadow transition-transform ${
-                mode === 'block' ? 'translate-x-5' : 'translate-x-0'
-              }`}
-            />
-          </button>
-          <span className="text-base text-gray-300 select-none">
-            {mode === 'block'
-              ? 'Exclude from Best Days'
-              : 'Show as busy in Best Days'}
-          </span>
+      {/* Mode — below legend, close to sync toggle */}
+      <fieldset className="mt-8">
+        <legend className="block text-base text-gray-300 mb-2">When I mark a date as unavailable:</legend>
+        <div className="flex gap-3 flex-wrap">
+          {([
+            { value: 'block', label: 'Exclude from Best Days' },
+            { value: 'flag',  label: 'Show as busy in Best Days' },
+          ] as const).map(({ value, label }) => (
+            <label
+              key={value}
+              className={`flex items-center gap-2.5 px-3 py-2 rounded cursor-pointer select-none border transition-colors
+                ${mode === value
+                  ? 'bg-[var(--dnd-input-bg)] border-[var(--dnd-accent)] text-gray-100'
+                  : 'bg-[var(--dnd-input-bg)] border-gray-700 text-gray-400 hover:border-gray-500'}`}
+            >
+              <input
+                type="radio"
+                name={`dm-exception-mode-${campaignId}`}
+                value={value}
+                checked={mode === value}
+                onChange={() => handleModeChange(value)}
+                className="accent-[var(--dnd-accent)] cursor-pointer"
+              />
+              <span className="text-sm">{label}</span>
+            </label>
+          ))}
+          {modeStatus === 'saving' && <span className="text-xs text-gray-500 self-center">Saving…</span>}
         </div>
-        <p className="text-xs text-gray-500 mt-2 ml-14">
-          When I mark a date as unavailable
-        </p>
-      </div>
+      </fieldset>
 
       <Toast
         status={saveStatus}
