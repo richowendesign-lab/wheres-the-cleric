@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.6
 milestone_name: Campaign Detail Rework
-status: unknown
-last_updated: "2026-03-18T18:08:32.493Z"
+status: complete
+last_updated: "2026-03-18T00:00:00Z"
 progress:
-  total_phases: 20
-  completed_phases: 20
-  total_plans: 43
-  completed_plans: 43
+  total_phases: 27
+  completed_phases: 27
+  total_plans: 44
+  completed_plans: 44
 ---
 
 # Project State
@@ -18,16 +18,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-16)
 
 **Core value:** The DM can instantly see when everyone is free — without chasing people for responses or guessing which dates to offer.
-**Current focus:** Phase 27 — Flat Settings and Sync Toggle
+**Current focus:** Milestone v1.6 complete — ready for v1.7 planning
 
 ## Current Position
 
-Phase: 27 of 27 (Flat Settings and Sync Toggle)
-Plan: 1 of 1 (not started)
-Status: Ready — Phase 26 complete
-Last activity: 2026-03-18 — 26-01 complete (two-column layout restructure + fixed panel z-index fixes)
+Phase: 27 of 27 (Flat Settings and Sync Toggle) — COMPLETE
+Plan: 1 of 1 (complete)
+Status: Milestone v1.6 complete
+Last activity: 2026-03-18 — 27-01 complete (flat Settings tab + DmSyncToggle + paginated DmExceptionCalendar)
 
-Progress: [█░░░░░░░░░] 11%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -42,6 +42,7 @@ Progress: [█░░░░░░░░░] 11%
 |-------|-------|-------|----------|
 | 25-sync-schema-and-server-layer | 2 | 5 min | 2.5 min |
 | 26-two-column-layout-restructure | 1 | ~15 min | 15 min |
+| 27-flat-settings-and-sync-toggle | 1 | ~90 min | 90 min |
 
 **Recent Trend:**
 - Last 5 plans: 2min, 3min, 15min
@@ -63,7 +64,10 @@ Progress: [█░░░░░░░░░] 11%
 - [Phase 26-two-column-layout-restructure]: Sidebar DOM source-order first for mobile stacking; lg:col-start for desktop reordering
 - [Phase 26-two-column-layout-restructure]: Inline sidebar content swap reverted after browser verification — fixed slide-in panel restored; sidebar permanently shows BestDaysList
 - [Phase 26-two-column-layout-restructure]: Backdrop z-[51], panel z-[52] to layer above sticky AppNav (z-50); h-[100dvh] for dynamic viewport on mobile
-- [Phase 27-flat-settings-and-sync-toggle]: joinUrl prop removed from CampaignTabs entirely — Join Link section removed in this plan, prop had no other consumers
+- [Phase 27-flat-settings-and-sync-toggle]: joinUrl prop restored to CampaignTabs — Join Link section brought back to Settings after Phase 26 removed it
+- [Phase 27-flat-settings-and-sync-toggle]: DmSyncToggle uses radio button pair (Sync enabled / Sync off) matching DmExceptionCalendar mode picker pattern, not a pill toggle
+- [Phase 27-flat-settings-and-sync-toggle]: DmSyncToggle placed under My Unavailable Dates below DmExceptionCalendar for contextual adjacency
+- [Phase 27-flat-settings-and-sync-toggle]: Settings container left-aligned (max-w-2xl, no centering)
 
 ### Pending Todos
 
@@ -76,5 +80,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-18
-Stopped at: Phase 26 complete — ready to start Phase 27 (27-01-PLAN.md)
+Stopped at: Phase 27 complete — milestone v1.6 Campaign Detail Rework complete
 Resume file: None

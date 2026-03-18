@@ -8,7 +8,7 @@
 - ✅ **v1.3 DM Experience & Scheduling Flow** — Phases 11-16 (shipped 2026-03-12)
 - ✅ **v1.4 Clarity & Polish** — Phases 17-19 (shipped 2026-03-13)
 - ✅ **v1.5 Marketing Home Page** — Phases 20-24 (shipped 2026-03-14)
-- 🚧 **v1.6 Campaign Detail Rework** — Phases 25-27 (in progress)
+- ✅ **v1.6 Campaign Detail Rework** — Phases 25-27 (shipped 2026-03-18)
 
 ## Phases
 
@@ -84,13 +84,13 @@ Full phase details: `.planning/milestones/v1.5-ROADMAP.md`
 
 </details>
 
-### 🚧 v1.6 Campaign Detail Rework (In Progress)
+### ✅ v1.6 Campaign Detail Rework — SHIPPED 2026-03-18
 
 **Milestone Goal:** Improve the campaign detail page with a better layout, cleaner settings, and synced DM availability.
 
 - [x] **Phase 25: Sync Schema and Server Layer** — Add dmSyncEnabled to Campaign schema; extend toggleDmException to propagate to sync-enabled sibling campaigns (completed 2026-03-17)
-- [x] **Phase 26: Two-Column Layout Restructure** — Restructure CampaignTabs to own a two-column availability layout; sidebar shows Best Days and join link; date panel becomes a sidebar content swap (completed 2026-03-17)
-- [ ] **Phase 27: Flat Settings and Sync Toggle** — Remove accordion wrappers from Settings; add DmSyncToggle component to Settings tab
+- [x] **Phase 26: Two-Column Layout Restructure** — Restructure CampaignTabs to own a two-column availability layout; sidebar shows Best Days and join link; date panel becomes a sidebar content swap (completed 2026-03-18)
+- [x] **Phase 27: Flat Settings and Sync Toggle** — Remove accordion wrappers from Settings; add DmSyncToggle component to Settings tab (completed 2026-03-18)
 
 ## Phase Details
 
@@ -136,7 +136,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 27-01-PLAN.md — Flat Settings tab + DmSyncToggle component
+- [x] 27-01-PLAN.md — Flat Settings tab + DmSyncToggle component
 
 ## Progress
 
@@ -168,4 +168,4 @@ Plans:
 | 24. Sticky Nav Scroll Behaviour | v1.5 | 1/1 | Complete | 2026-03-14 |
 | 25. Sync Schema and Server Layer | v1.6 | 2/2 | Complete | 2026-03-17 |
 | 26. Two-Column Layout Restructure | v1.6 | 1/1 | Complete | 2026-03-18 |
-| 27. Flat Settings and Sync Toggle | v1.6 | 0/? | Not started | - |
+| 27. Flat Settings and Sync Toggle | v1.6 | 1/1 | Complete | 2026-03-18 |
