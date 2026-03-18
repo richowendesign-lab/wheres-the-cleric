@@ -7,12 +7,11 @@ import { BestDaysList } from '@/components/BestDaysList'
 import { DmExceptionCalendar } from '@/components/DmExceptionCalendar'
 import { UpdatePlanningWindowForm } from '@/components/UpdatePlanningWindowForm'
 import { UpdateMaxPlayersForm } from '@/components/UpdateMaxPlayersForm'
-import { CopyLinkButton } from '@/components/CopyLinkButton'
 import { DeleteCampaignButton } from '@/components/DeleteCampaignButton'
+import { DmSyncToggle } from '@/components/DmSyncToggle'
 
 interface CampaignTabsProps {
   campaignId: string
-  joinUrl: string
   windowStartStr: string | null
   windowEndStr: string | null
   dayAggregations: DayAggregation[]
@@ -22,6 +21,7 @@ interface CampaignTabsProps {
   dmExceptionMode: 'block' | 'flag' | null
   maxPlayers: number | null
   playerSlotCount: number
+  dmSyncEnabled: boolean
 }
 
 function formatWindowDate(dateStr: string): string {
@@ -44,15 +44,9 @@ const PencilIcon = () => (
   </svg>
 )
 
-const ChevronDownIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-    <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-)
 
 export function CampaignTabs({
   campaignId,
-  joinUrl,
   windowStartStr,
   windowEndStr,
   dayAggregations,
@@ -62,6 +56,7 @@ export function CampaignTabs({
   dmExceptionMode,
   maxPlayers,
   playerSlotCount,
+  dmSyncEnabled,
 }: CampaignTabsProps) {
   const [activeTab, setActiveTab] = useState<'availability' | 'settings'>('availability')
   const [editingWindow, setEditingWindow] = useState(false)
@@ -308,17 +303,7 @@ export function CampaignTabs({
       {activeTab === 'settings' && (
         <div className="max-w-2xl space-y-8">
 
-          {/* 1. Join Link */}
-          <section>
-            <h2 className="text-lg font-semibold text-white mb-2">Join Link</h2>
-            <p className="text-sm text-[var(--dnd-text-muted)] mb-3">Share this link with your players. Anyone who visits it can join the campaign.</p>
-            <div className="flex items-center gap-3 bg-[var(--dnd-input-bg)] border border-[#ba7df6]/30 rounded px-4 py-3">
-              <span className="flex-1 text-sm font-mono text-[var(--dnd-accent)] truncate">{joinUrl}</span>
-              <CopyLinkButton url={joinUrl} />
-            </div>
-          </section>
-
-          {/* 2. Planning Window */}
+          {/* 1. Planning Window */}
           <section>
             <h2 className="text-lg font-semibold text-white mb-2">Planning Window</h2>
             <UpdatePlanningWindowForm
@@ -328,47 +313,35 @@ export function CampaignTabs({
             />
           </section>
 
-          {/* 3. Players — accordion */}
+          {/* 2. Availability Sync */}
           <section>
-            <details className="group">
-              <summary className="flex items-center gap-2 cursor-pointer [&::-webkit-details-marker]:hidden list-none select-none">
-                <h2 className="text-lg font-semibold text-white">Players</h2>
-                <span className="text-white group-open:rotate-180 transition-transform">
-                  <ChevronDownIcon />
-                </span>
-              </summary>
-              <div className="mt-4">
-                <UpdateMaxPlayersForm
-                  key={String(maxPlayers ?? '')}
-                  campaignId={campaignId}
-                  currentMax={maxPlayers}
-                  currentCount={playerSlotCount}
-                  alwaysShowForm
-                />
-              </div>
-            </details>
+            <h2 className="text-lg font-semibold text-white mb-4">Availability Sync</h2>
+            <DmSyncToggle campaignId={campaignId} initialEnabled={dmSyncEnabled} />
           </section>
 
-          {/* 4. DM Unavailable Dates — accordion */}
+          {/* 3. Players */}
+          <section>
+            <h2 className="text-lg font-semibold text-white mb-4">Players</h2>
+            <UpdateMaxPlayersForm
+              key={String(maxPlayers ?? '')}
+              campaignId={campaignId}
+              currentMax={maxPlayers}
+              currentCount={playerSlotCount}
+              alwaysShowForm
+            />
+          </section>
+
+          {/* 4. My Unavailable Dates */}
           {windowStartStr && windowEndStr && (
             <section>
-              <details className="group">
-                <summary className="flex items-center gap-2 cursor-pointer [&::-webkit-details-marker]:hidden list-none select-none">
-                  <h2 className="text-lg font-semibold text-white">My Unavailable Dates</h2>
-                  <span className="text-white group-open:rotate-180 transition-transform">
-                    <ChevronDownIcon />
-                  </span>
-                </summary>
-                <div className="mt-4">
-                  <DmExceptionCalendar
-                    campaignId={campaignId}
-                    planningWindowStart={windowStartStr}
-                    planningWindowEnd={windowEndStr}
-                    initialExceptions={dmExceptionDates}
-                    exceptionMode={dmExceptionMode}
-                  />
-                </div>
-              </details>
+              <h2 className="text-lg font-semibold text-white mb-4">My Unavailable Dates</h2>
+              <DmExceptionCalendar
+                campaignId={campaignId}
+                planningWindowStart={windowStartStr}
+                planningWindowEnd={windowEndStr}
+                initialExceptions={dmExceptionDates}
+                exceptionMode={dmExceptionMode}
+              />
             </section>
           )}
 

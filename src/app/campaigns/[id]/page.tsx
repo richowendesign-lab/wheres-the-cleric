@@ -83,7 +83,6 @@ export default async function CampaignDetailPage({
         {/* Tab component — receives all pre-fetched serialised data */}
         <CampaignTabs
           campaignId={campaign.id}
-          joinUrl={joinUrl}
           windowStartStr={windowStartStr}
           windowEndStr={windowEndStr}
           dayAggregations={dayAggregations}
@@ -93,6 +92,7 @@ export default async function CampaignDetailPage({
           dmExceptionMode={dmExceptionMode}
           maxPlayers={campaign.maxPlayers}
           playerSlotCount={campaign.playerSlots.length}
+          dmSyncEnabled={campaign.dmSyncEnabled}
         />
 
         {/* ShareModal — stays outside tabs (triggered by ?share=1) */}
