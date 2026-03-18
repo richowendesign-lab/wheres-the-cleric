@@ -108,13 +108,13 @@ export function CampaignTabs({
       {/* ── Shared fixed slide-in date panel ── */}
       {selectedDate && (
         <div
-          className="fixed inset-0 z-10"
+          className="fixed inset-0 z-[51]"
           onClick={() => setSelectedDate(null)}
           aria-hidden="true"
         />
       )}
       <div className={`fixed inset-y-0 right-0 w-80 bg-gray-900 border-l border-gray-800
-        shadow-2xl z-20 flex flex-col transition-transform duration-200
+        shadow-2xl z-[52] flex flex-col transition-transform duration-200
         ${selectedDate ? 'translate-x-0' : 'translate-x-full'}`}>
         {selectedDate && (() => {
           const agg = aggMap.get(selectedDate)
