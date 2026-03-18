@@ -262,6 +262,27 @@ export async function setDmSyncEnabled(
   }
 }
 
+export async function removePlayer(
+  campaignId: string,
+  playerSlotId: string
+): Promise<{ success: true } | { error: string }> {
+  try {
+    const dm = await getSessionDM()
+    if (!dm) return { error: 'Not authenticated' }
+
+    const campaign = await prisma.campaign.findUnique({ where: { id: campaignId }, select: { dmId: true } })
+    if (!campaign || campaign.dmId !== dm.id) return { error: 'Unauthorized' }
+
+    await prisma.playerSlot.delete({ where: { id: playerSlotId } })
+
+    revalidatePath(`/campaigns/${campaignId}`)
+    return { success: true }
+  } catch (error) {
+    console.error('removePlayer error:', error)
+    return { error: 'Failed to remove player. Please try again.' }
+  }
+}
+
 export async function updatePlanningWindow(campaignId: string, _prevState: unknown, formData: FormData) {
   const dm = await getSessionDM()
   if (!dm) return { error: 'Not authenticated' }
