@@ -304,7 +304,7 @@ export function CampaignTabs({
 
       {/* ── Settings tab ── */}
       {activeTab === 'settings' && (
-        <div className="max-w-2xl mx-auto px-2 sm:px-6">
+        <div className="max-w-2xl">
 
           {/* 1. Join Link */}
           <section className="py-7">
