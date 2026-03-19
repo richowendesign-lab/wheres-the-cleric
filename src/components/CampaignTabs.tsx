@@ -344,7 +344,7 @@ export function CampaignTabs({
                 {players.map(player => (
                   <span
                     key={player.id}
-                    className={`inline-flex items-center gap-1.5 pl-3 pr-1.5 py-1 rounded-full text-sm border transition-colors ${
+                    className={`inline-flex items-center gap-2 pl-4 pr-2 py-2 rounded-full text-base border transition-colors ${
                       confirmingPlayerId === player.id
                         ? 'bg-red-950/40 border-red-700 text-red-300'
                         : 'bg-[var(--dnd-input-bg)] border-gray-700 text-gray-200'
@@ -352,7 +352,7 @@ export function CampaignTabs({
                   >
                     {confirmingPlayerId === player.id ? (
                       <>
-                        <span className="text-xs">Remove {player.name}?</span>
+                        <span>Remove {player.name}?</span>
                         <button
                           type="button"
                           onClick={() => {
@@ -367,7 +367,7 @@ export function CampaignTabs({
                             })
                           }}
                           disabled={isPending}
-                          className="flex items-center justify-center w-5 h-5 rounded-full bg-red-700 hover:bg-red-600 text-white disabled:opacity-50 cursor-pointer transition-colors"
+                          className="flex items-center justify-center w-6 h-6 rounded-full bg-red-700 hover:bg-red-600 text-white disabled:opacity-50 cursor-pointer transition-colors"
                           aria-label={`Confirm remove ${player.name}`}
                         >
                           ✓
@@ -375,7 +375,7 @@ export function CampaignTabs({
                         <button
                           type="button"
                           onClick={() => setConfirmingPlayerId(null)}
-                          className="flex items-center justify-center w-5 h-5 rounded-full hover:bg-gray-700 text-gray-400 hover:text-gray-200 cursor-pointer transition-colors"
+                          className="flex items-center justify-center w-6 h-6 rounded-full hover:bg-gray-700 text-gray-400 hover:text-gray-200 cursor-pointer transition-colors"
                           aria-label="Cancel"
                         >
                           ✕
@@ -387,7 +387,7 @@ export function CampaignTabs({
                         <button
                           type="button"
                           onClick={() => setConfirmingPlayerId(player.id)}
-                          className="flex items-center justify-center w-5 h-5 rounded-full hover:bg-red-900/60 text-gray-500 hover:text-red-400 cursor-pointer transition-colors"
+                          className="flex items-center justify-center w-6 h-6 rounded-full hover:bg-red-900/60 text-gray-500 hover:text-red-400 cursor-pointer transition-colors"
                           aria-label={`Remove ${player.name}`}
                         >
                           ✕
