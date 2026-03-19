@@ -340,12 +340,19 @@ export function CampaignTabs({
             <h2 className="text-base font-semibold text-white mb-1">Players</h2>
             <p className="text-sm text-[var(--dnd-text-muted)] mb-3">Manage the maximum number of player slots for this campaign.</p>
             {players.length > 0 && (
-              <ul className="mb-4 space-y-1">
+              <div className="flex flex-wrap gap-2 mb-4">
                 {players.map(player => (
-                  <li key={player.id} className="flex items-center justify-between py-1.5">
+                  <span
+                    key={player.id}
+                    className={`inline-flex items-center gap-1.5 pl-3 pr-1.5 py-1 rounded-full text-sm border transition-colors ${
+                      confirmingPlayerId === player.id
+                        ? 'bg-red-950/40 border-red-700 text-red-300'
+                        : 'bg-[var(--dnd-input-bg)] border-gray-700 text-gray-200'
+                    }`}
+                  >
                     {confirmingPlayerId === player.id ? (
-                      <span className="flex items-center gap-3 text-sm">
-                        <span className="text-gray-300">Remove {player.name}?</span>
+                      <>
+                        <span className="text-xs">Remove {player.name}?</span>
                         <button
                           type="button"
                           onClick={() => {
@@ -360,33 +367,36 @@ export function CampaignTabs({
                             })
                           }}
                           disabled={isPending}
-                          className="text-red-400 hover:text-red-300 font-medium disabled:opacity-50 cursor-pointer"
+                          className="flex items-center justify-center w-5 h-5 rounded-full bg-red-700 hover:bg-red-600 text-white disabled:opacity-50 cursor-pointer transition-colors"
+                          aria-label={`Confirm remove ${player.name}`}
                         >
-                          Confirm
+                          ✓
                         </button>
                         <button
                           type="button"
                           onClick={() => setConfirmingPlayerId(null)}
-                          className="text-gray-500 hover:text-gray-300 cursor-pointer"
+                          className="flex items-center justify-center w-5 h-5 rounded-full hover:bg-gray-700 text-gray-400 hover:text-gray-200 cursor-pointer transition-colors"
+                          aria-label="Cancel"
                         >
-                          Cancel
+                          ✕
                         </button>
-                      </span>
+                      </>
                     ) : (
                       <>
-                        <span className="text-sm text-gray-200">{player.name}</span>
+                        <span>{player.name}</span>
                         <button
                           type="button"
                           onClick={() => setConfirmingPlayerId(player.id)}
-                          className="text-xs text-gray-500 hover:text-red-400 transition-colors cursor-pointer"
+                          className="flex items-center justify-center w-5 h-5 rounded-full hover:bg-red-900/60 text-gray-500 hover:text-red-400 cursor-pointer transition-colors"
+                          aria-label={`Remove ${player.name}`}
                         >
-                          Remove
+                          ✕
                         </button>
                       </>
                     )}
-                  </li>
+                  </span>
                 ))}
-              </ul>
+              </div>
             )}
             <UpdateMaxPlayersForm
               key={String(maxPlayers ?? '')}
