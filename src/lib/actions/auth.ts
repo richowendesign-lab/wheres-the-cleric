@@ -39,7 +39,7 @@ export async function signUp(_prevState: unknown, formData: FormData) {
   const cookieStore = await cookies()
   setSessionCookie(cookieStore, token)
 
-  redirect('/')
+  return { success: true }
 }
 
 export async function logIn(_prevState: unknown, formData: FormData) {
@@ -58,7 +58,7 @@ export async function logIn(_prevState: unknown, formData: FormData) {
   const cookieStore = await cookies()
   setSessionCookie(cookieStore, token)
 
-  redirect('/')
+  return { success: true }
 }
 
 export async function logOut() {

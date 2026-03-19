@@ -13,6 +13,7 @@ interface UpdatePlanningWindowFormProps {
 
 export function UpdatePlanningWindowForm({ campaignId, planningWindowStart, planningWindowEnd, onSuccess }: UpdatePlanningWindowFormProps) {
   const [state, formAction, isPending] = useActionState(updatePlanningWindow.bind(null, campaignId), null)
+  const today = new Date()
 
   // Use a ref so the effect always calls the latest callback without re-registering
   const onSuccessRef = useRef(onSuccess)
@@ -36,6 +37,7 @@ export function UpdatePlanningWindowForm({ campaignId, planningWindowStart, plan
             defaultValue={planningWindowStart ?? undefined}
             required
             placeholder="Start date"
+            minDate={today}
           />
         </div>
         <div>
@@ -45,6 +47,7 @@ export function UpdatePlanningWindowForm({ campaignId, planningWindowStart, plan
             defaultValue={planningWindowEnd ?? undefined}
             required
             placeholder="End date"
+            minDate={today}
           />
         </div>
       </div>

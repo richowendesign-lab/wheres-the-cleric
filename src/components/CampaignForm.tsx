@@ -8,6 +8,7 @@ const inputCls = "w-full rounded bg-[var(--dnd-input-bg)] border border-[var(--d
 
 export function CampaignForm() {
   const [state, formAction, isPending] = useActionState(createCampaign, null)
+  const today = new Date()
 
   return (
     <form action={formAction} className="space-y-6">
@@ -21,11 +22,11 @@ export function CampaignForm() {
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-sm text-gray-300 mb-1">Planning window start</label>
-          <DatePickerInput name="planningWindowStart" required placeholder="Planning window start" />
+          <DatePickerInput name="planningWindowStart" required placeholder="Planning window start" minDate={today} />
         </div>
         <div>
           <label className="block text-sm text-gray-300 mb-1">Planning window end</label>
-          <DatePickerInput name="planningWindowEnd" required placeholder="Planning window end" />
+          <DatePickerInput name="planningWindowEnd" required placeholder="Planning window end" minDate={today} />
         </div>
       </div>
 

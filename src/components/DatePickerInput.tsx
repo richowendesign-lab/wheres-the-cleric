@@ -72,6 +72,7 @@ interface DatePickerInputProps {
   defaultValue?: string
   required?: boolean
   placeholder?: string
+  minDate?: Date  // dates before this are disabled
 }
 
 export function DatePickerInput({
@@ -79,6 +80,7 @@ export function DatePickerInput({
   defaultValue,
   required: _required,
   placeholder = 'Pick a date',
+  minDate,
 }: DatePickerInputProps) {
   const today = new Date()
   const initialDate = defaultValue ? parseDateKey(defaultValue) : undefined
@@ -168,7 +170,14 @@ export function DatePickerInput({
     })
   }
 
+  function isDisabled(date: Date): boolean {
+    if (!minDate) return false
+    const minKey = formatDateKey(minDate)
+    return formatDateKey(date) < minKey
+  }
+
   function selectDate(date: Date) {
+    if (isDisabled(date)) return
     setSelected(date)
     setInputValue(formatDisplay(date))
     setOpen(false)
@@ -178,7 +187,7 @@ export function DatePickerInput({
     const val = e.target.value
     setInputValue(val)
     const parsed = parseTypedDate(val)
-    if (parsed) {
+    if (parsed && !isDisabled(parsed)) {
       setSelected(parsed)
       setViewYear(parsed.getUTCFullYear())
       setViewMonth(parsed.getUTCMonth())
@@ -243,15 +252,19 @@ export function DatePickerInput({
               {week.map((date, di) => {
                 if (!date) return <div key={di} />
                 const isSelected = selected != null && formatDateKey(selected) === formatDateKey(date)
+                const disabled = isDisabled(date)
                 return (
                   <button
                     key={di}
                     type="button"
                     onClick={() => selectDate(date)}
+                    disabled={disabled}
                     className={`rounded py-1.5 text-sm text-center transition-colors${
-                      isSelected
-                        ? ' bg-[var(--dnd-accent)] text-black font-semibold'
-                        : ' text-gray-300 hover:bg-[var(--dnd-border-card)] hover:text-white'
+                      disabled
+                        ? ' text-gray-600 cursor-not-allowed'
+                        : isSelected
+                          ? ' bg-[var(--dnd-accent)] text-black font-semibold'
+                          : ' text-gray-300 hover:bg-[var(--dnd-border-card)] hover:text-white'
                     }`}
                   >
                     {date.getUTCDate()}
